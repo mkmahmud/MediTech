@@ -1,15 +1,31 @@
 
 import { Route, Routes } from 'react-router'
 import './App.css'
+import MainLayout from './layouts/MainLayout'
+import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home/Home'
 import About from './pages/About/About'
+import DashboardOverview from './pages/Dashboard/Overview'
+import Patients from './pages/Dashboard/Patients'
+import Appointments from './pages/Dashboard/Appointments'
+import Settings from './pages/Dashboard/Settings'
 
 function App() {
-
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
+      {/* Public routes with MainLayout */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Route>
+
+      {/* Dashboard routes with DashboardLayout */}
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route index element={<DashboardOverview />} />
+        <Route path="patients" element={<Patients />} />
+        <Route path="appointments" element={<Appointments />} />
+        <Route path="settings" element={<Settings />} />
+      </Route>
     </Routes>
   )
 }
