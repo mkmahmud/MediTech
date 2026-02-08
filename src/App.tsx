@@ -12,6 +12,7 @@ const AuthLayout = lazy(() => import('./layouts/AuthLayout'));
 // --- Pages ---
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
+const Doctors = lazy(() => import('./pages/Doctors/Doctors'));
 const DashboardOverview = lazy(() => import('./pages/Dashboard/Overview'));
 const Patients = lazy(() => import('./pages/Dashboard/Patients'));
 const Appointments = lazy(() => import('./pages/Dashboard/Appointments'));
@@ -37,6 +38,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/doctors" element={<Doctors />} />
           </Route>
 
           {/* Dashboard routes */}

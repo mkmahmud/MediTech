@@ -20,7 +20,7 @@ export default function NotFound() {
                 <div className="relative w-full h-40 flex items-center justify-center mb-12">
 
                     {/* Ghost 404 in the Background */}
-                    <span className="absolute text-[12rem] font-black text-gray-50 dark:text-white/[0.02] tracking-tighter select-none">
+                    <span className="absolute text-[12rem] font-black text-orange/50 dark:text-white/[0.02] tracking-tighter select-none">
                         404
                     </span>
 
