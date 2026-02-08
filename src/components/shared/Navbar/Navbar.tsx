@@ -1,6 +1,7 @@
 import { HeartHandshake } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useThemeStore } from '../../../stores/themeStore';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,13 +14,16 @@ export default function Navbar() {
     { name: 'About', path: '/about' },
   ];
 
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
+
   return (
     <nav className=" relative w-full z-50 transition-all duration-300 bg-transparent text-app-text">
       <div className="flex items-center justify-between h-20">
 
         {/*  Logo --- */}
         <div className="flex-shrink-0 ml-4">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-brand-primary dark:text-brand-orange flex items-center space-x-1 text-orange">
+          <Link to="/" className="text-2xl font-bold tracking-tighter text-brand-primary dark:text-primary flex items-center space-x-1 text-orange">
             <HeartHandshake className='' /><span className="text-brand-soft">Medi.</span>
           </Link>
         </div>
@@ -34,6 +38,7 @@ export default function Navbar() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-brand-primary dark:text-brand-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
               </svg>
+
             </div>
 
             {/* Hidden links that slide/fade in on hover */}
@@ -53,6 +58,17 @@ export default function Navbar() {
 
         {/* ---   Actions --- */}
         <div className="flex items-center space-x-4">
+          <button
+            onClick={toggleDarkMode}
+            aria-label="Toggle Dark Mode"
+            className="p-2.5 rounded-2xl bg-gray-50 dark:bg-soft/10 text-primary dark:text-orange border border-gray-100 dark:border-soft/20 transition-all hover:scale-105 active:scale-95"
+          >
+            {isDarkMode ? (
+              <span className="flex items-center gap-2 font-bold text-sm">🌙  </span>
+            ) : (
+              <span className="flex items-center gap-2 font-bold text-sm">☀️  </span>
+            )}
+          </button>
           <Link
             to="/login"
             className="hidden sm:block px-6 py-2.5 rounded-full bg-orange text-white font-semibold hover:bg-primary transition-all shadow-md active:scale-95"

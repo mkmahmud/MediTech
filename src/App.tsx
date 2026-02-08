@@ -1,6 +1,7 @@
 
 import { Route, Routes } from 'react-router'
 import './App.css'
+import { ThemeInitializer } from './components/ThemeInitializer'
 import MainLayout from './layouts/MainLayout'
 import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home/Home'
@@ -12,21 +13,24 @@ import Settings from './pages/Dashboard/Settings'
 
 function App() {
   return (
-    <Routes>
-      {/* Public routes with MainLayout */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-      </Route>
+    <>
+      <ThemeInitializer />
+      <Routes>
+        {/* Public routes with MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Route>
 
-      {/* Dashboard routes with DashboardLayout */}
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        <Route index element={<DashboardOverview />} />
-        <Route path="patients" element={<Patients />} />
-        <Route path="appointments" element={<Appointments />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-    </Routes>
+        {/* Dashboard routes with DashboardLayout */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardOverview />} />
+          <Route path="patients" element={<Patients />} />
+          <Route path="appointments" element={<Appointments />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
 
