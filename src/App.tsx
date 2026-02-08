@@ -10,12 +10,22 @@ import DashboardOverview from './pages/Dashboard/Overview'
 import Patients from './pages/Dashboard/Patients'
 import Appointments from './pages/Dashboard/Appointments'
 import Settings from './pages/Dashboard/Settings'
+import AuthLayout from './layouts/AuthLayout'
+import Login from './pages/Auth/Login'
+import Register from './pages/Auth/Register'
 
 function App() {
   return (
     <>
       <ThemeInitializer />
       <Routes>
+
+        {/* Auth Layout */}
+        <Route path="/auth/*" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+
         {/* Public routes with MainLayout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />

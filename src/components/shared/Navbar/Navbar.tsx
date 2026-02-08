@@ -70,7 +70,7 @@ export default function Navbar() {
             )}
           </button>
           <Link
-            to="/login"
+            to="/auth/login"
             className="hidden sm:block px-6 py-2.5 rounded-full bg-orange text-white font-semibold hover:bg-primary transition-all shadow-md active:scale-95"
           >
             Sign In

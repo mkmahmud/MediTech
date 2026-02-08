@@ -1,4 +1,4 @@
-
+ 
 export default function Home() {
     return (
         <section className="relative  lg:py-24 overflow-hidden bg-primary/10">
