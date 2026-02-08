@@ -1,204 +1,238 @@
+import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint, Command, Star, CheckCircle2, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Home() {
     return (
-        <section>
-            {/* Hero Section */}
-            <section className="relative  lg:py-24 overflow-hidden bg-gray-50/50 dark:bg-deep/20">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-10">
+        <main
+            style={{ fontFamily: "'Roboto', 'Open Sans', 'Helvetica', 'Arial', sans-serif" }}
+            className="bg-white dark:bg-[#030303] transition-colors duration-500"
+        >
 
-                    {/* --- Left Column: Content --- */}
-                    <div className="space-y-8 animate-in fade-in slide-in-from-left-10 duration-700">
+            {/* --- 1. HERO SECTION --- */}
+            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none"
+                    style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }}
+                />
 
-                        {/* Trusted Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                            Trusted by 2M+ Patients
+                <div className="max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div className="lg:col-span-7 space-y-10 relative z-10">
+                        <div className="space-y-4">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-orange/10 border border-orange/20"
+                            >
+                                <span className="flex h-2 w-2 rounded-full bg-orange animate-pulse" />
+                                <span className="text-[10px] font-mono font-black text-orange uppercase tracking-widest">System_Status: Optimal</span>
+                            </motion.div>
+
+                            <h1 className="text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9] dark:text-white">
+                                Healthcare <br />
+                                <span className="text-orange italic">Redefined.</span>
+                            </h1>
                         </div>
 
-                        {/* Main Heading */}
-                        <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] text-orange">
-                            Healthcare at <br />
-                            your <span className="text-soft">fingertips.</span>
-                        </h1>
-
-                        {/* Subtext */}
-                        <p className="text-lg text-gray-500 dark:text-gray-400 max-w-lg leading-relaxed">
-                            Find and book consultations with top-rated specialists instantly.
-                            Experience medical care from the comfort of your home.
+                        <p className="text-lg text-gray-500 dark:text-gray-400 max-w-xl leading-relaxed font-medium">
+                            Access the global network of specialized medicine. Book high-fidelity consultations with
+                            verified experts through our secure clinical operating system.
                         </p>
 
-                        {/* Search Bar Component */}
-                        <div className="relative max-w-xl group">
-                            <div className="flex items-center p-2 bg-white dark:bg-deep rounded-2xl shadow-2xl shadow-primary/10 border border-gray-100 dark:border-soft/20">
-                                <div className="flex-grow flex items-center px-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
+                        <div className="relative max-w-2xl group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-orange/20 to-primary/20 blur opacity-0 group-hover:opacity-100 transition duration-1000" />
+                            <div className="relative flex items-center p-2 bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-2xl">
+                                <div className="flex-grow flex items-center px-6">
+                                    <Search className="w-5 h-5 text-gray-400" />
                                     <input
                                         type="text"
-                                        placeholder="Search by specialty, doctor..."
-                                        className="w-full px-4 py-3 bg-transparent focus:outline-none text-md"
+                                        placeholder="Enter specialty or physician name..."
+                                        className="w-full px-4 py-4 bg-transparent focus:outline-none text-sm font-bold tracking-tight dark:text-white"
                                     />
                                 </div>
-                                <button className="bg-primary text-white px-8 py-3.5 rounded-xl font-bold hover:bg-soft transition-all active:scale-95">
-                                    Search
+                                <button className="bg-black dark:bg-white text-white dark:text-black px-10 py-4 rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-orange dark:hover:bg-primary dark:hover:text-white transition-all active:scale-95 flex items-center gap-2">
+                                    Execute <Command className="w-3 h-3" />
                                 </button>
                             </div>
                         </div>
 
-                        {/* Specialist Avatars / Social Proof */}
-                        <div className="flex items-center gap-4 pt-4">
-                            <div className="flex -space-x-3">
-                                {[1, 2, 3].map((i) => (
-                                    <div key={i} className="w-12 h-12 rounded-full border-4 border-white dark:border-deep bg-soft flex items-center justify-center text-white font-bold text-xs">
-                                        DR
+                        <div className="flex items-center gap-6 pt-4 border-t border-gray-100 dark:border-white/5">
+                            <div className="flex -space-x-4">
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="w-12 h-12 rounded-2xl border-4 border-white dark:border-[#030303] bg-gray-100 dark:bg-white/10 flex items-center justify-center overflow-hidden">
+                                        <div className="w-full h-full bg-gradient-to-br from-orange/20 to-primary/20" />
                                     </div>
                                 ))}
                             </div>
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                                Join <span className="text-primary font-bold">500+</span> active specialists
-                            </p>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-black dark:text-white">500+ Verified Nodes</span>
+                                <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Active_Medical_Specialists</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* --- Right Column: Image --- */}
-                    <div className="relative hidden lg:block animate-in fade-in zoom-in duration-1000">
-                        {/* Main Image Container with rounded corners from the reference */}
-                        <div className="relative z-10 rounded-[40px] overflow-hidden border-[12px] border-white dark:border-primary/10 shadow-2xl">
-                            <img
-                                src="/doctor.jpg"
-                                alt="Doctor using tablet"
-                                className="w-full h-[600px] object-cover object-top"
-                            />
+                    <div className="lg:col-span-5 relative hidden lg:block">
+                        <div className="relative rounded-[3rem] overflow-hidden border-[1px] border-gray-200 dark:border-white/10 shadow-2xl group">
+                            <div className="absolute inset-0 bg-orange/10 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
+                            <img src="/doctor.jpg" alt="Clinical Interface" className="w-full h-[650px] object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" />
+
+                            <div className="absolute top-10 right-10 p-4 bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl">
+                                <Activity className="w-6 h-6 text-orange animate-pulse" />
+                            </div>
+                            <div className="absolute bottom-10 left-10 p-6 bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl">
+                                <p className="text-[10px] font-mono text-orange font-bold uppercase mb-1">Heart_Rate</p>
+                                <p className="text-2xl font-black dark:text-white tracking-tighter">72 BPM</p>
+                            </div>
                         </div>
-
-                        {/* Decorative Background Glow */}
-                        <div className="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-0"></div>
-                        <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-orange/10 rounded-full blur-3xl -z-0"></div>
                     </div>
-
                 </div>
             </section>
-            {/* Social Proof Section */}
-            <section className="py-12 bg-white dark:bg-black border-y border-gray-100 dark:border-white/5">
-                <div className="max-w-7xl mx-auto px-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+
+            {/* --- 2. STATS BAR --- */}
+            <section className="py-12 border-y border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.01]">
+                <div className="max-w-7xl mx-auto px-10 grid grid-cols-2 lg:grid-cols-4 gap-12">
                     {[
-                        { label: "Happy Patients", value: "50k+" },
-                        { label: "Expert Doctors", value: "500+" },
-                        { label: "Years Experience", value: "15+" },
-                        { label: "Medical Centers", value: "80+" },
+                        { label: "Transactions", value: "50k+", icon: <ShieldCheck className="w-4 h-4" /> },
+                        { label: "Active_Physicians", value: "500+", icon: <Activity className="w-4 h-4" /> },
+                        { label: "Clinical_Years", value: "15+", icon: <Zap className="w-4 h-4" /> },
+                        { label: "Medical_Nodes", value: "80+", icon: <Globe className="w-4 h-4" /> },
                     ].map((stat, i) => (
-                        <div key={i} className="text-center">
-                            <h3 className="text-3xl font-bold text-primary dark:text-soft">{stat.value}</h3>
-                            <p className="text-sm text-gray-500 uppercase tracking-widest mt-1">{stat.label}</p>
+                        <div key={i} className="flex flex-col space-y-1">
+                            <div className="flex items-center gap-2 text-primary">
+                                {stat.icon}
+                                <span className="text-3xl font-black tracking-tighter dark:text-white uppercase">{stat.value}</span>
+                            </div>
+                            <p className="text-[9px] font-mono text-gray-400 uppercase tracking-[0.2em] font-bold">{stat.label}</p>
                         </div>
                     ))}
                 </div>
             </section>
-            {/* Services Section */}
-            <section className="py-24 bg-gray-50/50 dark:bg-deep/20">
-                <div className="max-w-7xl mx-auto px-10">
-                    <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-4xl font-bold text-black dark:text-white">Our Medical Services</h2>
-                        <p className="text-gray-500 max-w-2xl mx-auto">We provide a wide range of medical services to ensure you get the best care possible.</p>
+
+            {/* --- 3. SPECIALIST MATRIX --- */}
+            <section className="py-32 px-10 bg-white dark:bg-[#030303]">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex justify-between items-end mb-16">
+                        <div className="space-y-4">
+                            <span className="text-xs font-mono text-orange font-black uppercase tracking-[0.4em]">Node_Directory</span>
+                            <h2 className="text-5xl font-black tracking-tighter dark:text-white uppercase">Expert Specialists.</h2>
+                        </div>
+                        <button className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-6 py-3 border border-gray-200 dark:border-white/10 rounded-full hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                            Browse All <ChevronRight className="w-4 h-4" />
+                        </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            { title: "Telemedicine", desc: "Consult with doctors via video call from anywhere.", icon: "📱" },
-                            { title: "Lab Tests", desc: "Book blood tests and diagnostics at home.", icon: "🔬" },
-                            { title: "Pharmacy", desc: "Order medicines and get them delivered fast.", icon: "💊" },
-                        ].map((service, i) => (
-                            <div key={i} className="p-8 bg-white dark:bg-deep rounded-3xl border border-gray-100 dark:border-white/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                                <div className="text-4xl mb-6">{service.icon}</div>
-                                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                                <p className="text-gray-500 text-sm leading-relaxed">{service.desc}</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="group relative bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-4 transition-all hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-2xl">
+                                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                    <div className="w-full h-full bg-gray-200 dark:bg-white/10" />
+                                    <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                                        <button className="w-full py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">Book Consultation</button>
+                                    </div>
+                                </div>
+                                <div className="px-4 pb-4">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <h4 className="font-black dark:text-white uppercase text-lg tracking-tight">Dr. Sarah Johnson</h4>
+                                        <div className="flex items-center gap-1 text-orange">
+                                            <Star className="w-3 h-3 fill-current" />
+                                            <span className="text-[10px] font-bold">4.9</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] font-mono text-gray-400 font-bold uppercase tracking-widest">Senior Cardiologist</p>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-            {/* Why Choose Us Section */}
-            <section className="py-24 bg-white dark:bg-black overflow-hidden">
-                <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    <div className="relative">
-                        <div className="w-full aspect-square bg-primary/5 rounded-[60px] flex items-center justify-center overflow-hidden">
 
-                            <div className="absolute rounded-[60px] inset-0 bg-cover bg-center opacity-10"
-                                style={{ backgroundImage: "url('/login.jpg')" }}>
-                            </div>
-                            {/* Placeholder for a secondary medical image or illustration */}
-                            <div className="z-10 p-10 bg-white dark:bg-deep rounded-3xl shadow-2xl border border-gray-100 dark:border-white/5">
-
-                                <p className="text-primary font-bold">24/7 Support Available</p>
-                                <p className="text-sm text-gray-500">We are always here for your health.</p>
-                            </div>
+            {/* --- 4. CLINICAL PROTOCOL --- */}
+            <section className="py-32 px-10 border-t border-gray-100 dark:border-white/5">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    <div className="space-y-12">
+                        <div className="space-y-4">
+                            <span className="text-xs font-mono text-primary font-black uppercase tracking-[0.4em]">Workflow_Protocol</span>
+                            <h2 className="text-5xl font-black tracking-tighter dark:text-white uppercase leading-none">The Patient <br /> Journey.</h2>
                         </div>
-                    </div>
-                    <div className="space-y-8">
-                        <h2 className="text-4xl font-bold leading-tight">State-of-the-art care <br /><span className="text-soft">for you and your family.</span></h2>
-                        <div className="space-y-6">
-                            {["Verified Specialists", "Instant Booking", "Digital Health Records"].map((feat, i) => (
-                                <div key={i} className="flex items-center gap-4">
-                                    <div className="w-6 h-6 rounded-full bg-orange/20 flex items-center justify-center">
-                                        <div className="w-2 h-2 rounded-full bg-orange"></div>
+                        <div className="space-y-8">
+                            {[
+                                { step: "01", title: "Node Selection", desc: "Filter through verified specialists across all clinical departments." },
+                                { step: "02", title: "Secure Uplink", desc: "Initialize a high-bandwidth video consultation on our encrypted network." },
+                                { step: "03", title: "Digital Diagnosis", desc: "Receive immediate prescriptions and lab requests to your secure vault." }
+                            ].map((item, i) => (
+                                <div key={i} className="flex gap-6 group">
+                                    <span className="text-2xl font-mono font-black text-gray-200 dark:text-white/10 group-hover:text-orange transition-colors">{item.step}</span>
+                                    <div className="space-y-1">
+                                        <h4 className="text-xl font-black dark:text-white uppercase tracking-tight">{item.title}</h4>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{item.desc}</p>
                                     </div>
-                                    <span className="font-medium text-lg text-gray-700 dark:text-gray-300">{feat}</span>
                                 </div>
                             ))}
                         </div>
-                        <button className="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-bold hover:scale-105 transition-transform">Learn More</button>
+                    </div>
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full" />
+                        <div className="relative bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/10 rounded-[3rem] p-12 shadow-2xl">
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-primary/20" />
+                                        <span className="text-xs font-black dark:text-white uppercase">Specialist Found</span>
+                                    </div>
+                                    <CheckCircle2 className="text-primary w-5 h-5" />
+                                </div>
+                                <div className="h-40 flex items-center justify-center border-2 border-dashed border-gray-100 dark:border-white/5 rounded-3xl">
+                                    <Activity className="w-12 h-12 text-gray-200 dark:text-white/10 animate-pulse" />
+                                </div>
+                                <button className="w-full py-4 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em]">Initialize System</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
-            {/* Top Rated Doctors Section */}
-            <section className="py-24 bg-gray-50/50 dark:bg-deep/10">
-                <div className="max-w-7xl mx-auto px-10">
-                    <div className="flex justify-between items-end mb-12">
-                        <div>
-                            <h2 className="text-4xl font-bold">Meet Our Specialists</h2>
-                            <p className="text-gray-500 mt-2">Top rated doctors across all specialties.</p>
-                        </div>
-                        <button className="text-primary font-bold hover:underline">View All Doctors →</button>
+
+            {/* --- 5. SERVICES MODULES --- */}
+            <section className="py-32 px-10 bg-gray-50/50 dark:bg-white/[0.01] border-y border-gray-100 dark:border-white/5">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20 space-y-4">
+                        <span className="text-xs font-mono text-orange font-black uppercase tracking-[0.4em]">Clinical_Modules</span>
+                        <h2 className="text-5xl font-black tracking-tighter dark:text-white uppercase">System Capabilities.</h2>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="group bg-white dark:bg-deep rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 transition-all">
-                                <div className="h-64 bg-gray-200 animate-pulse relative group-hover:bg-gray-300 transition-colors">
-                                    {/* Actual Image would go here */}
-                                </div>
-                                <div className="p-6">
-                                    <h4 className="font-bold text-lg">Dr. Sarah Johnson</h4>
-                                    <p className="text-sm text-primary">Cardiologist</p>
-                                    <div className="flex items-center gap-1 mt-3">
-                                        <span className="text-orange">★</span>
-                                        <span className="text-sm font-bold">4.9</span>
-                                        <span className="text-xs text-gray-400 ml-1">(120 Reviews)</span>
-                                    </div>
-                                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {[
+                            { title: "Telemedicine", desc: "Consult with doctors via video call from anywhere.", icon: <Video className="w-8 h-8" /> },
+                            { title: "Lab Tests", desc: "Book blood tests and diagnostics at home.", icon: <Microscope className="w-8 h-8" /> },
+                            { title: "Neural Pharmacy", desc: "Automated medicine routing and logistics.", icon: <Zap className="w-8 h-8" /> },
+                        ].map((service, i) => (
+                            <div key={i} className="p-10 bg-white dark:bg-[#0A0A0A] rounded-[2.5rem] border border-gray-100 dark:border-white/5 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                                <div className="text-orange mb-8">{service.icon}</div>
+                                <h3 className="text-2xl font-black mb-4 dark:text-white uppercase tracking-tighter">{service.title}</h3>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium">{service.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-            {/* CTA */}
-            <section className="py-24">
-                <div className="max-w-7xl mx-auto px-10">
-                    <div className="relative bg-primary p-12 lg:p-20 rounded-[40px] overflow-hidden text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-10">
-                        {/* Background Decor */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
 
-                        <div className="relative z-10 space-y-6 max-w-xl">
-                            <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">Ready to start your health journey?</h2>
-                            <p className="text-white/80 text-lg">Join Medi. today and get your first consultation with a 20% discount.</p>
-                        </div>
-
-                        <div className="relative z-10 flex flex-col sm:flex-row gap-4">
-                            <button className="px-10 py-5 bg-white text-primary rounded-2xl font-bold hover:bg-gray-100 transition-colors">Create Account</button>
-                            <button className="px-10 py-5 bg-primary border border-white/30 text-white rounded-2xl font-bold hover:bg-white/10 transition-colors">Contact Us</button>
-                        </div>
+            {/* --- 6. CTA --- */}
+            <section className="py-32 px-10">
+                <div className="max-w-7xl mx-auto relative rounded-[3rem] bg-black dark:bg-white overflow-hidden p-12 lg:p-24 text-center space-y-10">
+                    <div className="absolute inset-0 opacity-20 pointer-events-none">
+                        <Activity className="w-full h-full text-white dark:text-black scale-150" />
+                    </div>
+                    <div className="relative z-10 space-y-6">
+                        <h2 className="text-5xl lg:text-7xl font-black text-white dark:text-black tracking-tighter leading-none uppercase">
+                            Ready to <br /> Initialize?
+                        </h2>
+                        <p className="text-white/60 dark:text-black/60 text-lg font-medium max-w-2xl mx-auto">
+                            Join the Medi. network today. Authenticate your profile to access subsidized consultations and global nodes.
+                        </p>
+                    </div>
+                    <div className="relative z-10 flex flex-col sm:flex-row gap-4 justify-center">
+                        <button className="px-12 py-5 bg-orange text-white rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] hover:scale-105 transition-transform flex items-center gap-3 mx-auto sm:mx-0">
+                            <Fingerprint className="w-5 h-5" /> Create_Identity
+                        </button>
                     </div>
                 </div>
             </section>
-        </section>
+        </main>
     );
 }
