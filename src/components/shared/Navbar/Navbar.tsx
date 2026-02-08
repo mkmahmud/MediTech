@@ -1,4 +1,4 @@
-import { HeartHandshake } from 'lucide-react';
+import { HeartHandshake, Lightbulb, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useThemeStore } from '../../../stores/themeStore';
@@ -64,9 +64,9 @@ export default function Navbar() {
             className="p-2.5 rounded-2xl bg-gray-50 dark:bg-soft/10 text-primary dark:text-orange border border-gray-100 dark:border-soft/20 transition-all hover:scale-105 active:scale-95"
           >
             {isDarkMode ? (
-              <span className="flex items-center gap-2 font-bold text-sm">🌙  </span>
+              <span className="flex items-center gap-2 font-bold text-sm"><Lightbulb /> </span>
             ) : (
-              <span className="flex items-center gap-2 font-bold text-sm">☀️  </span>
+              <span className="flex items-center gap-2 font-bold text-sm"><Moon />  </span>
             )}
           </button>
           <Link
