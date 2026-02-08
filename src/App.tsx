@@ -1,9 +1,9 @@
-import   { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router';
 import './App.css';
 import { ThemeInitializer } from './components/ThemeInitializer';
 import { LoadingScreen } from './components/LoadingScreen';
- 
+
 // --- Layouts ---
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const DashboardLayout = lazy(() => import('./layouts/DashboardLayout'));
@@ -13,6 +13,9 @@ const AuthLayout = lazy(() => import('./layouts/AuthLayout'));
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
 const Doctors = lazy(() => import('./pages/Doctors/Doctors'));
+const Services = lazy(() => import('./pages/Services/Services'));
+
+// Dashboard Pages
 const DashboardOverview = lazy(() => import('./pages/Dashboard/Overview'));
 const Patients = lazy(() => import('./pages/Dashboard/Patients'));
 const Appointments = lazy(() => import('./pages/Dashboard/Appointments'));
@@ -39,6 +42,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/doctors" element={<Doctors />} />
+            <Route path="/services" element={<Services />} />
           </Route>
 
           {/* Dashboard routes */}
