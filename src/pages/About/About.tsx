@@ -1,6 +1,6 @@
 import { Link } from "react-router"
 import { motion } from "framer-motion"
-import {  ShieldCheck, Activity, Globe, Cpu, Users, Zap, Microscope, Shield } from "lucide-react"
+import {  ShieldCheck, Activity, Globe,   Users, Zap, Microscope, Shield, HeartHandshake } from "lucide-react"
 import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
@@ -108,7 +108,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-orange/5 group-hover:bg-transparent transition-colors duration-500" />
           <div className="absolute inset-10 border border-dashed border-gray-300 dark:border-white/10 rounded-full animate-spin-slow" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Cpu className="w-32 h-32 text-orange/20" />
+            <HeartHandshake className="w-32 h-32 text-orange" />
           </div>
         </div>
       </section>
