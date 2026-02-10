@@ -4,10 +4,12 @@ import { InputGroup } from "@/components/ui/input-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FormField } from "@/components/ui/form-field"
 import { PasswordStrength } from "@/components/ui/password-strength"
-import { Link } from "react-router"
-import { HeartHandshake, Command, ShieldCheck,  Fingerprint, CheckCircle2 } from "lucide-react"
+import { Link, useNavigate } from "react-router"
+import { HeartHandshake, Command, ShieldCheck, Fingerprint, CheckCircle2 } from "lucide-react"
 import { PhoneInputGroup } from "@/components/ui/phone-Inpu-group"
 import { motion } from "framer-motion"
+import { useAuth } from "@/hooks/auth/useAuth"
+import { toast } from "sonner"
 
 interface RegisterFormData {
   fullName: string
@@ -19,6 +21,13 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
+
+  // Call Api
+  const { register } = useAuth();
+
+  // Navigation
+  const navigate = useNavigate();
+
   const methods = useForm<RegisterFormData>({
     defaultValues: {
       fullName: "",
@@ -31,10 +40,41 @@ export default function RegisterPage() {
     mode: "onChange",
   })
 
+
+
+
   const password = methods.watch("password")
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("✅ Register data submitted:", data)
+  // Handle Registration 
+  const onSubmit = async (data: RegisterFormData) => {
+    // Split full name into first and last names
+    const nameParts = data.fullName.trim().split(" ")
+    const firstName = nameParts[0]
+    const lastName = nameParts.slice(1).join(" ") || "L"
+
+    // Join country code and phone number
+    const phoneNumber = `${data.countryCode}${data.phoneNumber}`
+
+    // Append processed fields to data
+    const processedData = {
+      email: data.email,
+      password: data.password,
+      firstName,
+      lastName,
+      phoneNumber,
+    }
+
+
+
+    try {
+      await register(processedData);
+      toast.success("Registration successful! Please log in.");
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+
+
   }
 
   const clinicalFontStack = { fontFamily: "'Roboto', 'Open Sans', 'Helvetica', 'Arial', sans-serif" };

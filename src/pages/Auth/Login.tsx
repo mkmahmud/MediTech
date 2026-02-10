@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button"
 import { InputGroup } from "@/components/ui/input-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FormField } from "@/components/ui/form-field"
-import { Link } from "react-router"
+import { Link, useLocation, useNavigate } from "react-router"
 import { HeartHandshake, Command, ShieldCheck, Activity, Fingerprint } from "lucide-react"
 import { motion } from "framer-motion"
+import { useAuth } from "@/hooks/auth/useAuth"
 
 interface LoginFormData {
   email: string
@@ -14,6 +15,16 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
+
+  // Call Api
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the "from" location state or default to "/dashboard"
+  const from = location.state?.from?.pathname || "/dashboard";
+
   const methods = useForm<LoginFormData>({
     defaultValues: {
       email: "",
@@ -22,9 +33,10 @@ export default function LoginPage() {
     },
   })
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login data:", data)
-    // Your login logic remains untouched
+  const onSubmit = async (data: LoginFormData) => {
+    await login(data);
+     // Only handle navigation here
+    navigate(from, { replace: true });
   }
 
   // Strictly using the requested font stack
@@ -144,7 +156,7 @@ export default function LoginPage() {
               <Button type="submit"
                 className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black uppercase text-[11px] tracking-[0.3em] hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95"
               >
-                  Login <Command className="w-4 h-4" />
+                Login <Command className="w-4 h-4" />
               </Button>
 
               {/* Tactical Divider */}

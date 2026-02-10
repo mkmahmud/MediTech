@@ -4,6 +4,8 @@ import {
     Dna, Activity, ChevronRight, Cpu, ArrowLeft,
     LayoutDashboard, Users, Calendar, Settings
 } from "lucide-react"
+import { Button } from '../ui/button';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 const NAV_ITEMS = [
     { path: "/dashboard", label: "Overview", icon: LayoutDashboard, end: true },
@@ -14,6 +16,16 @@ const NAV_ITEMS = [
 
 export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => void }) {
     const location = useLocation();
+
+
+    const { logout } = useAuth();
+
+    // Handle Logout
+
+    const handleLogout = async () => {
+        await logout();
+    }
+
 
     return (
         <div className="flex flex-col h-full bg-white dark:bg-[#050505] p-6 border-r border-gray-100 dark:border-white/5">
@@ -61,6 +73,12 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
                     </NavLink>
                 ))}
             </nav>
+
+
+            <Button variant="destructive" size="lg" className="text-white mt-6 w-full"  >
+                <span className="text-[10px] font-black uppercase tracking-widest" onClick={handleLogout}>Log Out</span>
+            </Button>
+
 
             {/* Footer Status */}
             <div className="pt-6 border-t border-gray-100 dark:border-white/5 space-y-4">
