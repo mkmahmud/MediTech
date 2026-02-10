@@ -26,16 +26,22 @@ api.interceptors.response.use(
         }
 
         if (status === 400 && data?.errors) {
-            data.errors.forEach((e: any) => toast.error("VALIDATION_ERROR", { description: e.message }));
-        }
-        else if (status === 401) {
-            toast.error("UNAUTHORIZED", { description: "Session expired." });
-        }
-        else if (status === 404) {
-            console.error("Endpoint not found. Check if baseURL or path is correct:", error.config?.url);
-        }
-        else {
-            toast.error("SYSTEM_ERROR", { description: data?.message || "Internal Protocol Error" });
+            data.errors.forEach((e: any) =>
+                toast.error('VALIDATION_ERROR', { description: e.message })
+            );
+        } else if (status === 401) {
+            useAuthStore.getState().clearAuth();
+            toast.error('UNAUTHORIZED', { description: 'Session expired.' });
+            window.location.href = '/auth/login';
+        } else if (status === 404) {
+            console.error(
+                'Endpoint not found. Check if baseURL or path is correct:',
+                error.config?.url
+            );
+        } else {
+            toast.error('SYSTEM_ERROR', {
+                description: data?.message || 'Internal Protocol Error'
+            });
         }
 
         return Promise.reject(error);

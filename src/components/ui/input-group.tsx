@@ -58,8 +58,7 @@ export const InputGroup: React.FC<InputGroupProps> = ({
             )}
             onChange={(e) => {
               field.onChange(e)
-              console.log(`${name} changed:`, e.target.value)
-            }}
+             }}
           />
           {showPasswordToggle && (
             <button

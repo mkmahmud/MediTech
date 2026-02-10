@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface User {
     id: string;
@@ -14,39 +15,38 @@ interface AuthState {
     refreshToken: string | null;
     isInitialized: boolean;
 
-    // Actions
     setAuth: (user: User, access: string, refresh: string) => void;
     clearAuth: () => void;
     setInitialized: (val: boolean) => void;
     updateUser: (user: User) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => {
-    const savedUser = localStorage.getItem('medi_user_data');
-    const savedRefresh = localStorage.getItem('medi_rt_key');
+export const useAuthStore = create<AuthState>()(
+    persist(
+        (set) => ({
+            user: null,
+            refreshToken: null,
+            accessToken: null,
+            isInitialized: false,
 
-    return {
-        user: savedUser && savedUser !== 'undefined' ? JSON.parse(savedUser) : null,
-        refreshToken: savedRefresh && savedRefresh !== 'undefined' ? savedRefresh : null,
-        accessToken: null,
-        isInitialized: false,
+            setAuth: (user, access, refresh) => {
+                set({ user, accessToken: access, refreshToken: refresh });
+            },
 
-        setAuth: (user, access, refresh) => {
-            localStorage.setItem('medi_user_data', JSON.stringify(user));
-            localStorage.setItem('medi_rt_key', refresh);
-            set({ user, accessToken: access, refreshToken: refresh });
-        },
+            clearAuth: () => {
+                set({ user: null, accessToken: null, refreshToken: null });
+            },
 
-        clearAuth: () => {
-            localStorage.removeItem('medi_user_data');
-            localStorage.removeItem('medi_rt_key');
-            set({ user: null, accessToken: null, refreshToken: null });
-        },
-
-        setInitialized: (val) => set({ isInitialized: val }),
-        updateUser: (user) => {
-            localStorage.setItem('medi_user_data', JSON.stringify(user));
-            set({ user });
-        },
-    };
-});
+            setInitialized: (val) => set({ isInitialized: val }),
+            updateUser: (user) => set({ user }),
+        }),
+        {
+            name: 'medi_auth_store',
+            partialize: (state) => ({
+                user: state.user,
+                refreshToken: state.refreshToken,
+                accessToken: state.accessToken,
+            }),
+        }
+    )
+);
