@@ -28,6 +28,8 @@ const Settings = lazy(() => import('./pages/Dashboard/Settings'));
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Register = lazy(() => import('./pages/Auth/Register'));
 const NotFound = lazy(() => import('./pages/NOtfound'));
+// Dashboard Admin Pages
+const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
 
 function App() {
   const { refresh } = useAuth();
@@ -86,6 +88,8 @@ function App() {
               <Route path="patients" element={<Patients />} />
               <Route path="appointments" element={<Appointments />} />
               <Route path="settings" element={<Settings />} />
+              {/* Admin Pages */}
+              <Route path="add-users" element={<AddUser />} />
             </Route>
           </Route>
 

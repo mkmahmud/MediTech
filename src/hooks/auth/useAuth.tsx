@@ -36,5 +36,13 @@ export const useAuth = () => {
         clearAuth();
     }, [clearAuth]);
 
-    return { register, login, refresh, logout };
+
+    // Create a new user (Admin only)
+    const createUser = useCallback(async (userData: any) => {
+        const response = await api.post('/auth/create-user', userData);
+        return response.data;
+    }, []);
+
+
+    return { register, login, refresh, logout, createUser };
 };

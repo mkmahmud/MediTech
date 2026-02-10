@@ -4,7 +4,8 @@ import {
     ChevronRight, ArrowLeft,
     LayoutDashboard, Users, Calendar, Settings,
     HeartHandshake, ClipboardList, Pill, Beaker,
-    Activity, ShieldAlert, UserCircle
+    Activity, ShieldAlert, UserCircle,
+    UserPlus
 } from "lucide-react"
 import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/auth/useAuth';
@@ -71,6 +72,12 @@ const ALL_NAV_ITEMS = [
         path: "/dashboard/settings",
         label: "System_Config",
         icon: Settings,
+        roles: ["SUPER_ADMIN", "ADMIN"]
+    },
+    {
+        path: "/dashboard/add-users",
+        label: "Add User",
+        icon: UserPlus,
         roles: ["SUPER_ADMIN", "ADMIN"]
     },
 ];
