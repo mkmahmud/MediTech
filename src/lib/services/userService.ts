@@ -5,7 +5,7 @@ import api from "../api";
 export const userService = {
     // Get current user profile (includes Doctor/Patient relations)
     getProfile: async () => {
-        const response = await api.get<User>("/users/profile");
+        const response = await api.get<User>("/auth/me");
         return response.data;
     },
 

@@ -1,11 +1,14 @@
 import {
     Mail, Phone, Calendar, ShieldCheck, Fingerprint, Activity,
-    Camera, Clock,   Key, ShieldAlert,
+    Camera, Clock, Key, ShieldAlert,
     Stethoscope, Award, DollarSign, Briefcase,
     Droplets, Ruler, Weight, PhoneCall, HeartPulse,
-    User as UserIcon,    Info, History
+    User as UserIcon, Info, History
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { userService } from "@/lib/services/userService";
+import { useEffect } from "react";
+import { useUserStore } from "@/stores/user/useUserStore";
 
 // Static Tactical Data representing the full Prisma Model
 const DUMMY_USER = {
@@ -25,7 +28,7 @@ const DUMMY_USER = {
     twoFactorEnabled: true,
     createdAt: "2024-01-15T08:00:00Z",
     lastLogin: "2026-02-12T14:30:00Z",
-    
+
     // Full Doctor Model Fields
     doctor: {
         licenseNumber: "LIC-99203341",
@@ -49,6 +52,24 @@ const DUMMY_USER = {
 
 export default function ProfilePage() {
     const clinicalFontStack = { fontFamily: "'Roboto', sans-serif" };
+    const { user, setUser } = useUserStore();
+    useEffect(() => {
+        const syncData = async () => {
+            try {
+                // 2. Call your service (Axios logic)
+                const freshUserData = await userService.getProfile();
+                // 3. Update your Zustand store (State logic)
+                setUser(freshUserData);
+            } catch (error) {
+                console.error("CRITICAL_SYNC_FAILURE", error);
+                // Handle unauthorized or server errors here
+            }
+        };
+
+        syncData();
+    }, [setUser]);
+
+
 
     return (
         <div style={clinicalFontStack} className="space-y-10 font-['Roboto']">
@@ -66,10 +87,10 @@ export default function ProfilePage() {
                     <div>
                         <div className="flex items-center gap-3 mb-1">
                             <h1 className="text-4xl font-black uppercase tracking-tight">
-                                {DUMMY_USER.firstName}_{DUMMY_USER.lastName}
+                                {user?.firstName}_{user?.lastName}
                             </h1>
                             <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-green-500/10 text-green-500">
-                                {DUMMY_USER.status}
+                                {user?.status}
                             </span>
                         </div>
                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Internal_UID: {DUMMY_USER.id}</p>
@@ -82,54 +103,54 @@ export default function ProfilePage() {
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 <div className="xl:col-span-2 space-y-8">
-                    
+
                     {/* SECTION 1: SYSTEM IDENTITY (USER MODEL) */}
                     <section className="bg-white dark:bg-[#080808] border border-gray-100 dark:border-white/5 rounded-[32px] p-8 shadow-sm">
                         <h3 className="text-[11px] font-black mb-8 flex items-center gap-2 uppercase tracking-widest">
                             <Fingerprint className="w-4 h-4 text-orange" /> Core_User_Registry
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                            <ProfileItem label="Username" value={DUMMY_USER.username || "NOT_SET"} icon={UserIcon} />
-                            <ProfileItem label="Email_Uplink" value={DUMMY_USER.email} icon={Mail} verified={DUMMY_USER.emailVerified} />
-                            <ProfileItem label="Phone_Comms" value={DUMMY_USER.phoneNumber || "PENDING"} icon={Phone} verified={DUMMY_USER.phoneVerified} />
-                            <ProfileItem label="Gender_Class" value={DUMMY_USER.gender || "UNSPECIFIED"} icon={Activity} />
-                            <ProfileItem label="Date_of_Birth" value={DUMMY_USER.dateOfBirth} icon={Calendar} />
-                            <ProfileItem label="Verification_Status" value={DUMMY_USER.emailVerified ? "VALIDATED" : "UNVERIFIED"} icon={ShieldCheck} />
+                            <ProfileItem label="Username" value={user?.username || "NOT_SET"} icon={UserIcon} />
+                            <ProfileItem label="Email_Uplink" value={user?.email} icon={Mail} verified={user?.emailVerified} />
+                            <ProfileItem label="Phone_Comms" value={user?.phoneNumber || "PENDING"} icon={Phone} verified={user?.phoneNumber} />
+                            <ProfileItem label="Gender_Class" value={user?.gender || "UNSPECIFIED"} icon={Activity} />
+                            <ProfileItem label="Date_of_Birth" value={user?.dateOfBirth || "Not Set Yet"} icon={Calendar} />
+                            <ProfileItem label="Verification_Status" value={user?.emailVerified ? "VALIDATED" : "UNVERIFIED"} icon={ShieldCheck} />
                         </div>
                     </section>
 
                     {/* SECTION 2: PROFESSIONAL_DATA (DOCTOR MODEL) */}
-                    {DUMMY_USER.role === "DOCTOR" && (
+                    {user?.role === "DOCTOR" && (
                         <section className="bg-white dark:bg-[#080808] border border-gray-100 dark:border-white/5 rounded-[32px] p-8 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h3 className="text-[11px] font-black uppercase tracking-widest mb-8 flex items-center gap-2 text-orange">
                                 <Stethoscope className="w-4 h-4" /> Professional_Credentials_Node
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                                <ProfileItem label="License_Number" value={DUMMY_USER.doctor.licenseNumber} icon={ShieldAlert} />
-                                <ProfileItem label="Specialization" value={DUMMY_USER.doctor.specialization} icon={Briefcase} />
-                                <ProfileItem label="Experience_Years" value={`${DUMMY_USER.doctor.experience} YRS`} icon={History} />
-                                <ProfileItem label="Qualifications" value={DUMMY_USER.doctor.qualifications.join(" | ")} icon={Award} />
-                                <ProfileItem label="Consultation_Rate" value={`$${DUMMY_USER.doctor.consultationFee.toFixed(2)}`} icon={DollarSign} />
-                                <ProfileItem label="Profile_Updated" value={new Date(DUMMY_USER.doctor.updatedAt).toLocaleDateString()} icon={Clock} />
+                                <ProfileItem label="License_Number" value={user?.doctor?.licenseNumber} icon={ShieldAlert} />
+                                <ProfileItem label="Specialization" value={user?.doctor?.specialization} icon={Briefcase} />
+                                <ProfileItem label="Experience_Years" value={`${user?.doctor?.experience} YRS`} icon={History} />
+                                <ProfileItem label="Qualifications" value={user?.doctor?.qualifications.join(" | ")} icon={Award} />
+                                <ProfileItem label="Consultation_Rate" value={`$${user?.doctor?.consultationFee.toFixed(2)}`} icon={DollarSign} />
+
                             </div>
                         </section>
                     )}
 
                     {/* SECTION 2: CLINICAL_BIOMETRICS (PATIENT MODEL) */}
-                    {DUMMY_USER.role === "PATIENT" && (
+                    {user?.role === "PATIENT" && (
                         <section className="bg-white dark:bg-[#080808] border border-gray-100 dark:border-white/5 rounded-[32px] p-8 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h3 className="text-[11px] font-black uppercase tracking-widest mb-8 flex items-center gap-2 text-orange">
                                 <HeartPulse className="w-4 h-4" /> Biometric_Encryption_Layer
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                                <ProfileItem label="Blood_Group" value={DUMMY_USER.patient.bloodType} icon={Droplets} />
-                                <ProfileItem label="Stature_Height" value={`${DUMMY_USER.patient.height} CM`} icon={Ruler} />
-                                <ProfileItem label="Mass_Weight" value={`${DUMMY_USER.patient.weight} KG`} icon={Weight} />
-                                <ProfileItem label="Clinical_Sync" value={new Date(DUMMY_USER.patient.updatedAt).toLocaleDateString()} icon={Clock} />
+                                <ProfileItem label="Blood_Group" value={user?.patient?.bloodType} icon={Droplets} />
+                                <ProfileItem label="Stature_Height" value={`${user?.patient?.height} CM`} icon={Ruler} />
+                                <ProfileItem label="Mass_Weight" value={`${user?.patient?.weight} KG`} icon={Weight} />
+
                                 <div className="md:col-span-2 pt-4 border-t border-gray-50 dark:border-white/5 mt-4">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <ProfileItem label="Emergency_Contact" value={DUMMY_USER.patient.emergencyContactName} icon={UserIcon} />
-                                        <ProfileItem label="Emergency_Uplink" value={DUMMY_USER.patient.emergencyContactPhone} icon={PhoneCall} />
+                                        <ProfileItem label="Emergency_Contact" value={user?.patient?.emergencyContactName} icon={UserIcon} />
+                                        <ProfileItem label="Emergency_Uplink" value={user?.patient?.emergencyContactPhone} icon={PhoneCall} />
                                     </div>
                                 </div>
                             </div>
@@ -155,9 +176,9 @@ export default function ProfilePage() {
                         <div className="absolute top-[-20%] right-[-10%] w-40 h-40 bg-orange/20 blur-[60px] rounded-full" />
                         <h4 className="text-[10px] text-center font-black uppercase tracking-[0.4em] mb-8 relative z-10">Access_Metadata</h4>
                         <div className="space-y-6 relative z-10">
-                            <MetaRow label="Protocol_Role" value={DUMMY_USER.role} highlight />
-                            <MetaRow label="Auth_Status" value={DUMMY_USER.status} />
-                            <MetaRow label="Node_Created" value="JAN_2024" />
+                            <MetaRow label="Protocol_Role" value={user?.role} highlight />
+                            <MetaRow label="Auth_Status" value={user?.status} />
+                            <MetaRow label="Joined" value="JAN_2024" />
                             <MetaRow label="Last_Ping" value="14:30_GMT" />
                             <div className="pt-4 border-t border-white/10 dark:border-black/10">
                                 <div className="flex justify-center items-center gap-2 text-orange">
@@ -173,8 +194,8 @@ export default function ProfilePage() {
                         <Info className="w-8 h-8 text-orange mb-4 opacity-50" />
                         <p className="text-[10px] font-black uppercase tracking-widest mb-2">System_Intelligence</p>
                         <p className="text-[9px] font-medium text-gray-400 leading-relaxed uppercase tracking-wide">
-                            {DUMMY_USER.role === "DOCTOR" 
-                                ? "Professional credentials are cross-referenced with the National Medical Registry." 
+                            {DUMMY_USER.role === "DOCTOR"
+                                ? "Professional credentials are cross-referenced with the National Medical Registry."
                                 : "Medical history and biometrics are encrypted at the application layer."}
                         </p>
                     </div>
@@ -183,8 +204,8 @@ export default function ProfilePage() {
         </div>
     );
 }
- 
- 
+
+
 
 function ProfileItem({ label, value, icon: Icon, verified }: any) {
     return (
