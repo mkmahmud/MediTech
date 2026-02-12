@@ -114,7 +114,7 @@ export default function Home() {
                             <h2 className="text-5xl font-black tracking-tighter dark:text-white uppercase">Expert Specialists.</h2>
                         </div>
                         <button className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-6 py-3 border border-gray-200 dark:border-white/10 rounded-full hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                            Browse All <ChevronRight className="w-4 h-4" />
+                            Browse All  <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
 

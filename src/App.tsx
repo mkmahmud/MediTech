@@ -31,6 +31,10 @@ const NotFound = lazy(() => import('./pages/NOtfound'));
 // Dashboard Admin Pages
 const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
 
+// Common Dashboard Pages
+const Profile = lazy(() => import('./pages/Dashboard/profile/Profile'));
+
+
 function App() {
   const { refresh } = useAuth();
   const setInitialized = useAuthStore((s) => s.setInitialized);
@@ -90,6 +94,9 @@ function App() {
               <Route path="settings" element={<Settings />} />
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />
+
+              {/* Common Dashboard Pages */}
+              <Route path='profile' element={<Profile />} />
             </Route>
           </Route>
 
