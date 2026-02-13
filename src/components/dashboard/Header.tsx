@@ -1,11 +1,11 @@
-import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useThemeStore } from "@/stores/themeStore";
+import { useUserStore } from "@/stores/user/useUserStore";
 import { Menu, Search, Bell, Lightbulb, Moon } from "lucide-react"
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
   // Get User logged in or not
-  const user = useAuthStore((state) => state.user);
+  const { user } = useUserStore();
 
   // Dark mode and light 
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
@@ -44,8 +44,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
             <Bell className="w-5 h-5 text-gray-400 hover:text-orange" />
             <div className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-orange rounded-full border-2 border-[#fcfcfc] dark:border-[#030303] animate-pulse" />
           </div>
-          <div className="relative cursor-pointer hover:scale-110 transition-transform"  onClick={toggleDarkMode}>
-              
+          <div className="relative cursor-pointer hover:scale-110 transition-transform" onClick={toggleDarkMode}>
+
             {isDarkMode ? <Lightbulb className="w-5 h-5 text-white hover:text-orange" /> : <Moon className="w-5 h-5 text-gray-400 hover:text-orange" />}
 
           </div>
@@ -55,8 +55,9 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
               <p className="text-md font-black uppercase leading-none">{user?.firstName} {user?.lastName}</p>
               <p className="text-xs font-bold text-orange uppercase   mt-1">{user?.role}</p>
             </div>
-            <div className="w-11 h-11 bg-black dark:bg-white text-white dark:text-black rounded-2xl flex items-center justify-center font-black text-xs shadow-xl shadow-black/5">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
+            <div className="w-11 h-11  border overflow-hidden text-white dark:text-black rounded-2xl flex items-center justify-center font-black text-xs shadow-xl shadow-black/5">
+
+              <img src={user?.profileImageUrl || '/doctor.jpg'} alt="Profile" className="w-full h-full object-top" />
             </div>
           </div>
         </div>

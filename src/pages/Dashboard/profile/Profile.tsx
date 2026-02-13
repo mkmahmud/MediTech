@@ -1,14 +1,16 @@
 import {
     Mail, Phone, Calendar, ShieldCheck, Fingerprint, Activity,
-    Camera, Clock, Key, ShieldAlert,
+    Camera, Clock,   ShieldAlert,
     Stethoscope, Award, DollarSign, Briefcase,
     Droplets, Ruler, Weight, PhoneCall, HeartPulse,
     User as UserIcon, Info, History
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { userService } from "@/lib/services/userService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/user/useUserStore";
+import { ImageUpload } from "@/components/shared/ImageUpload/ImageUpload";
+import { toast } from "sonner";
 
 // Static Tactical Data representing the full Prisma Model
 const DUMMY_USER = {
@@ -52,7 +54,12 @@ const DUMMY_USER = {
 
 export default function ProfilePage() {
     const clinicalFontStack = { fontFamily: "'Roboto', sans-serif" };
+
+
+    // States
     const { user, setUser } = useUserStore();
+    const [isImageUpload, setImageUpload] = useState(false);
+
     useEffect(() => {
         const syncData = async () => {
             try {
@@ -62,14 +69,26 @@ export default function ProfilePage() {
                 setUser(freshUserData);
             } catch (error) {
                 console.error("CRITICAL_SYNC_FAILURE", error);
-                // Handle unauthorized or server errors here
             }
         };
 
         syncData();
     }, [setUser]);
 
+    const handleReportsUploaded = async (urls: string[]) => {
 
+        try {
+
+            const updateUserProfileImage = await userService.updateProfile({ profileImageUrl: urls[0] })
+            setUser(updateUserProfileImage);
+            setImageUpload(false)
+            toast.success("Profile Image Updated Successfully!")
+        } catch (error) {
+            console.error("Faile to Update", error);
+        }
+
+
+    };
 
     return (
         <div style={clinicalFontStack} className="space-y-10 font-['Roboto']">
@@ -77,28 +96,49 @@ export default function ProfilePage() {
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-gray-100 dark:border-white/5 pb-8">
                 <div className="flex items-center gap-6">
                     <div className="relative group">
-                        <div className="w-24 h-24 bg-gray-100 dark:bg-white/5 rounded-[32px] flex items-center justify-center border-2 border-dashed border-gray-200 dark:border-white/10 overflow-hidden relative">
-                            <img src={DUMMY_USER.profileImageUrl} alt="Profile" className="w-full h-full object-top" />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                                <Camera className="w-6 h-6 text-white" />
+                        {
+                            isImageUpload ? <div  >
+
+                                <ImageUpload
+                                    label="Profile Picture"
+                                    folder="radiology"
+                                    onComplete={handleReportsUploaded}
+                                />
+                                <div className="w-full flex justify-center mt-4">
+                                    <Button onClick={() => setImageUpload(false)} >
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </div> : <div className="w-24 h-24 bg-gray-100 dark:bg-white/5 rounded-[32px] flex items-center justify-center border-2 border-dashed border-gray-200 dark:border-white/10 overflow-hidden relative">
+                                <img src={user?.profileImageUrl || '/doctor.jpg'} alt="Profile" className="w-full h-full object-top" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer" >
+
+
+                                    <Camera className="w-6 h-6 text-white" onClick={() => setImageUpload(true)} />
+
+
+                                </div>
                             </div>
-                        </div>
+                        }
+
+
+
                     </div>
+
+
                     <div>
                         <div className="flex items-center gap-3 mb-1">
-                            <h1 className="text-4xl font-black uppercase tracking-tight">
-                                {user?.firstName}_{user?.lastName}
+                            <h1 className="text-4xl font-black   ">
+                                {user?.firstName} {user?.lastName}
                             </h1>
                             <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-green-500/10 text-green-500">
                                 {user?.status}
                             </span>
                         </div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Internal_UID: {DUMMY_USER.id}</p>
+                        <p className="text-[10px] font-black text-gray-400  ">Internal_UID: {DUMMY_USER.id}</p>
                     </div>
                 </div>
-                <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-6 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-orange/20 transition-all">
-                    <Key className="w-4 h-4 mr-2" /> Security_Override
-                </Button>
+
             </header>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
