@@ -31,8 +31,7 @@ api.interceptors.response.use(
             );
         } else if (status === 401) {
             useAuthStore.getState().clearAuth();
-            toast.error('UNAUTHORIZED', { description: 'Session expired.' });
-            window.location.href = '/auth/login';
+            toast.error('UNAUTHORIZED', { description: data?.message });
         } else if (status === 404) {
             console.error(
                 'Endpoint not found. Check if baseURL or path is correct:',

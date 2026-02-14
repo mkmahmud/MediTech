@@ -4,9 +4,10 @@ import { InputGroup } from "@/components/ui/input-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FormField } from "@/components/ui/form-field"
 import { Link, useLocation, useNavigate } from "react-router"
-import { HeartHandshake, Command, ShieldCheck, Activity, Fingerprint } from "lucide-react"
+import { HeartHandshake, Command, ShieldCheck, Activity, Fingerprint, Loader2 } from "lucide-react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/hooks/auth/useAuth"
+import { useState } from "react"
 
 interface LoginFormData {
   email: string
@@ -15,14 +16,12 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
-
-  // Call Api
   const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false); // Loading state added
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get the "from" location state or default to "/dashboard"
   const from = location.state?.from?.pathname || "/dashboard";
 
   const methods = useForm<LoginFormData>({
@@ -34,12 +33,18 @@ export default function LoginPage() {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    await login(data);
-     // Only handle navigation here
-    navigate(from, { replace: true });
+
+    setIsLoading(true);
+    try {
+      await login(data);
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error("AUTH_UPLINK_ERROR:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  // Strictly using the requested font stack
   const clinicalFontStack = { fontFamily: "'Roboto', 'Open Sans', 'Helvetica', 'Arial', sans-serif" };
 
   return (
@@ -47,7 +52,6 @@ export default function LoginPage() {
 
       {/* --- LEFT SIDE: BRAND ARCHIVE --- */}
       <div className="relative lg:w-1/2 bg-black flex flex-col justify-between p-8 lg:p-16 min-h-[400px] overflow-hidden">
-        {/* Background Visualizer Overlay */}
         <div className="absolute inset-0 opacity-20 grayscale"
           style={{ backgroundImage: "url('/login.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         </div>
@@ -99,7 +103,6 @@ export default function LoginPage() {
       <div className="lg:w-1/2 flex items-center justify-center p-6 lg:p-16 bg-gray-50 dark:bg-[#030303]">
         <div className="w-full max-w-sm space-y-10 relative">
 
-          {/* Header UI */}
           <div className="space-y-2">
             <h2 className="text-4xl font-black tracking-tighter text-gray-900 dark:text-white uppercase">Log In</h2>
             <p className="text-sm font-bold text-gray-400 uppercase tracking-widest text-[10px]">Log in to manage your clinical data.</p>
@@ -109,7 +112,6 @@ export default function LoginPage() {
             <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
 
               <div className="space-y-4">
-                {/* Email Field - Functionality kept same, UI matched */}
                 <FormField name="email" label="Email">
                   <InputGroup
                     name="email"
@@ -120,7 +122,6 @@ export default function LoginPage() {
                   />
                 </FormField>
 
-                {/* Password Field - Functionality kept same, UI matched */}
                 <div>
                   <FormField name="password" label="Password">
                     <InputGroup
@@ -142,7 +143,6 @@ export default function LoginPage() {
                 </a>
               </div>
 
-              {/* Remember Me functionality kept same */}
               <div className="bg-white/50 dark:bg-white/[0.02] p-4 rounded-xl border border-gray-100 dark:border-white/5">
                 <Checkbox
                   {...methods.register("rememberMe")}
@@ -152,14 +152,13 @@ export default function LoginPage() {
                 />
               </div>
 
-              {/* Action Button */}
               <Button type="submit"
-                className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black uppercase text-[11px] tracking-[0.3em] hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95"
+                disabled={isLoading}
+                className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black uppercase text-[11px] tracking-[0.3em] hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95 disabled:opacity-50"
               >
-                Login <Command className="w-4 h-4" />
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Login <Command className="w-4 h-4" /></>}
               </Button>
 
-              {/* Tactical Divider */}
               <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200 dark:border-white/5"></div>
@@ -169,7 +168,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Social Buttons - Updated UI, same functionality */}
               <div className="grid grid-cols-2 gap-4">
                 <Button type="button" variant="outline"
                   className="rounded-2xl h-14 bg-white dark:bg-white/[0.02] border-none font-black text-[10px] uppercase tracking-widest dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5"
@@ -185,7 +183,6 @@ export default function LoginPage() {
             </form>
           </FormProvider>
 
-          {/* Sign Up Link */}
           <div className="text-center">
             <p className="text-[11px] font-black dark:text-white uppercase tracking-tighter">
               Don't have an account?
@@ -193,7 +190,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Tactical Footer */}
           <div className="flex justify-center gap-8 text-[9px] font-mono font-black text-gray-400 uppercase tracking-[0.2em] pt-8">
             <a href="/privacy" className="hover:text-orange transition-colors">Privacy</a>
             <a href="/terms" className="hover:text-orange transition-colors">Terms</a>

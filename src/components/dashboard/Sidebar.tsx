@@ -70,9 +70,9 @@ const ALL_NAV_ITEMS = [
     },
     {
         path: "/dashboard/settings",
-        label: "System_Config",
+        label: "Settings",
         icon: Settings,
-        roles: ["SUPER_ADMIN", "ADMIN"]
+        roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "NURSE", "PATIENT", "RECEPTIONIST", "PHARMACIST", "LAB_TECHNICIAN"]
     },
     {
         path: "/dashboard/add-users",

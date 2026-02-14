@@ -43,6 +43,11 @@ export const useAuth = () => {
         return response.data;
     }, []);
 
+    // Change Password
+    const changePassword = useCallback(async (data: any) => {
+        const response = await api.post('/auth/change-password', data);
+        return response
+    }, [])
 
-    return { register, login, refresh, logout, createUser };
+    return { register, login, refresh, logout, createUser, changePassword };
 };

@@ -1,107 +1,140 @@
-import {
-  Cpu, ShieldAlert,
-  Database, Globe, Save,
-  Activity
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { FormField } from "@/components/ui/form-field";
+import { InputGroup } from "@/components/ui/input-group";
+import { useAuth } from "@/hooks/auth/useAuth";
+import { ShieldAlert } from "lucide-react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const SETTING_SECTIONS = [
-  {
-    id: "kernel",
-    title: "Kernel_Configuration",
-    icon: Cpu,
-    items: [
-      { label: "Auto_Diagnostics", desc: "Run background system health checks", status: "Enabled", active: true },
-      { label: "Data_Sync_Frequency", desc: "Real-time uplink with central server", status: "0.5ms", active: false },
-    ]
-  },
-  {
-    id: "security",
-    title: "Security_Protocols",
-    icon: ShieldAlert,
-    items: [
-      { label: "Biometric_Lock", desc: "Require fingerprint for patient nodes", status: "Active", active: true },
-      { label: "Encryption_Level", desc: "AES-256 Military Grade Hardware encryption", status: "Lvl_04", active: true },
-    ]
-  }
-];
+
+interface ChangePassword {
+  currentPassword: string;
+  newPassword: String;
+  confirmNewPassword: String
+}
 
 export default function Settings() {
+  // Call Api
+  const { changePassword } = useAuth()
+
+
+
+  const methods = useForm<ChangePassword>({
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: '',
+    },
+  })
+
+  const onSubmit = async (data: ChangePassword) => {
+
+    const finalData = {
+      currentPassword: data?.currentPassword,
+      newPassword: data?.newPassword
+    }
+
+    try {
+      await changePassword(finalData);
+      toast.success("Password Changed successfully!")
+    } catch (err) {
+      console.log(err)
+    }
+
+
+    console.log(finalData)
+
+
+  }
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       {/* Page Header */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-100 dark:border-white/5 pb-8">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-gray-100 dark:border-white/5 pb-8">
         <div>
-          <h1 className="text-4xl font-black uppercase italic tracking-tighter">System_Settings</h1>
-          <p className="text-[10px] font-bold text-orange uppercase tracking-[0.4em] mt-2">Operational_Parameters_Registry</p>
+          <h1 className="text-3xl font-bold italic">Settings</h1>
+
         </div>
-        <button className="flex items-center gap-2 px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-black/10">
-          <Save className="w-4 h-4" /> Commit_Changes
-        </button>
       </header>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        {/* Main Settings Area */}
-        <div className="xl:col-span-2 space-y-8">
-          {SETTING_SECTIONS.map((section) => (
-            <section key={section.id} className="bg-white dark:bg-[#080808] border border-gray-100 dark:border-white/5 rounded-[32px] overflow-hidden">
-              <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center">
-                  <section.icon className="w-5 h-5 text-orange" />
-                </div>
-                <h3 className="font-black uppercase tracking-widest text-sm">{section.title}</h3>
+        {/* Main Area */}
+        <div className="xl:col-span-2">
+          <section className="bg-white dark:bg-[#080808] border border-gray-100 dark:border-white/5 rounded-[2rem] overflow-hidden p-4">
+            <div className="p-6 border-b border-gray-50 dark:border-white/5 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5 text-orange" />
               </div>
+              <h3 className="font-bold text-sm">Change Password</h3>
+            </div>
 
-              <div className="divide-y divide-gray-50 dark:divide-white/5">
-                {section.items.map((item, idx) => (
-                  <div key={idx} className="p-8 flex items-center justify-between group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                    <div className="space-y-1">
-                      <p className="text-[11px] font-black uppercase tracking-widest">{item.label}</p>
-                      <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tight">{item.desc}</p>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <span className="text-[9px] font-black text-orange uppercase tracking-widest">{item.status}</span>
-                      <div className={`w-12 h-6 rounded-full p-1 transition-colors cursor-pointer ${item.active ? 'bg-orange' : 'bg-gray-200 dark:bg-white/10'}`}>
-                        <div className={`w-4 h-4 bg-white rounded-full transition-transform ${item.active ? 'translate-x-6' : 'translate-x-0'}`} />
-                      </div>
-                    </div>
+
+            <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
+                  {/* Current Password */}
+                  <div>
+                    <FormField name="currentPassword" label="Current Password">
+                      <InputGroup
+                        name="currentPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        icon="password"
+                        showPasswordToggle
+                        className="rounded-2xl h-16 bg-white dark:bg-white/[0.02] border-none outline-none shadow-sm dark:text-white dark:placeholder:text-gray-600 font-bold"
+                      />
+                    </FormField>
                   </div>
-                ))}
-              </div>
-            </section>
-          ))}
+
+                  {/* New Password */}
+                  <div>
+                    <FormField name="newPassword" label="New Password">
+                      <InputGroup
+                        name="newPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        icon="password"
+                        showPasswordToggle
+                        className="rounded-2xl h-16 bg-white dark:bg-white/[0.02] border-none outline-none shadow-sm dark:text-white dark:placeholder:text-gray-600 font-bold"
+                      />
+                    </FormField>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div>
+                    <FormField name="confirmNewPassword" label="Confirm Password">
+                      <InputGroup
+                        name="confirmNewPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        icon="password"
+                        showPasswordToggle
+                        className="rounded-2xl h-16 bg-white dark:bg-white/[0.02] border-none outline-none shadow-sm dark:text-white dark:placeholder:text-gray-600 font-bold"
+                      />
+                    </FormField>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  {/* Action Button */}
+                  <Button type="submit"
+                    className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-semibold   text-sm   hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95"
+                  >
+                    Change Password
+                  </Button>
+                </div>
+              </form>
+            </FormProvider>
+          </section>
         </div>
 
-        {/* Sidebar Info/Status */}
+        {/* Sidebar Info */}
         <div className="space-y-8">
-          <div className="p-8 bg-black text-white dark:bg-white dark:text-black rounded-[32px] shadow-2xl">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6">User_Profile_Node</h4>
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-16 h-16 bg-orange/20 rounded-2xl flex items-center justify-center text-orange font-black text-xl">AD</div>
-              <div>
-                <p className="font-black uppercase tracking-tighter text-lg leading-none italic">A_Dimitrov</p>
-                <p className="text-[9px] font-bold text-orange uppercase tracking-widest mt-1">Admin_Level_10</p>
-              </div>
-            </div>
-            <button className="w-full py-4 border border-white/20 dark:border-black/20 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-orange hover:border-orange hover:text-white transition-all">
-              Update_Node_Credentials
-            </button>
-          </div>
-
-          <div className="p-8 border border-gray-100 dark:border-white/5 rounded-[32px] space-y-6">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400">System_Health</p>
-            {[
-              { label: "Storage", val: "42%", icon: Database },
-              { label: "Uptime", val: "99.9%", icon: Globe },
-              { label: "Latency", val: "12ms", icon: Activity }
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <stat.icon className="w-4 h-4 text-gray-400" />
-                  <span className="text-[10px] font-black uppercase">{stat.label}</span>
-                </div>
-                <span className="text-[10px] font-black italic">{stat.val}</span>
-              </div>
-            ))}
+          <div className="p-8 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-100 dark:border-white/5">
+            <h4 className="text-[10px] font-bold text-gray-400 mb-4">Security_Tip</h4>
+            <p className="text-xs leading-relaxed text-gray-500 italic">
+              Ensure your new credentials utilize a mix of alphanumeric nodes and special symbols to maximize encryption strength.
+            </p>
           </div>
         </div>
       </div>

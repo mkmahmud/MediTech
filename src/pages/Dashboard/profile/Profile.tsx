@@ -11,6 +11,7 @@ import { useUserStore } from "@/stores/user/useUserStore";
 import { ImageUpload } from "@/components/shared/ImageUpload/ImageUpload";
 import { toast } from "sonner";
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { SPECIALIZATIONS } from "@/types/doctors";
 
 export default function ProfilePage() {
     const clinicalFontStack = { fontFamily: "'Roboto', sans-serif" };
@@ -168,8 +169,20 @@ export default function ProfilePage() {
                                 <ProfileItem label="First_Name" value={user?.firstName} icon={Fingerprint} isEditing={isEditing} name="firstName" />
                                 <ProfileItem label="Last_Name" value={user?.lastName} icon={Fingerprint} isEditing={isEditing} name="lastName" />
                                 <ProfileItem label="Phone_Comms" value={user?.phoneNumber || "PENDING"} icon={Phone} isEditing={isEditing} name="phoneNumber" />
-                                <ProfileItem label="Gender_Class" value={user?.gender || "UNSPECIFIED"} icon={Activity} isEditing={isEditing} name="gender" />
-                                {/* <ProfileItem label="Date_of_Birth" value={user?.dateOfBirth} icon={Calendar} isEditing={isEditing} name="dateOfBirth" type="date" /> */}
+                                <ProfileItem
+                                    label="Gender_Class"
+                                    value={user?.gender || "UNSPECIFIED"}
+                                    icon={Activity}
+                                    isEditing={isEditing}
+                                    name="gender"
+                                    type="select"
+                                    options={[
+                                        { label: "MALE", value: "MALE" },
+                                        { label: "FEMALE", value: "FEMALE" },
+                                        { label: "PREFER_NOT_TO_SAY", value: "PREFER_NOT_TO_SAY" },
+                                        { label: "OTHER", value: "OTHER" }
+                                    ]}
+                                />                                {/* <ProfileItem label="Date_of_Birth" value={user?.dateOfBirth} icon={Calendar} isEditing={isEditing} name="dateOfBirth" type="date" /> */}
                                 <ProfileItem label="Registry_Status" value={user?.status} icon={ShieldCheck} isEditing={false} />
                             </div>
                         </section>
@@ -182,7 +195,21 @@ export default function ProfilePage() {
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12">
                                     <ProfileItem label="License_Number" value={user?.doctor?.licenseNumber} icon={ShieldAlert} isEditing={isEditing} name="doctor.licenseNumber" />
-                                    <ProfileItem label="Specialization" value={user?.doctor?.specialization} icon={Briefcase} isEditing={isEditing} name="doctor.specialization" />
+
+                                    <ProfileItem
+                                        label="Specialization"
+                                        value={user?.doctor?.specialization}
+                                        icon={Briefcase}
+                                        isEditing={isEditing}
+                                        name="doctor.specialization"
+                                        type="select"
+                                        options={SPECIALIZATIONS?.map(spec => ({
+                                            label: spec.split('_').map(word =>
+                                                word.charAt(0) + word.slice(1).toLowerCase()
+                                            ).join(' '),
+                                            value: spec
+                                        }))}
+                                    />
                                     <ProfileItem label="Experience_Years" value={`${user?.doctor?.experience} YRS`} icon={History} isEditing={isEditing} name="doctor.experience" type="number" />
                                     <ProfileItem label="Consultation_Rate ($)" value={user?.doctor?.consultationFee?.toFixed(2)} icon={DollarSign} isEditing={isEditing} name="doctor.consultationFee" type="number" />
                                 </div>
@@ -214,7 +241,7 @@ export default function ProfilePage() {
     );
 }
 
-function ProfileItem({ label, value, icon: Icon, verified, isEditing, name, type = "text" }: any) {
+function ProfileItem({ label, value, icon: Icon, verified, isEditing, name, type = "text", options = [] }: any) {
     const { register } = useFormContext();
 
     return (
@@ -225,12 +252,26 @@ function ProfileItem({ label, value, icon: Icon, verified, isEditing, name, type
             </div>
             <div className="flex items-center gap-3">
                 {isEditing && name ? (
-                    <input
-                        {...register(name)}
-                        type={type}
-                        step={type === "number" ? "any" : undefined}
-                        className="bg-gray-100 dark:bg-white/10 border-none rounded-xl px-4 py-2 text-sm font-bold w-full focus:ring-2 focus:ring-orange/50 outline-none transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
-                    />
+                    type === "select" ? (
+                        <select
+                            {...register(name)}
+                            className="bg-gray-100 dark:bg-white/10 border-none rounded-xl px-4 py-2 text-sm font-bold w-full focus:ring-2 focus:ring-orange/50 outline-none transition-all text-gray-900 dark:text-white appearance-none cursor-pointer"
+                        >
+                            <option value="" disabled className="dark:bg-[#080808]">Select {label}</option>
+                            {options.map((opt: any) => (
+                                <option key={opt.value} value={opt.value} className="dark:bg-[#080808]">
+                                    {opt.label}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            {...register(name)}
+                            type={type}
+                            step={type === "number" ? "any" : undefined}
+                            className="bg-gray-100 dark:bg-white/10 border-none rounded-xl px-4 py-2 text-sm font-bold w-full focus:ring-2 focus:ring-orange/50 outline-none transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
+                        />
+                    )
                 ) : (
                     <div className="flex items-center gap-2">
                         <p className="text-sm font-bold text-gray-900 dark:text-gray-100">{value || "---"}</p>
