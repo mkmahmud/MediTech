@@ -31,7 +31,7 @@ api.interceptors.response.use(
             );
         } else if (status === 401) {
             useAuthStore.getState().clearAuth();
-            toast.error('UNAUTHORIZED', { description: data?.message });
+            toast.error('UNAUTHORIZED', { description: data?.message || "Access denied to this node.", });
         } else if (status === 404) {
             console.error(
                 'Endpoint not found. Check if baseURL or path is correct:',

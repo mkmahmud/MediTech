@@ -17,8 +17,6 @@ export default function Settings() {
   // Call Api
   const { changePassword } = useAuth()
 
-
-
   const methods = useForm<ChangePassword>({
     defaultValues: {
       currentPassword: "",

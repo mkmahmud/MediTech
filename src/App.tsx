@@ -28,11 +28,17 @@ const Settings = lazy(() => import('./pages/Dashboard/Settings'));
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Register = lazy(() => import('./pages/Auth/Register'));
 const NotFound = lazy(() => import('./pages/NOtfound'));
+
 // Dashboard Admin Pages
 const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
 
+// Dashboard Doctor Page
+const ManageAvailability = lazy(() => import('./pages/Dashboard/Doctor/Manage-availability/ManageAvailability'));
+
 // Common Dashboard Pages
 const Profile = lazy(() => import('./pages/Dashboard/profile/Profile'));
+
+
 
 
 function App() {
@@ -66,7 +72,7 @@ function App() {
   return (
     <>
       <ThemeInitializer />
-      <Toaster />
+      <Toaster richColors position="top-center" />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Auth Layout */}
@@ -94,6 +100,10 @@ function App() {
               <Route path="settings" element={<Settings />} />
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />
+
+              {/* Doctor Pages */}
+              <Route path="manage-availability" element={<ManageAvailability />} />
+
 
               {/* Common Dashboard Pages */}
               <Route path='profile' element={<Profile />} />

@@ -22,13 +22,19 @@ const ALL_NAV_ITEMS = [
     },
     {
         path: "/dashboard/patients",
-        label: "Patient_Nodes",
+        label: "Patient",
         icon: Users,
         roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "NURSE", "RECEPTIONIST"]
     },
     {
+        path: "/dashboard/manage-availability",
+        label: "Manage Availability",
+        icon: Users,
+        roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR"]
+    },
+    {
         path: "/dashboard/appointments",
-        label: "Cycle_Registry",
+        label: "Appiontments",
         icon: Calendar,
         roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "RECEPTIONIST", "PATIENT"]
     },
