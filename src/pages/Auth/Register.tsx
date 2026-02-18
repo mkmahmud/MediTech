@@ -217,7 +217,7 @@ export default function RegisterPage() {
               {/* Create Account Button */}
               <Button
                 type="submit"
-                className="w-full rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black uppercase text-[11px] tracking-[0.3em] hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95"
+                className="w-full rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black   text-[11px]   hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95"
               >
                 Create Account <Command className="w-4 h-4" />
               </Button>

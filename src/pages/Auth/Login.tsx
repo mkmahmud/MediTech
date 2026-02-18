@@ -154,7 +154,7 @@ export default function LoginPage() {
 
               <Button type="submit"
                 disabled={isLoading}
-                className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black uppercase text-[11px] tracking-[0.3em] hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95 disabled:opacity-50"
+                className="rounded-2xl h-16 bg-black dark:bg-white text-white dark:text-black font-black   text-[11px]   hover:bg-orange dark:hover:bg-orange dark:hover:text-white transition-all w-full flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95 disabled:opacity-50"
               >
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Login <Command className="w-4 h-4" /></>}
               </Button>

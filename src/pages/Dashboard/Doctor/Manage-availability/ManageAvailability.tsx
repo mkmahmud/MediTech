@@ -1,143 +1,194 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-    Clock,
-    Plus,
-    Trash2,
-    Save,
-    ShieldCheck,
-    AlertCircle,
-    Timer
+    Clock, Plus, Trash2, Save, ShieldCheck, AlertCircle, Timer
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { doctorService } from '@/lib/services/doctorService';
+import { useUserStore } from '@/stores/user/useUserStore';
+import type { DoctorAvailability } from '@/types/doctors';
+
+// Mapping for Prisma dayOfWeek (0 = Sunday)
+const DAYS_LOOKUP = [
+    { label: "sunday", value: 0 },
+    { label: "monday", value: 1 },
+    { label: "tuesday", value: 2 },
+    { label: "wednesday", value: 3 },
+    { label: "thursday", value: 4 },
+    { label: "friday", value: 5 },
+    { label: "saturday", value: 6 },
+];
 
 export default function ManageAvailability() {
     const clinicalFont = { fontFamily: "'Roboto', sans-serif" };
 
-    // Initial State Structure
-    const [schedule, setSchedule] = useState([
-        { day: "Monday", active: true, slots: [{ start: "09:00", end: "17:00" }] },
-        { day: "Tuesday", active: true, slots: [{ start: "09:00", end: "17:00" }] },
-        { day: "Wednesday", active: true, slots: [{ start: "09:00", end: "17:00" }] },
-        { day: "Thursday", active: true, slots: [{ start: "09:00", end: "17:00" }] },
-        { day: "Friday", active: true, slots: [{ start: "09:00", end: "17:00" }] },
-        { day: "Saturday", active: false, slots: [] },
-        { day: "Sunday", active: false, slots: [] },
-    ]);
+    // Get User Id
+    const { user } = useUserStore();
 
-    const toggleDay = (index: number) => {
-        const newSchedule = [...schedule];
-        newSchedule[index].active = !newSchedule[index].active;
-        if (newSchedule[index].active && newSchedule[index].slots.length === 0) {
-            newSchedule[index].slots.push({ start: "09:00", end: "17:00" });
+
+    // The state is now a flat array of availability objects, matching your DB table rows
+    const [availabilities, setAvailabilities] = useState<Partial<DoctorAvailability>[]>([]);
+
+    // Load initial data (Example mock, usually from a useEffect fetching your DB)
+    useEffect(() => {
+
+        async function fetchData() {
+            try {
+                const data = await doctorService.getAvailability(user?.id);
+                // @ts-ignore
+                setAvailabilities(data);
+            } catch (error) {
+                toast.error("Failed to load availability");
+            }
         }
-        setSchedule(newSchedule);
+
+        fetchData()
+
+    }, [user]);
+
+    const toggleDay = (dayValue: number) => {
+        const dayExists = availabilities.some(a => a.dayOfWeek === dayValue);
+
+        if (dayExists) {
+            // If it exists, we remove all slots for that day (marking it unavailable)
+            setAvailabilities(availabilities.filter(a => a.dayOfWeek !== dayValue));
+        } else {
+            // If not, add a default slot for that day
+            setAvailabilities([...availabilities, {
+                dayOfWeek: dayValue,
+                startTime: "09:00",
+                endTime: "17:00",
+                isAvailable: true
+            }]);
+        }
     };
 
-    const addSlot = (index: number) => {
-        const newSchedule = [...schedule];
-        newSchedule[index].slots.push({ start: "12:00", end: "14:00" });
-        setSchedule(newSchedule);
+    const addSlot = (dayValue: number) => {
+        setAvailabilities([...availabilities, {
+            dayOfWeek: dayValue,
+            startTime: "12:00",
+            endTime: "14:00",
+            isAvailable: true
+        }]);
     };
 
-    const removeSlot = (dayIndex: number, slotIndex: number) => {
-        const newSchedule = [...schedule];
-        newSchedule[dayIndex].slots.splice(slotIndex, 1);
-        setSchedule(newSchedule);
+    const updateTime = (index: number, field: 'startTime' | 'endTime', value: string) => {
+        const newAvail = [...availabilities];
+        newAvail[index][field] = value;
+        setAvailabilities(newAvail);
     };
 
-    console.log(schedule)
+    const removeSlot = (index: number) => {
+        setAvailabilities(availabilities.filter((_, i) => i !== index));
+    };
+
+    const handleCommit = async () => {
+        try {
+
+            const res = await doctorService.setAvailability(user?.id, availabilities);
+
+            toast.success(res.message || "Schedule updated successfully");
+        } catch (error) {
+            toast.error("protocol_sync_failed");
+        }
+    };
 
     return (
         <div style={clinicalFont} className="space-y-8 animate-in fade-in duration-500">
-            {/* Header Area */}
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 dark:border-white/5 pb-6">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                        availability_registry
+                        Availability Schedule
                     </h1>
                     <p className="text-[12px] font-medium text-gray-500 flex items-center gap-2">
                         <Clock className="w-3 h-3 text-orange" />
-                        node_id: scheduler_01 // timezone: utc+6
+                        set your weekly availability for patient bookings
                     </p>
                 </div>
                 <Button
-                    onClick={() => toast.success("scheduling_matrix_synchronized")}
+                    onClick={handleCommit}
                     className="bg-orange hover:bg-orange/90 text-white rounded-xl px-6 h-10 flex items-center gap-2 shadow-lg shadow-orange/20"
                 >
                     <Save className="w-4 h-4" />
-                    commit_schedule
+                    Save changes
                 </Button>
             </header>
 
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-                {/* Main Scheduler Config */}
                 <div className="xl:col-span-3 space-y-4">
-                    {schedule.map((item, dIdx) => (
-                        <div
-                            key={item.day}
-                            className={`group relative bg-white dark:bg-[#080808] border rounded-2xl p-5 transition-all duration-300 ${item.active
-                                ? 'border-gray-200 dark:border-white/10 opacity-100'
-                                : 'border-gray-100 dark:border-white/5 opacity-50'
-                                }`}
-                        >
-                            <div className="flex flex-col md:flex-row md:items-center gap-6">
-                                {/* Day Selector */}
-                                <div className="w-32 flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
-                                        checked={item.active}
-                                        onChange={() => toggleDay(dIdx)}
-                                        className="w-4 h-4 rounded border-gray-300 text-orange focus:ring-orange"
-                                    />
-                                    <span className={`text-sm font-bold ${item.active ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
-                                        {item.day.toLowerCase()}
-                                    </span>
-                                </div>
+                    {DAYS_LOOKUP.map((day) => {
+                        // Filter slots belonging to this specific day of the week
+                        const daySlots = availabilities.filter(a => a.dayOfWeek === day.value);
+                        const isActive = daySlots.length > 0;
 
-                                {/* Slots Grid */}
-                                <div className="flex-1 flex flex-wrap gap-3">
-                                    {item.active ? (
-                                        item.slots.map((slot, sIdx) => (
-                                            <div key={sIdx} className="flex items-center gap-2 bg-gray-50 dark:bg-white/5 p-2 rounded-xl border border-gray-100 dark:border-white/5 animate-in zoom-in-95">
-                                                <input
-                                                    type="time"
-                                                    defaultValue={slot.start}
-                                                    className="bg-transparent text-[12px] font-bold outline-none text-gray-700 dark:text-gray-300"
-                                                />
-                                                <span className="text-gray-400 text-[10px]">—</span>
-                                                <input
-                                                    type="time"
-                                                    defaultValue={slot.end}
-                                                    className="bg-transparent text-[12px] font-bold outline-none text-gray-700 dark:text-gray-300"
-                                                />
-                                                <button
-                                                    onClick={() => removeSlot(dIdx, sIdx)}
-                                                    className="ml-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
-                                                >
-                                                    <Trash2 className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <span className="text-[12px] font-medium text-gray-400 italic">offline_status</span>
-                                    )}
+                        return (
+                            <div
+                                key={day.value}
+                                className={`group relative bg-white dark:bg-[#080808] border rounded-2xl p-5 transition-all duration-300 ${isActive
+                                    ? 'border-gray-200 dark:border-white/10 opacity-100'
+                                    : 'border-gray-100 dark:border-white/5 opacity-50'
+                                    }`}
+                            >
+                                <div className="flex flex-col md:flex-row md:items-center gap-6">
+                                    <div className="w-32 flex items-center gap-3">
+                                        <input
+                                            type="checkbox"
+                                            checked={isActive}
+                                            onChange={() => toggleDay(day.value)}
+                                            className="w-4 h-4 rounded border-gray-300 text-orange focus:ring-orange"
+                                        />
+                                        <span className={`text-sm font-bold ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
+                                            {day.label}
+                                        </span>
+                                    </div>
 
-                                    {item.active && (
-                                        <button
-                                            onClick={() => addSlot(dIdx)}
-                                            className="p-2 border border-dashed border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-                                        >
-                                            <Plus className="w-4 h-4 text-orange" />
-                                        </button>
-                                    )}
+                                    <div className="flex-1 flex flex-wrap gap-3">
+                                        {isActive ? (
+                                            availabilities.map((slot, globalIdx) => {
+                                                if (slot.dayOfWeek !== day.value) return null;
+                                                return (
+                                                    <div key={globalIdx} className="flex items-center gap-2 bg-gray-50 dark:bg-white/5 p-2 rounded-xl border border-gray-100 dark:border-white/5 animate-in zoom-in-95">
+                                                        <input
+                                                            type="time"
+                                                            value={slot.startTime}
+                                                            onChange={(e) => updateTime(globalIdx, 'startTime', e.target.value)}
+                                                            className="bg-transparent text-[12px] font-bold outline-none text-gray-700 dark:text-gray-300"
+                                                        />
+                                                        <span className="text-gray-400 text-[10px]">—</span>
+                                                        <input
+                                                            type="time"
+                                                            value={slot.endTime}
+                                                            onChange={(e) => updateTime(globalIdx, 'endTime', e.target.value)}
+                                                            className="bg-transparent text-[12px] font-bold outline-none text-gray-700 dark:text-gray-300"
+                                                        />
+                                                        <button
+                                                            onClick={() => removeSlot(globalIdx)}
+                                                            className="ml-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })
+                                        ) : (
+                                            <span className="text-[12px] font-medium text-gray-400 italic">offline_status</span>
+                                        )}
+
+                                        {isActive && (
+                                            <button
+                                                onClick={() => addSlot(day.value)}
+                                                className="p-2 border border-dashed border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                                            >
+                                                <Plus className="w-4 h-4 text-orange" />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
-                {/* Sidebar Protocol Info */}
                 <aside className="space-y-6">
                     <div className="bg-black dark:bg-white p-6 rounded-[32px] text-white dark:text-black shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
