@@ -39,16 +39,15 @@ export default function LoginPage() {
       await login(data);
       navigate(from, { replace: true });
     } catch (error) {
-      console.error("AUTH_UPLINK_ERROR:", error);
+      console.error("Auth Error:", error);
     } finally {
       setIsLoading(false);
     }
   }
 
-  const clinicalFontStack = { fontFamily: "'Roboto', 'Open Sans', 'Helvetica', 'Arial', sans-serif" };
 
   return (
-    <div style={clinicalFontStack} className="min-h-screen flex flex-col lg:flex-row bg-white dark:bg-[#030303]">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-white dark:bg-[#030303]">
 
       {/* --- LEFT SIDE: BRAND ARCHIVE --- */}
       <div className="relative lg:w-1/2 bg-black flex flex-col justify-between p-8 lg:p-16 min-h-[400px] overflow-hidden">
@@ -74,12 +73,12 @@ export default function LoginPage() {
             className="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md"
           >
             <span className="flex h-1.5 w-1.5 rounded-full bg-orange animate-pulse" />
-            <span className="text-[9px] font-mono font-black text-white uppercase tracking-[0.3em]">System_Secure_Entry</span>
+            <span className="text-sm font-mono font-black text-white  ">Secure Auth</span>
           </motion.div>
 
           <h1 className="text-5xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase">
             Initialize <br />
-            <span className="text-orange italic text-4xl lg:text-6xl">User_Session.</span>
+            <span className="text-orange   text-4xl lg:text-6xl">User_Session.</span>
           </h1>
 
           <p className="text-white/50 text-sm max-w-sm leading-relaxed font-medium">

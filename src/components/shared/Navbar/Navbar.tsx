@@ -1,4 +1,4 @@
-import { HeartHandshake, Lightbulb, Moon, LayoutGrid, Fingerprint, Activity, ChevronRight } from 'lucide-react';
+import { HeartHandshake, Lightbulb, Moon, LayoutGrid, Fingerprint, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useThemeStore } from '../../../stores/themeStore';
@@ -9,7 +9,7 @@ export default function Navbar() {
   // Get User logged in or not
   const user = useAuthStore((state) => state.user);
   const isLoggedIn = !!user;
- 
+
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,34 +31,32 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-500 px-6 py-4">
+    <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-500 px-6 py-4 font-roboto">
       {/* The Desktop Glass Shell */}
       <div
         className={`max-w-7xl mx-auto h-16 flex items-center justify-between px-6 rounded-[1.5rem] transition-all duration-500 border ${scrolled
-          ? 'bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border-gray-200 dark:border-white/10 shadow-2xl h-14'
-          : 'bg-white dark:bg-[#030303] border-transparent shadow-sm'
+          ? 'bg-white/70 dark:bg-black/70 backdrop-blur-2xl border-gray-200 dark:border-white/10 shadow-2xl h-14'
+          : 'bg-white dark:bg-black border-transparent shadow-sm'
           }`}
       >
 
         {/* --- 1. BRANDING --- */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center   group">
           <div className="relative">
-            <div className="absolute inset-0 bg-orange/20 blur-lg rounded-full animate-pulse group-hover:bg-primary/20" />
-            <div className="relative h-10 w-10 flex items-center justify-center rounded-xl bg-white dark:bg-[#0A0A0A] border border-gray-100 dark:border-white/10">
+            <div className="absolute inset-0   blur-lg rounded-full animate-pulse  " />
+            <div className="relative h-10 w-10 flex items-center justify-center rounded-xl  ">
               <HeartHandshake className="w-5 h-5 text-orange group-hover:text-primary transition-colors" />
             </div>
           </div>
           <div className="flex flex-col">
             <span className="text-lg font-black tracking-tighter dark:text-white uppercase leading-none">
-              Medi<span className="text-orange">.</span>
+              Medi<span className="text-orange"> Tech</span>
             </span>
-            <span className="text-[7px] font-mono font-bold text-gray-400 uppercase tracking-widest mt-1 leading-none">
-              CLINICAL HUB
-            </span>
+
           </div>
         </Link>
 
-        {/* --- 2. THE FLOATING NAV (Desktop) --- */}
+        {/* ---   THE FLOATING NAV (Desktop) --- */}
         <div className="hidden md:flex items-center gap-1 bg-gray-50/50 dark:bg-white/[0.03] p-1.5 rounded-full border border-gray-100 dark:border-white/5">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
@@ -69,7 +67,7 @@ export default function Navbar() {
                 className="relative px-6 py-2 group"
               >
                 <div className="flex flex-col items-center relative z-10">
-                  <span className={`text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${isActive ? 'text-orange translate-y-[-1px]' : 'text-gray-500 group-hover:text-black dark:group-hover:text-white'
+                  <span className={`  text-sm font-medium   transition-all duration-300 ${isActive ? 'text-orange translate-y-[-1px]' : 'text-gray-500 group-hover:text-black dark:group-hover:text-white '
                     }`}>
                     {link.name}
                   </span>
@@ -95,14 +93,11 @@ export default function Navbar() {
         {/* --- 3. THE UTILITY HUD (Desktop) --- */}
         <div className="flex items-center gap-3">
           {/* Status Badge (Desktop Only) */}
-          <div className="hidden xl:flex items-center gap-3 px-4 h-9 bg-gray-50 dark:bg-white/5 rounded-full border border-gray-100 dark:border-white/5">
-            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#3b82f6]" />
-            <span className="text-[9px] font-mono text-gray-500 uppercase tracking-tighter font-bold">Encrypted Link: 04-26</span>
-          </div>
+
 
           <button
             onClick={toggleDarkMode}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 text-gray-400 hover:text-orange transition-all hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-white/5   text-gray-400 hover:text-orange transition-all hover:scale-110"
           >
             {isDarkMode ? <Lightbulb className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -112,15 +107,13 @@ export default function Navbar() {
           {
             isLoggedIn ? <Link
               to="/dashboard"
-              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 transition-all"
+              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
             >
-              <Fingerprint className="w-4 h-4" />
               Dashboard
             </Link> : <Link
               to="/auth/login"
-              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 transition-all"
+              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
             >
-              <Fingerprint className="w-4 h-4" />
               Login
             </Link>
           }
@@ -142,16 +135,35 @@ export default function Navbar() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
-            className="fixed inset-0 z-[110] bg-white dark:bg-[#030303] flex flex-col p-10"
+            className="fixed inset-0 z-[110] bg-white dark:bg-[#030303] flex flex-col px-10 py-6"
           >
             <div className="flex justify-between items-center border-b border-gray-100 dark:border-white/5 pb-8">
-              <div className="flex items-center gap-2">
-                <Activity className="text-orange w-5 h-5 animate-pulse" />
-                <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Network Directory</span>
+              <Link to="/" className="flex items-center   group">
+                <div className="relative">
+                  <div className="absolute inset-0   blur-lg rounded-full animate-pulse  " />
+                  <div className="relative h-10 w-10 flex items-center justify-center rounded-xl  ">
+                    <HeartHandshake className="w-5 h-5 text-orange group-hover:text-primary transition-colors" />
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-lg font-black tracking-tighter dark:text-white uppercase leading-none">
+                    Medi<span className="text-orange"> Tech</span>
+                  </span>
+
+                </div>
+              </Link>
+
+              <div className='flex items-center  space-x-2'>
+                <button
+                  onClick={toggleDarkMode}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-white/5   text-gray-400 hover:text-orange transition-all hover:scale-110"
+                >
+                  {isDarkMode ? <Lightbulb className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
+                <button onClick={() => setIsMenuOpen(false)} className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-white/5 rounded-2xl">
+                  <LayoutGrid className="w-6 h-6 rotate-45 text-orange" />
+                </button>
               </div>
-              <button onClick={() => setIsMenuOpen(false)} className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-white/5 rounded-2xl">
-                <LayoutGrid className="w-6 h-6 rotate-45 text-orange" />
-              </button>
             </div>
 
             <div className="flex flex-col gap-8 mt-16">
@@ -164,10 +176,10 @@ export default function Navbar() {
                 >
                   <span className="text-[10px] font-mono text-orange mb-1">0{i + 1}. // {link.tag}</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-6xl font-black uppercase tracking-tighter dark:text-white transition-all group-hover:italic group-hover:text-primary">
+                    <span className="text-xl font-black uppercase tracking-tighter dark:text-white transition-all group-hover:italic group-hover:text-primary">
                       {link.name}
                     </span>
-                    <ChevronRight className="w-10 h-10 text-gray-100 dark:text-white/5 group-hover:text-orange transition-colors" />
+                    <ChevronRight className="w-6 h-6 text-gray-100 dark:text-white/5 group-hover:text-orange transition-colors" />
                   </div>
                 </Link>
               ))}
@@ -179,18 +191,19 @@ export default function Navbar() {
               {
                 isLoggedIn ? <Link
                   to="/dashboard"
-                  className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 transition-all"
+                  className="  flex items-center gap-2 px-6 py-2.5 bg-black  dark:bg-white text-white justify-center dark:text-black rounded-full text-sm font-medium      "
                 >
                   <Fingerprint className="w-4 h-4" />
                   Dashboard
                 </Link> : <Link
                   to="/auth/login"
-                  className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 transition-all"
+                  className=" flex items-center gap-2 px-6 py-2.5 bg-black  dark:bg-white text-white justify-center dark:text-black rounded-full text-sm font-medium     "
                 >
                   <Fingerprint className="w-4 h-4" />
                   Login
                 </Link>
               }
+
             </div>
           </motion.div>
         )}

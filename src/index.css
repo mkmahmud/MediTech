@@ -30,7 +30,7 @@
     --color-white: #FFFFFF;
 
     /* Fonts */
-    --font-family-sans: 'Roboto', ui-sans-serif, system-ui;
+    --font-family-sans: 'Roboto';
 
     /* Font size*/
     --text-xs: 0.75rem;
