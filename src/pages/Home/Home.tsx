@@ -1,17 +1,8 @@
-import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint, Command, Star, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint, Command, CheckCircle2, } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
-import { useDoctorStore } from '@/stores/doctors/useDoctorsStore';
-import { DoctorSkeleton } from '@/components/skeleton/DoctorCardSkeleton';
-
 export default function Home() {
 
-    // Get Doctors
-    const { doctors, isLoading, fetchDoctors } = useDoctorStore();
 
-    useEffect(() => {
-        fetchDoctors();
-    }, []);
 
     return (
         <main
@@ -117,7 +108,7 @@ export default function Home() {
             </section>
 
             {/* --- 3. SPECIALIST MATRIX --- */}
-            <section className="py-32 px-10 bg-white dark:bg-[#030303]">
+            {/* <section className="py-32 px-10 bg-white dark:bg-[#030303]">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex justify-between items-end mb-16">
                         <div className="space-y-4">
@@ -163,7 +154,7 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* --- 4. CLINICAL PROTOCOL --- */}
             <section className="py-32 px-10 border-t border-gray-100 dark:border-white/5">
