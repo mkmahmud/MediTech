@@ -50,7 +50,7 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
                     <Select
                         {...field}
                         className={cn(
-                            "h-16 rounded-2xl bg-white dark:bg-white/[0.02] border-none outline-none shadow-sm dark:text-white font-bold transition-all focus:ring-1 focus:ring-orange appearance-none",
+                            "    bg-white dark:bg-white/[0.02] border-none outline-none   dark:text-white font-medium transition-all focus:ring-1 focus:ring-orange  font-roboto",
                             IconComponent && "pl-12",
                             className
                         )}
@@ -63,11 +63,12 @@ export const SelectGroup: React.FC<SelectGroupProps> = ({
                                 {placeholder}
                             </option>
                         )}
+                        
                         {options.map((option) => (
                             <option
                                 key={option.value}
                                 value={option.value}
-                                className="bg-white dark:bg-[#0c0c0c] text-black dark:text-white py-2 font-bold uppercase text-sm"
+                                className="bg-orange/20 dark:bg-dark-bg text-black dark:text-white "
                             >
                                 {option.label}
                             </option>

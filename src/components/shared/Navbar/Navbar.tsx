@@ -102,7 +102,12 @@ export default function Navbar() {
             {isDarkMode ? <Lightbulb className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-
+          <Link
+            to="/appointment"
+            className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-orange dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
+          >
+            Book appointment
+          </Link>
 
           {
             isLoggedIn ? <Link
@@ -187,7 +192,12 @@ export default function Navbar() {
 
             <div className="mt-auto flex flex-col gap-4">
               <div className="h-[1px] w-full bg-gradient-to-r from-orange to-transparent opacity-20" />
-
+              <Link
+                to="/appointment"
+                className="  sm:flex items-center text-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
+              >
+                Book appointment
+              </Link>
               {
                 isLoggedIn ? <Link
                   to="/dashboard"

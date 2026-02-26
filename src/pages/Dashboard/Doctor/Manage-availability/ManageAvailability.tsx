@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { doctorService } from '@/lib/services/doctorService';
 import { useUserStore } from '@/stores/user/useUserStore';
 import type { DoctorAvailability } from '@/types/doctors';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Mapping for Prisma dayOfWeek (0 = Sunday)
 const DAYS_LOOKUP = [
@@ -21,39 +22,45 @@ const DAYS_LOOKUP = [
 
 export default function ManageAvailability() {
     const clinicalFont = { fontFamily: "'Roboto', sans-serif" };
-
-    // Get User Id
+    const queryClient = useQueryClient();
     const { user } = useUserStore();
 
-
-    // The state is now a flat array of availability objects, matching your DB table rows
+    // Local state for the "draft" schedule
     const [availabilities, setAvailabilities] = useState<Partial<DoctorAvailability>[]>([]);
 
-    // Load initial data (Example mock, usually from a useEffect fetching your DB)
+    // 1. Fetching Data
+    const { data: serverData, isLoading } = useQuery({
+        queryKey: ['availability', user?.id],
+        queryFn: () => doctorService.getAvailability(user?.id),
+        enabled: !!user?.id,
+        staleTime: 1000 * 60 * 5,
+    });
+
+    // 2. Hydrate local state from cache/server whenever data changes
     useEffect(() => {
-
-        async function fetchData() {
-            try {
-                const data = await doctorService.getAvailability(user?.id);
-                // @ts-ignore
-                setAvailabilities(data);
-            } catch (error) {
-                toast.error("Failed to load availability");
-            }
+        if (serverData) {
+            setAvailabilities(serverData as any);
         }
+    }, [serverData]);
 
-        fetchData()
-
-    }, [user]);
+    // 3. Mutation for saving changes
+    const mutation = useMutation({
+        mutationFn: (newSchedule: Partial<DoctorAvailability>[]) => 
+            doctorService.setAvailability(user?.id, newSchedule),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['availability', user?.id] });
+            toast.success(res.message || "Schedule updated successfully");
+        },
+        onError: () => {
+            toast.error("protocol_sync_failed");
+        }
+    });
 
     const toggleDay = (dayValue: number) => {
         const dayExists = availabilities.some(a => a.dayOfWeek === dayValue);
-
         if (dayExists) {
-            // If it exists, we remove all slots for that day (marking it unavailable)
             setAvailabilities(availabilities.filter(a => a.dayOfWeek !== dayValue));
         } else {
-            // If not, add a default slot for that day
             setAvailabilities([...availabilities, {
                 dayOfWeek: dayValue,
                 startTime: "09:00",
@@ -82,15 +89,8 @@ export default function ManageAvailability() {
         setAvailabilities(availabilities.filter((_, i) => i !== index));
     };
 
-    const handleCommit = async () => {
-        try {
-
-            const res = await doctorService.setAvailability(user?.id, availabilities);
-
-            toast.success(res.message || "Schedule updated successfully");
-        } catch (error) {
-            toast.error("protocol_sync_failed");
-        }
+    const handleCommit = () => {
+        mutation.mutate(availabilities);
     };
 
     return (
@@ -107,17 +107,23 @@ export default function ManageAvailability() {
                 </div>
                 <Button
                     onClick={handleCommit}
+                    disabled={mutation.isPending}
                     className="bg-orange hover:bg-orange/90 text-white rounded-xl px-6 h-10 flex items-center gap-2 shadow-lg shadow-orange/20"
                 >
                     <Save className="w-4 h-4" />
-                    Save changes
+                    {mutation.isPending ? "Saving..." : "Save changes"}
                 </Button>
             </header>
+
+            {isLoading && (
+                <div className="p-4 bg-yellow-50 text-yellow-700 rounded-lg">
+                    loading_availability...
+                </div>
+            )}
 
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
                 <div className="xl:col-span-3 space-y-4">
                     {DAYS_LOOKUP.map((day) => {
-                        // Filter slots belonging to this specific day of the week
                         const daySlots = availabilities.filter(a => a.dayOfWeek === day.value);
                         const isActive = daySlots.length > 0;
 
@@ -137,7 +143,7 @@ export default function ManageAvailability() {
                                             onChange={() => toggleDay(day.value)}
                                             className="w-4 h-4 rounded border-gray-300 text-orange focus:ring-orange"
                                         />
-                                        <span className={`text-sm font-bold ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
+                                        <span className={`text-sm font-bold capitalize ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
                                             {day.label}
                                         </span>
                                     </div>

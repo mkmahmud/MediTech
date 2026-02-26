@@ -43,10 +43,9 @@ export default function DoctorsPage() {
         });
     }, [searchQuery, activeCategory]);
 
-    const fontStack = { fontFamily: "'Roboto', 'Open Sans', 'Helvetica', 'Arial', sans-serif" };
-
+ 
     return (
-        <div style={fontStack} className="min-h-screen bg-[#fcfcfc] dark:bg-[#030303] text-[#1a1a1a] dark:text-white selection:bg-orange">
+        <div   className="min-h-screen bg-[#fcfcfc] dark:bg-[#030303] text-[#1a1a1a] dark:text-white selection:bg-orange">
 
             {/* --- STICKY SEARCH HEADER --- */}
             {/* Added backdrop-blur for a premium feel when scrolling cards underneath */}
