@@ -17,6 +17,12 @@ export const doctorService = {
         return response.data;
     },
 
+    // Get Doctor Profile by ID
+    getDoctorById: async (doctorId: any) => {
+        const response = await api.get(`/doctors/${doctorId}/profile`);
+        return response.data;
+    },
+
     // Get All Availabilities for a Doctor
     getAvailability: async (doctorId: any) => {
         const response = await api.get<DoctorAvailability>(`/doctors/${doctorId}/availability`);

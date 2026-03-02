@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DoctorSkeleton } from "@/components/skeleton/DoctorCardSkeleton";
 import { AppPagination } from "@/components/shared/AppPagination";
 import { NoDataFound } from "@/components/shared/NoDataFound";
+import { Link } from "react-router";
 
 export default function Appointment() {
     const [page, setPage] = useState(1);
@@ -172,7 +173,9 @@ export default function Appointment() {
                                     <div className="w-full h-full bg-gray-200 dark:bg-white/10" >
                                         <img src={doctor?.profileImageUrl || '/doctor.jpg'} alt="" /></div>
                                     <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                                        <button className="w-full py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">Book Consultation</button>
+                                        <Link to={`/appointment/${doctor?.id}`}>
+                                            <button className="w-full py-3 bg-white text-black rounded-xl font-black text-sm cursor-pointer  ">Book Consultation</button>
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className="px-4 pb-4">

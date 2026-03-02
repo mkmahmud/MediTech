@@ -20,6 +20,7 @@ const About = lazy(() => import('./pages/About/About'));
 const Doctors = lazy(() => import('./pages/Doctors/Doctors'));
 const Services = lazy(() => import('./pages/Services/Services'));
 const AppointmentBooking = lazy(() => import('./pages/Appointment/Appointment'));
+const BookAppointment = lazy(() => import('./pages/Appointment/BookAppointment/BookAppointment'));
 
 // Dashboard Pages
 const DashboardOverview = lazy(() => import('./pages/Dashboard/Overview'));
@@ -91,6 +92,7 @@ function App() {
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/services" element={<Services />} />
             <Route path="/appointment" element={<AppointmentBooking />} />
+            <Route path="/appointment/:id" element={<BookAppointment />} />
           </Route>
 
           {/* Dashboard routes */}
