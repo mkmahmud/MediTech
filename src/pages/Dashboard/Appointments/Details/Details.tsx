@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -6,42 +7,9 @@ import { Button } from "@/components/ui/button";
 import { NoDataFound } from "@/components/shared/NoDataFound";
 import { Calendar, ChevronLeft, Clock, MapPin, Video } from "lucide-react";
 import type { AppointmentDetails } from "../appointmentTypes";
-
-const statusStyle = (status: string) => {
-    switch (status) {
-        case "scheduled":
-            return "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300";
-        case "confirmed":
-            return "bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300";
-        case "in_progress":
-            return "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300";
-        case "completed":
-            return "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300";
-        case "cancelled":
-            return "bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300";
-        default:
-            return "bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300";
-    }
-};
-
-const formatDate = (date?: string | null) => {
-    if (!date) return "N/A";
-    return new Date(date).toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
-};
-
-const formatTime = (date?: string | null) => {
-    if (!date) return "N/A";
-    return new Date(date).toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-    });
-};
+import { formatDate, formatTime } from "@/lib/utils";
+import { StatusStyle } from "../components/ui/Status";
+import CompleteAppointment from "../components/CompleteAppointment";
 
 const formatStatus = (status: string) => status.replaceAll("_", " ");
 
@@ -53,6 +21,7 @@ export default function Details() {
     const { id } = useParams();
     const { user } = useAuthStore();
     const role = user?.role;
+    const [completeModalOpen, setCompleteModalOpen] = useState(false);
 
     const { data, isLoading } = useQuery({
         queryKey: ["appointment-details", id],
@@ -80,6 +49,7 @@ export default function Details() {
     const isPatient = role === "PATIENT";
     const isDoctor = role === "DOCTOR";
     const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
+    const doctorId = (user as any)?.doctorId || user?.id;
 
     return (
         <div className="dark:text-white min-h-screen">
@@ -96,7 +66,7 @@ export default function Details() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                    <div className={`rounded-2xl p-6 border ${statusStyle(normalizedStatus)}`}>
+                    <div className={`rounded-2xl p-6 border ${StatusStyle(normalizedStatus)}`}>
                         <div className="flex items-center justify-between gap-4">
                             <div>
                                 <p className="text-sm font-medium opacity-75">Appointment Status</p>
@@ -225,8 +195,27 @@ export default function Details() {
                         </div>
                     )}
 
+                    {isDoctor && normalizedStatus === "confirmed" && (
+                        <div className="border rounded-2xl p-6 dark:border-gray-800 dark:bg-gray-800/50">
+                            <h3 className="text-lg font-black mb-4">Actions</h3>
+                            <Button 
+                                onClick={() => setCompleteModalOpen(true)}
+                                className="w-full"
+                            >
+                                Complete Appointment
+                            </Button>
+                        </div>
+                    )}
+
                 </div>
             </div>
+
+            <CompleteAppointment
+                open={completeModalOpen}
+                onOpenChange={setCompleteModalOpen}
+                doctorId={doctorId}
+                appointmentId={appointment.id}
+            />
         </div>
     );
 }

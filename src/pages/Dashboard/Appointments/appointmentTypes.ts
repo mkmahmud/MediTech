@@ -37,3 +37,16 @@ export type AppointmentDetails = {
         };
     };
 };
+
+export const APPOINTMENT_FILTER_STATUSES = [
+    "all",
+    "scheduled",
+    "confirmed",
+    "in_progress",
+    "completed",
+    "cancelled",
+    "no_show",
+    "rescheduled",
+] as const;
+
+export type AppFilterStatus = (typeof APPOINTMENT_FILTER_STATUSES)[number];

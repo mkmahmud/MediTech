@@ -1,11 +1,12 @@
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { appointmentService } from "@/lib/services/appointment/appointmentService";
 import { AppointmentSkeleton } from "@/pages/Dashboard/Appointments/components/skeleton/AppointmentSkeleton";
 import { NoDataFound } from "@/components/shared/NoDataFound";
 import AppointmentCard from "../AppointmentCard";
+import { AppointmentStatusFilters } from "../ui/AppointmentStatusFilters";
+import { type AppFilterStatus } from "@/pages/Dashboard/Appointments/appointmentTypes";
 
 export default function Patient() {
     const { user } = useAuthStore();
@@ -14,14 +15,13 @@ export default function Patient() {
     const { data, isLoading } = useQuery({
         queryKey: ["appointments", user?.id, userRole],
         queryFn: async () => {
-            return appointmentService.getAppointmentsByPatientId(user?.id as string);
+            return appointmentService.getAppointmentsByPatientId(user?.patientId as string);
         },
         enabled: !!user?.id,
     });
 
-    const [filterStatus, setFilterStatus] = useState<
-        "all" | "scheduled" | "confirmed" | "in_progress" | "completed" | "cancelled" | "no_show" | "rescheduled"
-    >("all");
+
+    const [filterStatus, setFilterStatus] = useState<AppFilterStatus>("all");
 
     const appointments = data
         ? (Array.isArray(data) ? data : data?.data || []).map((apt: any) => ({
@@ -41,17 +41,12 @@ export default function Patient() {
 
 
             {/* Filter Tabs */}
-            <div className="flex gap-3 mb-8 flex-wrap">
-                {["all", "scheduled", "confirmed", "in_progress", "completed", "cancelled", "no_show", "rescheduled"].map((status) => (
-                    <Button
-                        key={status}
-                        onClick={() => setFilterStatus(status as any)}
-                        variant={filterStatus === status ? "default" : "secondary"}
-                    >
-                        {status}
-                    </Button>
-                ))}
-            </div>
+            <AppointmentStatusFilters
+                appointments={appointments}
+                selectedStatus={filterStatus}
+                onStatusChange={setFilterStatus}
+                className="flex gap-3 mb-8 flex-wrap"
+            />
 
             {/* Appointments Grid */}
             {isLoading ? (

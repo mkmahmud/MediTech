@@ -7,6 +7,8 @@ interface User {
     role: string;
     firstName?: string;
     lastName?: string;
+    patientId?: string;
+    doctorId?: string;
 }
 
 interface AuthState {

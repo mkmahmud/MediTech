@@ -15,8 +15,8 @@ export const appointmentService = {
     },
 
     // get appointments by doctor id
-    getAppointmentsByDoctorId: async (doctorId: string) => {
-        const response = await api.get(`/appointments/get-appointments-by-doctor-id?doctorId=${doctorId}`);
+    getAppointmentsByDoctorId: async (doctorId: string, date: string) => {
+        const response = await api.get(`/appointments/get-appointments-by-doctor-id?doctorId=${doctorId}&date=${date}`);
         return response.data;
     },
 
@@ -31,4 +31,10 @@ export const appointmentService = {
         const response = await api.get(`/appointments/get-appointment-details/${appointmentId}`);
         return response.data;
     },
+
+    // Complete appointment with diagnosis and notes by Doctor
+    completeAppointment: async (data: any) => {
+        const response = await api.post(`/appointments/complete-appointment`, data);
+        return response.data;
+    }
 };
