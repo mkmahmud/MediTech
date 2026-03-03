@@ -11,15 +11,17 @@ const buttonVariants = cva(
       variant: {
         default:
           // "bg-primary/90 text-white hover:bg-primary ",
-          "gap-2 px-6 py-2.5 bg-orange dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all ",
+          "gap-2 px-6 py-2.5 bg-orange dark:bg-white text-white dark:text-black rounded text-sm font-medium   active:scale-95 transition-all  ",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-[#0D1A63] text-white shadow-sm hover:bg-[#1A2CA3] dark:bg-red-600 dark:hover:bg-red-700 active:scale-95 transition-all",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-[#1A2CA3] bg-transparent text-[#1A2CA3] dark:border-[#2845D6] dark:text-[#2845D6] shadow-sm hover:bg-[#1A2CA3] hover:text-white dark:hover:bg-[#2845D6] dark:hover:text-white active:scale-95 transition-all",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        ghost: "text-[#1A2CA3] dark:text-[#2845D6] hover:bg-[#fcfcfc] dark:hover:bg-[#030303] hover:text-[#0D1A63] dark:hover:text-white transition-all",
+        link: "text-[#1A2CA3] dark:text-[#2845D6] underline-offset-4 hover:underline hover:text-[#0D1A63] dark:hover:text-white transition-colors",
+        denger: "bg-red-600 text-white shadow-sm hover:bg-red-700 active:scale-95 transition-all",
+        disabled: "bg-gray-300 text-gray-500 cursor-not-allowed",
       },
       size: {
         default: "h-9 px-4 py-2",

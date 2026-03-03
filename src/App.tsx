@@ -25,11 +25,15 @@ const BookAppointment = lazy(() => import('./pages/Appointment/BookAppointment/B
 // Dashboard Pages
 const DashboardOverview = lazy(() => import('./pages/Dashboard/Overview'));
 const Patients = lazy(() => import('./pages/Dashboard/Patients'));
-const Appointments = lazy(() => import('./pages/Dashboard/Appointments'));
 const Settings = lazy(() => import('./pages/Dashboard/Settings'));
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Register = lazy(() => import('./pages/Auth/Register'));
 const NotFound = lazy(() => import('./pages/NOtfound'));
+
+// Dashboard ~ Appointments Pages
+const Appointments = lazy(() => import('./pages/Dashboard/Appointments/Appointments'));
+const AppointmentDetails = lazy(() => import('./pages/Dashboard/Appointments/Details/Details'));
+
 
 // Dashboard Admin Pages
 const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
@@ -100,8 +104,13 @@ function App() {
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<DashboardOverview />} />
               <Route path="patients" element={<Patients />} />
-              <Route path="appointments" element={<Appointments />} />
               <Route path="settings" element={<Settings />} />
+
+              {/* Appointments */}
+              <Route path="appointments" element={<Appointments />} />
+              <Route path="appointments/:id" element={<AppointmentDetails />} />
+
+
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />
 
