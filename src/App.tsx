@@ -48,18 +48,24 @@ const Profile = lazy(() => import('./pages/Dashboard/profile/Profile'));
 
 
 function App() {
-  const { refresh } = useAuth();
+  const { refresh, setupTokenExpirationListener } = useAuth();
   const setInitialized = useAuthStore((s) => s.setInitialized);
   const isInitialized = useAuthStore((s) => s.isInitialized);
 
+  // Auto Logout on token expiration
   useEffect(() => {
     const bootstrap = async () => {
       const rt = localStorage.getItem('medi_rt_key');
 
       if (rt) {
         try {
-
           await refresh();
+
+          // Setup token expiration listener for restored session
+          const { accessToken } = useAuthStore.getState();
+          if (accessToken) {
+            setupTokenExpirationListener(accessToken);
+          }
         } catch (e) {
           console.error("Session restoration failed", e);
         }
@@ -69,7 +75,7 @@ function App() {
     };
 
     bootstrap();
-  }, []);
+  }, [refresh, setupTokenExpirationListener, setInitialized]);
 
 
   if (!isInitialized) return <LoadingScreen />;

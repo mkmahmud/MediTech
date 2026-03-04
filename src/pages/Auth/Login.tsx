@@ -7,7 +7,10 @@ import { Link, useLocation, useNavigate } from "react-router"
 import { HeartHandshake, Command, ShieldCheck, Activity, Fingerprint, Loader2 } from "lucide-react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/hooks/auth/useAuth"
-import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { useUserStore } from "@/stores/user/useUserStore"
+import { toast } from "sonner"
+import { userService } from "@/lib/services/userService"
 
 interface LoginFormData {
   email: string
@@ -17,8 +20,7 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false); // Loading state added
-
+  const { setUser } = useUserStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,18 +34,59 @@ export default function LoginPage() {
     },
   })
 
-  const onSubmit = async (data: LoginFormData) => {
+  // Login Mutation
+  const { mutate: handleLogin, isPending: isLoading } = useMutation({
+    mutationFn: async (data: LoginFormData) => {
+      // Clear previous errors
+      methods.clearErrors();
 
-    setIsLoading(true);
-    try {
-      await login(data);
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error("Auth Error:", error);
-    } finally {
-      setIsLoading(false);
+      // Call login from useAuth hook
+      return await login({
+        email: data.email,
+        password: data.password,
+      });
+    },
+    // @ts-ignore
+    onSuccess: async (response: any) => {
+      try {
+        // Fetch full user profile and set it in the store
+        const userProfile = await userService.getProfile();
+        setUser(userProfile);
+
+        toast.success("Authentication_Protocol_Initialized");
+
+        // Redirect after successful login
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 500);
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+        // Still navigate even if profile fetch fails
+        navigate(from, { replace: true });
+      }
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || error?.message || "Authentication_Failed";
+
+      // Handle specific field errors
+      if (error?.response?.status === 401 || error?.response?.status === 400) {
+        if (errorMessage.includes("email")) {
+          methods.setError("email", { type: "manual", message: errorMessage });
+        } else if (errorMessage.includes("password")) {
+          methods.setError("password", { type: "manual", message: errorMessage });
+        } else {
+          methods.setError("email", { type: "manual", message: errorMessage });
+        }
+      }
+
+      console.error("Login Error:", error);
+      toast.error(errorMessage);
     }
-  }
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    handleLogin(data);
+  };
 
 
   return (
