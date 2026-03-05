@@ -18,6 +18,7 @@ const AuthLayout = lazy(() => import('./layouts/AuthLayout'));
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
 const Doctors = lazy(() => import('./pages/Doctors/Doctors'));
+const DoctorProfile = lazy(() => import('./pages/Doctors/DoctorProfile'));
 const Services = lazy(() => import('./pages/Services/Services'));
 const AppointmentBooking = lazy(() => import('./pages/Appointment/Appointment'));
 const BookAppointment = lazy(() => import('./pages/Appointment/BookAppointment/BookAppointment'));
@@ -100,6 +101,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/doctors" element={<Doctors />} />
+            <Route path="/doctors/:id" element={<DoctorProfile />} />
             <Route path="/services" element={<Services />} />
             <Route path="/appointment" element={<AppointmentBooking />} />
             <Route path="/appointment/:id" element={<BookAppointment />} />

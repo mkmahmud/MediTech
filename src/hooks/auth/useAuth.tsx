@@ -90,9 +90,28 @@ export const useAuth = () => {
 
     // Logout
     const logout = useCallback(async () => {
-        clearTokenExpirationListener();
-        await authService.logout();
-        clearAuth();
+        try {
+            clearTokenExpirationListener();
+            await authService.logout();
+            clearAuth();
+            toast.dismiss('logout-toast');
+            toast.success("Logged out successfully");
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = '/auth/login';
+            }, 500);
+        } catch (error) {
+            console.error("Logout error:", error);
+            // Clear auth state even if API call fails
+            clearTokenExpirationListener();
+            clearAuth();
+            toast.dismiss('logout-toast');
+            toast.info("Logged out locally");
+            // Redirect to login page even if API fails
+            setTimeout(() => {
+                window.location.href = '/auth/login';
+            }, 500);
+        }
     }, [clearAuth, clearTokenExpirationListener]);
 
 

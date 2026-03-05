@@ -64,7 +64,14 @@ export const authService = {
      * Logout user and invalidate token
      */
     logout: async () => {
-        return await api.post('/auth/logout');
+        try {
+            return await api.post('/auth/logout');
+        } catch (error) {
+            console.error("Logout API call failed:", error);
+            // Even if API call fails, we should clear local auth state
+            // This ensures logout works even if backend is unreachable
+            return { success: true, message: "Logged out locally" };
+        }
     },
 
     /**

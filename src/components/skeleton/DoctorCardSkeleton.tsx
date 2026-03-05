@@ -1,20 +1,47 @@
 export const DoctorSkeleton = () => {
     return (
-        <div className="bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-4 animate-pulse">
-            {/* Image Area Skeleton */}
-            <div className="aspect-[4/5] rounded-[2rem] bg-gray-200 dark:bg-white/10 mb-6" />
+        <div className="group bg-white dark:bg-[#080808] rounded-3xl sm:rounded-[40px] p-6 sm:p-8 lg:p-12 border border-gray-100 dark:border-white/5 flex flex-col lg:flex-row gap-8 lg:gap-12 items-center animate-pulse">
+            {/* Avatar Skeleton */}
+            <div className="relative flex-shrink-0">
+                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gray-200 dark:bg-white/10" />
+                {/* Status dot skeleton */}
+                <div className="absolute -bottom-1 right-2 h-5 w-5 bg-gray-200 dark:bg-white/10 rounded-full" />
+            </div>
 
-            {/* Text Area Skeleton */}
-            <div className="px-4 pb-4">
-                <div className="flex justify-between items-center mb-3">
-                    {/* Name Bar */}
-                    <div className="h-5 w-32 bg-gray-200 dark:bg-white/10 rounded-lg" />
-                    {/* Rating Bar */}
-                    <div className="h-4 w-10 bg-gray-200 dark:bg-white/10 rounded-lg" />
+            {/* Content Skeleton */}
+            <div className="flex-1 space-y-4 w-full">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="space-y-3 flex-1">
+                        {/* Name */}
+                        <div className="h-7 sm:h-8 w-48 sm:w-56 bg-gray-200 dark:bg-white/10 rounded-xl" />
+                        
+                        {/* Specialty badges */}
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <div className="h-6 w-32 bg-gray-200 dark:bg-white/10 rounded-full" />
+                            <div className="h-6 w-24 bg-gray-200 dark:bg-white/10 rounded-full" />
+                        </div>
+                    </div>
+                    
+                    {/* Rating & Experience */}
+                    <div className="flex items-center gap-4">
+                        <div className="h-8 w-16 bg-gray-200 dark:bg-white/10 rounded-full" />
+                        <div className="h-4 w-px bg-gray-200 dark:bg-white/10" />
+                        <div className="h-6 w-12 bg-gray-200 dark:bg-white/10 rounded-full" />
+                    </div>
                 </div>
 
-                {/* Designation Bar */}
-                <div className="h-3 w-24 bg-gray-200 dark:bg-white/10 rounded-lg" />
+                {/* Info lines */}
+                <div className="space-y-2">
+                    <div className="h-4 w-64 bg-gray-200 dark:bg-white/10 rounded-lg" />
+                    <div className="h-4 w-48 bg-gray-200 dark:bg-white/10 rounded-lg" />
+                    <div className="h-4 w-40 bg-gray-200 dark:bg-white/10 rounded-lg" />
+                </div>
+            </div>
+
+            {/* Action Buttons Skeleton */}
+            <div className="flex sm:flex-row flex-col gap-3 w-full lg:w-auto">
+                <div className="h-16 sm:h-20 w-full sm:w-20 rounded-2xl sm:rounded-full bg-gray-200 dark:bg-white/10" />
+                <div className="h-16 sm:h-20 w-full sm:w-40 rounded-2xl sm:rounded-full bg-gray-200 dark:bg-white/10" />
             </div>
         </div>
     );

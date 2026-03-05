@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavLink, Link, useLocation } from 'react-router'
 import { motion } from "framer-motion"
 import {
@@ -10,6 +11,7 @@ import {
 import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { toast } from 'sonner';
 
 // Dynamic Navigation Configuration
 const ALL_NAV_ITEMS = [
@@ -93,6 +95,7 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
     const user = useAuthStore((state) => state.user);
     const userRole = user?.role;
     const { logout } = useAuth();
+    const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
 
 
@@ -101,7 +104,20 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
     const filteredNav = ALL_NAV_ITEMS.filter(item => item.roles.includes(userRole || ""));
 
     const handleLogout = async () => {
-        await logout();
+        if (isLoggingOut) return; // Prevent multiple clicks
+        
+        setIsLoggingOut(true);
+        toast.loading("Logging out...", { id: 'logout-toast' });
+        
+        try {
+            await logout();
+            // Navigation is handled inside the logout function
+        } catch (error) {
+            console.error("Logout failed:", error);
+            setIsLoggingOut(false);
+            toast.dismiss('logout-toast');
+            // Logout function handles navigation even on error
+        }
     }
 
     const clinicalFontStack = { fontFamily: "'Roboto', 'Open Sans', 'Arial', sans-serif" };
@@ -149,8 +165,16 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
                 ))}
             </nav>
 
-            <Button variant="destructive" size="lg" className="text-white mt-6 w-full" onClick={handleLogout}>
-                <span className="text-[10px] font-black uppercase tracking-widest">Log Out</span>
+            <Button 
+                variant="destructive" 
+                size="lg" 
+                className="text-white mt-6 w-full" 
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+            >
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                    {isLoggingOut ? 'Logging Out...' : 'Log Out'}
+                </span>
             </Button>
 
             {/* Footer Status */}

@@ -17,21 +17,21 @@ export const doctorService = {
         return response.data;
     },
 
-    // Get Doctor Profile by ID
-    getDoctorById: async (doctorId: any) => {
-        const response = await api.get(`/doctors/${doctorId}/profile`);
+    // Get Doctor Profile by ID (userId is passed)
+    getDoctorById: async (userId: string) => {
+        const response = await api.get(`/doctors/${userId}/profile`);
         return response.data;
     },
 
-    // Get All Availabilities for a Doctor
-    getAvailability: async (doctorId: any) => {
-        const response = await api.get<DoctorAvailability>(`/doctors/${doctorId}/availability`);
+    // Get All Availabilities for a Doctor (userId is passed)
+    getAvailability: async (userId: string) => {
+        const response = await api.get<DoctorAvailability>(`/doctors/${userId}/availability`);
         return response.data;
     },
 
-    // Create or Update Availability for a Doctor
-    setAvailability: async (doctorId: any, availabilityData: any) => {
-        const response = await api.post(`/doctors/${doctorId}/availability`, availabilityData);
+    // Create or Update Availability for a Doctor (userId is passed)
+    setAvailability: async (userId: string, availabilityData: any) => {
+        const response = await api.post(`/doctors/${userId}/availability`, availabilityData);
         return response.data;
     },
 
