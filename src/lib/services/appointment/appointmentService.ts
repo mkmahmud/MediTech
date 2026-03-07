@@ -20,6 +20,12 @@ export const appointmentService = {
         return response.data;
     },
 
+    // get appointments by doctor id with download option
+    getAppointmentsByDoctorIdForDownload: async (doctorId: string, date: string) => {
+        const response = await api.get(`/appointments/get-appointments-by-doctor-id?doctorId=${doctorId}&date=${date}&download=true`);
+        return response.data;
+    },
+
     // Cancel appointment
     cancelAppointment: async (data: any) => {
         const response = await api.post(`/appointments/cancel-appointment`, data);

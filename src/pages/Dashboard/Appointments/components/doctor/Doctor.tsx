@@ -6,15 +6,18 @@ import { Button } from "@/components/ui/button";
 import { NoDataFound } from "@/components/shared/NoDataFound";
 import { Calendar as DatePicker } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar, AlertCircle } from "lucide-react";
+import { Calendar, AlertCircle, Download } from "lucide-react";
 import AppointmentCardDoctor from "../AppointmentCardDoctor";
 import { AppointmentStatusFilters } from "../ui/AppointmentStatusFilters";
 import { type AppFilterStatus } from "@/pages/Dashboard/Appointments/appointmentTypes";
+import { AppointmentsPDFExport, triggerAppointmentsPDFDownload, type AppointmentForPDF } from "@/components/dashboard/AppointmentsPDFExport";
+import { toast } from "sonner";
 
 export default function Doctor() {
     const { user } = useAuthStore();
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [filterStatus, setFilterStatus] = useState<AppFilterStatus>("all");
+    const [isDownloading, setIsDownloading] = useState(false);
 
     const doctorId = (user as any)?.doctorId || user?.id;
 
@@ -58,6 +61,51 @@ export default function Doctor() {
         });
     };
 
+    const handleDownloadPDF = async () => {
+        if (appointments.length === 0) {
+            toast.error("No appointments to download");
+            return;
+        }
+
+        try {
+            setIsDownloading(true);
+
+            // Fetch appointments with download flag
+            const downloadData = await appointmentService.getAppointmentsByDoctorIdForDownload(
+                doctorId as string,
+                formatApiDate(selectedDate)
+            );
+
+            // Convert to PDF format
+            const pdfAppointments: AppointmentForPDF[] = Array.isArray(downloadData)
+                ? downloadData
+                : downloadData?.data || [];
+
+            if (!pdfAppointments || pdfAppointments.length === 0) {
+                toast.error("No appointment data available for download");
+                return;
+            }
+
+            // Trigger PDF generation and wait for it
+            const doctorName = user?.firstName ? `${user.firstName} ${user.lastName || ""}` : "Doctor";
+            try {
+                triggerAppointmentsPDFDownload(pdfAppointments, selectedDate, doctorName);
+                // Give the browser a moment to start the download
+                setTimeout(() => {
+                    toast.success("PDF downloaded successfully");
+                }, 500);
+            } catch (pdfError) {
+                console.error("PDF generation error:", pdfError);
+                toast.error("Failed to generate PDF. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error downloading PDF:", error);
+            toast.error("Failed to download PDF");
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     if (isLoading) {
         return <div className="dark:text-white text-center py-12">Loading your schedule...</div>;
     }
@@ -69,33 +117,46 @@ export default function Doctor() {
 
 
             {/* Step 1: Date Selection */}
-            <div className="mb-8 rounded-2xl border p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900/40">
-                <h2 className="text-lg font-black mb-3">Select Date</h2>
-                <div className="flex flex-wrap items-center gap-3">
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline" className="h-10 min-w-[280px] justify-start rounded-lg">
-                                <Calendar className="mr-2 h-4 w-4" />
-                                {formatDateForDisplay(selectedDate)}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto rounded-xl p-0" align="start">
-                            <DatePicker
-                                mode="single"
-                                selected={selectedDate}
-                                onSelect={(date) => {
-                                    if (date) {
-                                        setSelectedDate(date);
-                                        setFilterStatus("all");
-                                    }
-                                }}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Showing for {apiDate}
-                    </span>
+            <div className="mb-8 rounded-2xl border p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900/40 flex justify-between items-center">
+                <div>
+                    <h2 className="text-lg font-black mb-3">Select Date</h2>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" className="h-10 min-w-[280px] justify-start rounded-lg">
+                                    <Calendar className="mr-2 h-4 w-4" />
+                                    {formatDateForDisplay(selectedDate)}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto rounded-xl p-0" align="start">
+                                <DatePicker
+                                    mode="single"
+                                    selected={selectedDate}
+                                    onSelect={(date) => {
+                                        if (date) {
+                                            setSelectedDate(date);
+                                            setFilterStatus("all");
+                                        }
+                                    }}
+                                    initialFocus
+                                />
+                            </PopoverContent>
+                        </Popover>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                            Showing for {apiDate}
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadPDF}
+                        disabled={isDownloading || appointments.length === 0}
+                    >
+                        <Download className="mr-2 h-4 w-4" />
+                        {isDownloading ? "Generating..." : "Download PDF"}
+                    </Button>
                 </div>
             </div>
 
@@ -140,6 +201,12 @@ export default function Doctor() {
                     description={`No appointments found for ${apiDate}.`}
                 />
             )}
+
+            {/* PDF Export Component */}
+            <AppointmentsPDFExport
+                appointments={appointments}
+                selectedDate={selectedDate}
+            />
         </div>
     );
 }
