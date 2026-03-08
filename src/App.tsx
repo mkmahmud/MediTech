@@ -38,6 +38,8 @@ const AppointmentDetails = lazy(() => import('./pages/Dashboard/Appointments/Det
 
 // Dashboard Admin Pages
 const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
+const Audit = lazy(() => import('./pages/Dashboard/Admin/Audit/Audit'));
+
 
 // Dashboard Doctor Page
 const ManageAvailability = lazy(() => import('./pages/Dashboard/Doctor/Manage-availability/ManageAvailability'));
@@ -121,6 +123,7 @@ function App() {
 
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />
+              <Route path="audits" element={<Audit />} />
 
               {/* Doctor Pages */}
               <Route path="manage-availability" element={<ManageAvailability />} />

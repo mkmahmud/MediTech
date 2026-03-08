@@ -6,7 +6,8 @@ import {
     LayoutDashboard, Users, Calendar, Settings,
     HeartHandshake, ClipboardList, Pill, Beaker,
     Activity, ShieldAlert, UserCircle,
-    UserPlus
+    UserPlus,
+    Airplay
 } from "lucide-react"
 import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/auth/useAuth';
@@ -27,6 +28,12 @@ const ALL_NAV_ITEMS = [
         label: "Patient",
         icon: Users,
         roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "NURSE", "RECEPTIONIST"]
+    },
+    {
+        path: "/dashboard/audits",
+        label: "Audits",
+        icon: Airplay,
+        roles: ["SUPER_ADMIN", "ADMIN"]
     },
     {
         path: "/dashboard/manage-availability",
@@ -105,10 +112,10 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
 
     const handleLogout = async () => {
         if (isLoggingOut) return; // Prevent multiple clicks
-        
+
         setIsLoggingOut(true);
         toast.loading("Logging out...", { id: 'logout-toast' });
-        
+
         try {
             await logout();
             // Navigation is handled inside the logout function
@@ -165,10 +172,10 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
                 ))}
             </nav>
 
-            <Button 
-                variant="destructive" 
-                size="lg" 
-                className="text-white mt-6 w-full" 
+            <Button
+                variant="destructive"
+                size="lg"
+                className="text-white mt-6 w-full"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
             >
