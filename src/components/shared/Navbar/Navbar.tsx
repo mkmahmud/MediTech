@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useThemeStore } from '../../../stores/themeStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { NotificationBell } from '../../notifications/NotificationBell/NotificationBell';
+import { NotificationPanel } from '../../notifications/NotificationPanel/NotificationPanel';
 
 export default function Navbar() {
   // Get User logged in or not
@@ -101,6 +103,14 @@ export default function Navbar() {
           >
             {isDarkMode ? <Lightbulb className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
+
+          {/* Notification Bell - Only for logged in users */}
+          {isLoggedIn && (
+            <div className="relative">
+              <NotificationBell />
+              <NotificationPanel />
+            </div>
+          )}
 
           <Link
             to="/appointment"

@@ -17,6 +17,7 @@ import { NoDataFound } from "@/components/shared/NoDataFound";
 import { useUserStore } from "@/stores/user/useUserStore";
 import { appointmentService } from "@/lib/services/appointment/appointmentService";
 import { toast } from "sonner";
+import { NOTIFICATION_QUERY_KEYS } from "@/hooks/useNotifications";
 
 // Helper function to generate time slots between start and end time
 const generateTimeSlots = (startTime: string, endTime: string, intervalMinutes: number = 30) => {
@@ -164,11 +165,13 @@ export default function BookAppointment() {
 
   const { mutate: createAppointment, isPending } = useMutation({
     mutationFn: (payload: any) => appointmentService.createAppointment(payload),
-    onSuccess: ( ) => {
+    onSuccess: async () => {
       toast.success("Appointment booked successfully");
 
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       queryClient.invalidateQueries({ queryKey: ["doctor-availability"] });
+      await queryClient.invalidateQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all });
+      await queryClient.refetchQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all, type: 'active' });
 
     },
     onError: (error: any) => {

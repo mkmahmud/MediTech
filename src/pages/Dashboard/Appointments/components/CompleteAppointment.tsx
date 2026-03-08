@@ -5,6 +5,7 @@ import { appointmentService } from "@/lib/services/appointment/appointmentServic
 import { FormProvider, useForm } from "react-hook-form";
 import { TextareaGroup } from "@/components/ui/text-area-group";
 import { Stethoscope, FileText, X } from "lucide-react";
+import { NOTIFICATION_QUERY_KEYS } from "@/hooks/useNotifications";
 
 type CompleteAppointmentProps = {
     open: boolean;
@@ -40,10 +41,12 @@ export default function CompleteAppointment({
     const { mutate: completeAppointment, isPending } = useMutation({
         mutationFn: (payload: { appointmentId: string; doctorId: string; diagnosis: string; notes: string }) =>
             appointmentService.completeAppointment(payload),
-        onSuccess: () => {
+        onSuccess: async () => {
             toast.success("Appointment completed successfully");
             queryClient.invalidateQueries({ queryKey: ["appointments"] });
             queryClient.invalidateQueries({ queryKey: ["appointment-details", appointmentId] });
+            await queryClient.invalidateQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all });
+            await queryClient.refetchQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all, type: 'active' });
             methods.reset();
             onOpenChange(false);
             onSuccess?.();

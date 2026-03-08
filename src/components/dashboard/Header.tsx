@@ -1,6 +1,8 @@
 import { useThemeStore } from "@/stores/themeStore";
 import { useUserStore } from "@/stores/user/useUserStore";
-import { Menu, Search, Bell, Lightbulb, Moon } from "lucide-react"
+import { Menu, Search, Lightbulb, Moon } from "lucide-react"
+import { NotificationBell } from "../notifications/NotificationBell/NotificationBell";
+import { NotificationPanel } from "../notifications/NotificationPanel/NotificationPanel";
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
@@ -40,9 +42,9 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
         </div>
 
         <div className="flex items-center gap-4 border-l border-gray-100 dark:border-white/10 pl-4 lg:pl-10">
-          <div className="relative cursor-pointer hover:scale-110 transition-transform">
-            <Bell className="w-5 h-5 text-gray-400 hover:text-orange" />
-            <div className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-orange rounded-full border-2 border-[#fcfcfc] dark:border-[#030303] animate-pulse" />
+          <div className="relative">
+            <NotificationBell />
+            <NotificationPanel />
           </div>
           <div className="relative cursor-pointer hover:scale-110 transition-transform" onClick={toggleDarkMode}>
 

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { appointmentService } from "@/lib/services/appointment/appointmentService";
+import { NOTIFICATION_QUERY_KEYS } from "@/hooks/useNotifications";
 
 type CancelAppointmentProps = {
     open: boolean;
@@ -33,9 +34,11 @@ export default function CancelAppointment({
                 appointmentId,
                 cancellationReason,
             }),
-        onSuccess: () => {
+        onSuccess: async () => {
             toast.success("Appointment cancelled successfully");
             queryClient.invalidateQueries({ queryKey: ["appointments"] });
+            await queryClient.invalidateQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all });
+            await queryClient.refetchQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all, type: 'active' });
             setCancellationReason("");
             onOpenChange(false);
             onSuccess?.();

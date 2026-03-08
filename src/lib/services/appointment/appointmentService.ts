@@ -4,6 +4,7 @@ export const appointmentService = {
 
     // create appointment
     createAppointment: async (appointmentData: any) => {
+        console.log('Creating appointment with data:', appointmentData);
         const response = await api.post("/appointments/create-appointment", appointmentData);
         return response.data;
     },
