@@ -48,6 +48,12 @@ const ALL_NAV_ITEMS = [
         roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "RECEPTIONIST", "PATIENT"]
     },
     {
+        path: "/dashboard/prescriptions",
+        label: "Prescriptions",
+        icon: ClipboardList,
+        roles: ["PATIENT"]
+    },
+    {
         path: "/dashboard/vitals",
         label: "Vitals_Track",
         icon: Activity,
@@ -173,7 +179,7 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
             </nav>
 
             <Button
-                variant="destructive"
+                variant="denger"
                 size="lg"
                 className="text-white mt-6 w-full"
                 onClick={handleLogout}

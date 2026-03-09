@@ -19,7 +19,7 @@ export interface Prescription {
     id: string;
     patientId: string;
     doctorId: string;
-    status: "ACTIVE" | "EXPIRED" | "REVOKED";
+    status: "ACTIVE" | "COMPLETED" | "CANCELLED" | "EXPIRED";
     issuedAt: string;
     expiresAt?: string;
     doctorSignature?: string;
@@ -30,4 +30,20 @@ export interface Prescription {
     sentAt?: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface GetPrescriptionsQuery {
+    patientId?: string;
+    doctorId?: string;
+    status?: "ACTIVE" | "COMPLETED" | "CANCELLED" | "EXPIRED";
+    limit?: number;
+    offset?: number;
+}
+
+export interface GetPrescriptionsResponse {
+    data: Prescription[];
+    total: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
 }

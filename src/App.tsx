@@ -44,6 +44,9 @@ const Audit = lazy(() => import('./pages/Dashboard/Admin/Audit/Audit'));
 // Dashboard Doctor Page
 const ManageAvailability = lazy(() => import('./pages/Dashboard/Doctor/Manage-availability/ManageAvailability'));
 
+// Dashboard Patient Pages
+const Prescriptions = lazy(() => import('./pages/Dashboard/Patient/Prescriptions/prescriptions'));
+
 // Common Dashboard Pages
 const Profile = lazy(() => import('./pages/Dashboard/profile/Profile'));
 
@@ -120,6 +123,8 @@ function App() {
               <Route path="appointments" element={<Appointments />} />
               <Route path="appointments/:id" element={<AppointmentDetails />} />
 
+              {/* Patient Pages */}
+              <Route path="prescriptions" element={<Prescriptions />} />
 
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />

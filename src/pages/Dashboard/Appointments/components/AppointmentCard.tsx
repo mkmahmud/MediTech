@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock3, MapPin, Video } from 'lucide-react';
+import { Calendar, Clock3, MapPin, PresentationIcon, Video } from 'lucide-react';
 import { Link } from 'react-router';
 import CancelAppointment from './CancelAppointment';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -10,15 +10,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { appointmentService } from '@/lib/services/appointment/appointmentService';
 import { toast } from 'sonner';
 import { NOTIFICATION_QUERY_KEYS } from '@/hooks/useNotifications';
+import PrescriptionDetailsModal from '@/components/dashboard/PrescriptionDetailsModal';
 
 export default function AppointmentCard({ appointment }: any) {
     const { user } = useAuthStore();
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+    const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const doctorId = appointment?.doctorId || appointment?.doctor?.id || "";
     const patientId = appointment?.patientId || appointment?.patient?.id || user?.id || "";
     const appointmentId = appointment?.id || appointment?.appointmentId || "";
+    const prescriptionId = appointment?.prescriptionId || appointment?.prescription?.id || null;
 
     const { mutate: confirmAppointment, isPending: isConfirming } = useMutation({
         mutationFn: () => appointmentService.confirmAppointment(appointmentId),
@@ -101,6 +104,9 @@ export default function AppointmentCard({ appointment }: any) {
                         join call
                     </Button>
                 )}
+
+
+
                 {(appointment.status === "scheduled" || appointment.status === "confirmed" || appointment.status === "rescheduled") && (
                     <>
                         <Button variant="secondary"  >
@@ -133,6 +139,10 @@ export default function AppointmentCard({ appointment }: any) {
                         <Button variant="secondary" >
                             reschedule
                         </Button>
+                        <Button variant="outline" onClick={() => setIsPrescriptionModalOpen(true)}>
+                            <PresentationIcon className="w-4 h-4 mr-2" />
+                            Prescription
+                        </Button>
                     </>
                 )}
             </div>
@@ -144,6 +154,17 @@ export default function AppointmentCard({ appointment }: any) {
                 doctorId={doctorId}
                 patientId={patientId}
                 appointmentId={appointmentId}
+            />
+
+            <PrescriptionDetailsModal
+                open={isPrescriptionModalOpen}
+                onOpenChange={setIsPrescriptionModalOpen}
+                prescriptionId={prescriptionId}
+                patientId={patientId}
+                doctorId={doctorId}
+                appointmentDate={appointment?.scheduledAt}
+                patientName={appointment?.patient ? `${appointment.patient.firstName || ""} ${appointment.patient.lastName || ""}`.trim() : undefined}
+                doctorName={appointment?.doctor ? `${appointment.doctor.firstName || ""} ${appointment.doctor.lastName || ""}`.trim() : undefined}
             />
         </div>
     )
