@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { NotificationBell } from '../../notifications/NotificationBell/NotificationBell';
 import { NotificationPanel } from '../../notifications/NotificationPanel/NotificationPanel';
+import { Button } from '@/components/ui/button';
 
 export default function Navbar() {
   // Get User logged in or not
@@ -112,25 +113,31 @@ export default function Navbar() {
             </div>
           )}
 
-          <Link
-            to="/appointment"
-            className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-orange dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
-          >
-            Book appointment
-          </Link>
+          <Button variant={"outline"} className="hidden sm:flex items-center   ">
+            <Link
+              to="/appointment"
+
+            >
+              Book appointment
+            </Link>
+          </Button>
 
           {
-            isLoggedIn ? <Link
-              to="/dashboard"
-              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
-            >
-              Dashboard
-            </Link> : <Link
-              to="/auth/login"
-              className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
-            >
-              Login
-            </Link>
+            isLoggedIn ? <Button className="hidden sm:flex items-center ">
+              <Link
+                to="/dashboard"
+
+              >
+                Dashboard
+              </Link>
+            </Button> : <Button className="hidden sm:flex items-center  "  >
+              <Link
+                to="/auth/login"
+
+              >
+                Login
+              </Link>
+            </Button>
           }
 
           {/* Mobile Menu (Kept Mobile Design style) */}
@@ -202,26 +209,33 @@ export default function Navbar() {
 
             <div className="mt-auto flex flex-col gap-4">
               <div className="h-[1px] w-full bg-gradient-to-r from-orange to-transparent opacity-20" />
-              <Link
-                to="/appointment"
-                className="  sm:flex items-center text-center gap-2 px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-full text-sm font-medium   active:scale-95 transition-all"
-              >
-                Book appointment
-              </Link>
-              {
-                isLoggedIn ? <Link
-                  to="/dashboard"
-                  className="  flex items-center gap-2 px-6 py-2.5 bg-black  dark:bg-white text-white justify-center dark:text-black rounded-full text-sm font-medium      "
+              <Button variant={"outline"} className="  sm:flex items-center text-center ">
+                <Link
+                  to="/appointment"
+
                 >
-                  <Fingerprint className="w-4 h-4" />
-                  Dashboard
-                </Link> : <Link
-                  to="/auth/login"
-                  className=" flex items-center gap-2 px-6 py-2.5 bg-black  dark:bg-white text-white justify-center dark:text-black rounded-full text-sm font-medium     "
-                >
-                  <Fingerprint className="w-4 h-4" />
-                  Login
+                  Book appointment
                 </Link>
+              </Button>
+              {
+                isLoggedIn ? <Button className="  flex items-center    "
+                >
+                  <Link
+                    to="/dashboard"
+                    className=" flex items-center  gap-2 "
+                  >
+                    <Fingerprint className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                </Button> : <Button className=" flex items-center   ">
+                  <Link
+                    to="/auth/login"
+                    className=" flex items-center  gap-2 "
+                  >
+                    <Fingerprint className="w-4 h-4" />
+                    Login
+                  </Link>
+                </Button>
               }
 
             </div>

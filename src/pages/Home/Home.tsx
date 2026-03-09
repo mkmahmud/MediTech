@@ -1,6 +1,33 @@
-import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint, Command, CheckCircle2, } from 'lucide-react';
+import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint,   CheckCircle2, Users, Clock3, Stethoscope, Star, ArrowRight, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { Button } from '@/components/ui/button';
+import { useQuery } from '@tanstack/react-query';
+import { doctorService } from '@/lib/services/doctorService';
+import { DoctorSkeleton } from '@/components/skeleton/DoctorCardSkeleton';
+import { NoDataFound } from '@/components/shared/NoDataFound';
+import DoctorCardRow from '@/components/cards/DoctorCardRow';
 export default function Home() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+
+    const { data: doctorsData, isLoading: isDoctorsLoading } = useQuery({
+        queryKey: ['home-doctors'],
+        queryFn: () => doctorService.getAllDoctors({ page: 1, limit: 4 }),
+        staleTime: 1000 * 60 * 5,
+    });
+
+    const doctors = doctorsData?.data || [];
+
+    const handleHeroSearch = () => {
+        const query = searchTerm.trim();
+        if (!query) {
+            navigate('/appointment');
+            return;
+        }
+        navigate(`/appointment?search=${encodeURIComponent(query)}`);
+    };
 
 
 
@@ -40,7 +67,7 @@ export default function Home() {
                                 <span className="flex h-2 w-2 rounded-full bg-orange animate-pulse relative">
                                     <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-75 animate-ping" />
                                 </span>
-                                <span className="text-[9px] sm:text-[10px] font-mono font-black text-orange uppercase tracking-widest relative">System_Status: Optimal</span>
+                                <span className="text-[9px] sm:text-[10px] font-mono font-black text-orange uppercase tracking-widest relative">your ultimate healthcare experience</span>
                             </motion.div>
 
                             {/* Animated Heading with Gradient Text */}
@@ -75,22 +102,31 @@ export default function Home() {
                             transition={{ duration: 0.8, delay: 0.6 }}
                         >
                             <div className="absolute -inset-1 bg-gradient-to-r from-orange/20 to-primary/20 blur opacity-25 group-hover:opacity-100 transition duration-1000" />
-                            <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center p-2 bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-[2rem] shadow-2xl">
+                            <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center   bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/10  rounded shadow-2xl">
                                 <div className="flex-grow flex items-center px-4 sm:px-6 py-2 sm:py-0">
                                     <Search className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400 flex-shrink-0" />
                                     <input
                                         type="text"
                                         placeholder="Enter specialty or physician name..."
                                         aria-label="Search for specialty or physician"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleHeroSearch();
+                                            }
+                                        }}
                                         className="w-full px-3 sm:px-4 py-3 sm:py-4 bg-transparent focus:outline-none text-xs sm:text-sm font-bold tracking-tight dark:text-white placeholder:text-gray-400"
                                     />
                                 </div>
-                                <button
-                                    className="bg-black dark:bg-white text-white dark:text-black px-6 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-full font-black text-[9px] sm:text-[10px] uppercase tracking-[0.2em] hover:bg-orange dark:hover:bg-primary dark:hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2"
+                                <Button
+                                    onClick={handleHeroSearch}
+                                    className=" "
                                     aria-label="Execute search"
                                 >
-                                    Execute <Command className="w-3 h-3" />
-                                </button>
+                                    Search
+                                </Button>
                             </div>
                         </motion.div>
 
@@ -126,7 +162,7 @@ export default function Home() {
                                 ))}
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-xs sm:text-sm font-black dark:text-white">500+ Verified Nodes</span>
+                                <span className="text-xs sm:text-sm font-black dark:text-white">500+ Verified Doctors</span>
                                 <span className="text-[8px] sm:text-[10px] font-mono text-gray-400 uppercase tracking-widest">Active_Medical_Specialists</span>
                             </div>
                         </motion.div>
@@ -222,73 +258,112 @@ export default function Home() {
             </section>
 
             {/* --- 2. STATS BAR --- */}
-            <section className="py-8 sm:py-10 lg:py-12 border-y border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.01]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+            <section className="py-8 sm:py-10 lg:py-12 border-y border-gray-100 dark:border-white/5 bg-gradient-to-r from-gray-50/50 via-orange/[0.02] to-gray-50/50 dark:from-white/[0.01] dark:via-orange/[0.03] dark:to-white/[0.01] relative overflow-hidden">
+                {/* Animated Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]">
+                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+                </div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 relative z-10">
                     {[
-                        { label: "Transactions", value: "50k+", icon: <ShieldCheck className="w-3 sm:w-4 h-3 sm:h-4" /> },
-                        { label: "Active_Physicians", value: "500+", icon: <Activity className="w-3 sm:w-4 h-3 sm:h-4" /> },
-                        { label: "Clinical_Years", value: "15+", icon: <Zap className="w-3 sm:w-4 h-3 sm:h-4" /> },
-                        { label: "Medical_Nodes", value: "80+", icon: <Globe className="w-3 sm:w-4 h-3 sm:h-4" /> },
+                        { label: "Transactions", value: "50k+", icon: <ShieldCheck className="w-5 sm:w-6 h-5 sm:h-6" />, color: "from-orange/20 to-orange/5", iconBg: "bg-orange/10", iconColor: "text-orange", delay: 0.1 },
+                        { label: "Active_Physicians", value: "500+", icon: <Activity className="w-5 sm:w-6 h-5 sm:h-6" />, color: "from-primary/20 to-primary/5", iconBg: "bg-primary/10", iconColor: "text-primary", delay: 0.2 },
+                        { label: "Clinical_Years", value: "15+", icon: <Zap className="w-5 sm:w-6 h-5 sm:h-6" />, color: "from-green-500/20 to-green-500/5", iconBg: "bg-green-500/10", iconColor: "text-green-600 dark:text-green-500", delay: 0.3 },
+                        { label: "Medical_Nodes", value: "80+", icon: <Globe className="w-5 sm:w-6 h-5 sm:h-6" />, color: "from-blue-500/20 to-blue-500/5", iconBg: "bg-blue-500/10", iconColor: "text-blue-600 dark:text-blue-500", delay: 0.4 },
                     ].map((stat, i) => (
-                        <div key={i} className="flex flex-col space-y-1">
-                            <div className="flex items-center gap-1.5 sm:gap-2 text-primary">
-                                {stat.icon}
-                                <span className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tighter dark:text-white uppercase">{stat.value}</span>
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: stat.delay }}
+                            whileHover={{ scale: 1.05, y: -5 }}
+                            className="group relative"
+                        >
+                            {/* Gradient Background on Hover */}
+                            <div className={`absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+                            {/* Card Content */}
+                            <div className="relative bg-white dark:bg-[#0A0A0A] border border-gray-100 dark:border-white/5 rounded-2xl sm:rounded-3xl p-4 sm:p-6 transition-all duration-500 group-hover:border-gray-200 dark:group-hover:border-white/10 group-hover:shadow-xl">
+                                {/* Icon Container */}
+                                <motion.div
+                                    className={`w-10 sm:w-12 h-10 sm:h-12 rounded-xl sm:rounded-2xl ${stat.iconBg} ${stat.iconColor} flex items-center justify-center mb-3 sm:mb-4`}
+                                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    {stat.icon}
+                                </motion.div>
+
+                                {/* Value */}
+                                <motion.div
+                                    className="mb-2"
+                                    initial={{ scale: 0.5 }}
+                                    whileInView={{ scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: stat.delay + 0.2, type: "spring" }}
+                                >
+                                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tighter dark:text-white uppercase block leading-none">
+                                        {stat.value}
+                                    </span>
+                                </motion.div>
+
+                                {/* Label */}
+                                <p className="text-[9px] sm:text-[10px] font-mono text-gray-500 dark:text-gray-400   font-bold leading-relaxed">
+                                    {stat.label}
+                                </p>
+
+                                {/* Pulse Indicator */}
+                                <motion.div
+                                    className={`absolute top-3 right-3 w-2 h-2 rounded-full ${stat.iconBg} opacity-0 group-hover:opacity-100`}
+                                    animate={{ scale: [1, 1.5, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                />
                             </div>
-                            <p className="text-[8px] sm:text-[9px] font-mono text-gray-400 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-bold">{stat.label}</p>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </section>
 
             {/* --- 3. SPECIALIST MATRIX --- */}
-            {/* <section className="py-32 px-10 bg-white dark:bg-[#030303]">
+            <section className="py-32 px-10 bg-white dark:bg-[#030303]">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex justify-between items-end mb-16">
                         <div className="space-y-4">
-                            <span className="text-xs font-mono text-orange font-black uppercase tracking-[0.4em]">Node_Directory</span>
+                            <span className="text-xs font-mono text-orange font-black ">Doctors</span>
                             <h2 className="text-5xl font-black tracking-tighter dark:text-white uppercase">Expert Specialists.</h2>
                         </div>
-                        <button className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-6 py-3 border border-gray-200 dark:border-white/10 rounded-full hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                            Browse All  <ChevronRight className="w-4 h-4" />
-                        </button>
+                        <Button className="hidden md:flex items-center gap-2   transition-all">
+                            <Link to='/doctors' className="flex items-center gap-2">
+                                Browse All  <ChevronRight className="w-4 h-4" /></Link>
+                        </Button>
                     </div>
 
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                         {
-                            isLoading && [1, 2, 3, 4].map((i) => (
+                            isDoctorsLoading && [1, 2, 3, 4].map((i) => (
                                 <DoctorSkeleton key={i} />
                             ))
                         }
 
-                        {doctors && doctors?.map((doctor) => (
-                            <div key={doctor?.id} className="group relative bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-4 transition-all hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-2xl">
-
-                                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    <div className="w-full h-full bg-gray-200 dark:bg-white/10" >
-                                        <img src={doctor?.profileImageUrl || '/doctor.jpg'} alt="" /></div>
-                                    <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                                        <button className="w-full py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">Book Consultation</button>
-                                    </div>
-                                </div>
-                                <div className="px-4 pb-4">
-                                    <div className="flex justify-between items-start mb-1">
-                                        <h4 className="font-black dark:text-white uppercase text-lg tracking-tight">{doctor?.firstName} {doctor?.lastName}</h4>
-                                        <div className="flex items-center gap-1 text-orange">
-                                            <Star className="w-3 h-3 fill-current" />
-                                            <span className="text-[10px] font-bold">4.9</span>
-                                        </div>
-                                    </div>
-                                    <p className="text-[10px] font-mono text-gray-400 font-bold uppercase tracking-widest">{doctor?.doctor?.specialization}</p>
-                                </div>
-                            </div>
+                        {!isDoctorsLoading && doctors?.map((doctor: any) => (
+                            <DoctorCardRow key={doctor.id} doctor={doctor} />
                         ))}
+
+                        {!isDoctorsLoading && doctors?.length === 0 && (
+                            <div className="col-span-1 sm:col-span-2 lg:col-span-4">
+                                <NoDataFound title="No Doctors Found" description="No specialist doctors available right now." />
+                            </div>
+                        )}
                     </div>
                 </div>
-            </section> */}
+                <Button className=" w-full md:hidden" variant="outline">
+                    <Link to='/doctors' className="flex items-center gap-2">
+                        Browse All Doctors  <ChevronRight className="w-4 h-4" /></Link>
+                </Button>
+
+            </section>
 
             {/* --- 4. CLINICAL PROTOCOL --- */}
             <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-10 border-t border-gray-100 dark:border-white/5">
@@ -358,7 +433,107 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* --- 6. CTA --- */}
+            {/* --- 6. TRUST LAYERS --- */}
+            <section className="py-16 sm:py-24 lg:py-28 px-4 sm:px-6 lg:px-10">
+                <div className="max-w-7xl mx-auto space-y-10 sm:space-y-14">
+                    <div className="space-y-3">
+                        <span className="text-[10px] sm:text-xs font-mono text-primary font-black uppercase tracking-[0.3em] sm:tracking-[0.4em]">Quality_Layers</span>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter dark:text-white uppercase">Why Patients Choose Medi.</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        {[
+                            { title: 'Verified Doctors', desc: 'Every specialist is identity-verified and credential screened.', icon: <ShieldCheck className="w-5 h-5" /> },
+                            { title: 'Fast Appointments', desc: 'Book, confirm and consult without waiting in long queues.', icon: <Clock3 className="w-5 h-5" /> },
+                            { title: 'Patient-Centric', desc: 'Designed to keep every visit and medical record easy to manage.', icon: <Users className="w-5 h-5" /> },
+                            { title: 'Clinical Accuracy', desc: 'Structured workflow for diagnosis, notes and digital prescriptions.', icon: <Stethoscope className="w-5 h-5" /> },
+                        ].map((item, index) => (
+                            <div
+                                key={index}
+                                className="rounded-3xl border border-gray-100 dark:border-white/5 p-6 bg-white dark:bg-[#0A0A0A] hover:shadow-xl transition-all"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-orange/10 text-orange flex items-center justify-center mb-4">
+                                    {item.icon}
+                                </div>
+                                <h3 className="text-lg font-black tracking-tight dark:text-white uppercase mb-2">{item.title}</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 7. SPECIALTY GRID --- */}
+            <section className="py-16 sm:py-24 lg:py-28 px-4 sm:px-6 lg:px-10 bg-gray-50/50 dark:bg-white/[0.01] border-y border-gray-100 dark:border-white/5">
+                <div className="max-w-7xl mx-auto space-y-10 sm:space-y-14">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                        <div className="space-y-3">
+                            <span className="text-[10px] sm:text-xs font-mono text-orange font-black uppercase tracking-[0.3em] sm:tracking-[0.4em]">Departments_Index</span>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter dark:text-white uppercase">Popular Specialties.</h2>
+                        </div>
+                        <button className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-gray-200 dark:border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white dark:hover:bg-white/5 transition-all">
+                            Browse All
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                        {['Cardiology', 'Dermatology', 'Pediatrics', 'Neurology', 'Orthopedics', 'ENT', 'Gynecology', 'Urology', 'Psychiatry', 'Dental', 'Oncology', 'General Care'].map((specialty, index) => (
+                            <div
+                                key={index}
+                                className="rounded-2xl border border-gray-100 dark:border-white/5 bg-white dark:bg-[#0A0A0A] px-4 py-5 text-center hover:-translate-y-1 hover:shadow-lg transition-all"
+                            >
+                                <p className="text-xs sm:text-sm font-black dark:text-white uppercase tracking-tight">{specialty}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 8. PATIENT FEEDBACK --- */}
+            <section className="py-16 sm:py-24 lg:py-28 px-4 sm:px-6 lg:px-10">
+                <div className="max-w-7xl mx-auto space-y-10 sm:space-y-14">
+                    <div className="text-center space-y-3">
+                        <span className="text-[10px] sm:text-xs font-mono text-primary font-black uppercase tracking-[0.3em] sm:tracking-[0.4em]">Patient_Reports</span>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter dark:text-white uppercase">What Patients Say.</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                        {[
+                            {
+                                quote: 'Booking a specialist took less than five minutes, and follow-up was seamless.',
+                                author: 'Nadia Rahman',
+                                meta: 'Cardiology Patient'
+                            },
+                            {
+                                quote: 'The consultation quality was excellent and prescription delivery was instant.',
+                                author: 'Arif Hasan',
+                                meta: 'Telemedicine User'
+                            },
+                            {
+                                quote: 'I can track all appointments, notes and reports in one place. Very convenient.',
+                                author: 'Samia Islam',
+                                meta: 'Family Account'
+                            },
+                        ].map((item, index) => (
+                            <div key={index} className="rounded-3xl border border-gray-100 dark:border-white/5 p-6 sm:p-8 bg-white dark:bg-[#0A0A0A]">
+                                <div className="flex items-center gap-1 mb-4 text-orange">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <Star key={star} className="w-4 h-4 fill-current" />
+                                    ))}
+                                </div>
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium leading-relaxed mb-6">“{item.quote}”</p>
+                                <div>
+                                    <p className="text-sm font-black uppercase tracking-tight dark:text-white">{item.author}</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-widest text-gray-400 mt-1">{item.meta}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 9. CTA --- */}
             <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-10">
                 <div className="max-w-7xl mx-auto relative rounded-3xl sm:rounded-[3rem] bg-black dark:bg-white overflow-hidden p-8 sm:p-12 lg:p-24 text-center space-y-6 sm:space-y-8 lg:space-y-10">
                     <div className="absolute inset-0 opacity-10 sm:opacity-20 pointer-events-none">

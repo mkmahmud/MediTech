@@ -2,7 +2,7 @@ import { FormField } from "@/components/ui/form-field";
 import { InputGroup } from "@/components/ui/input-group";
 import { SelectGroup } from "@/components/ui/SelectGroup";
 import { SPECIALIZATIONS } from "@/types/doctors";
-import { Search, Star } from "lucide-react";
+import { Search } from "lucide-react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { Toggle } from "@/components/ui/toggle"
 import { useState, useEffect } from "react";
@@ -11,13 +11,22 @@ import { useQuery } from "@tanstack/react-query";
 import { DoctorSkeleton } from "@/components/skeleton/DoctorCardSkeleton";
 import { AppPagination } from "@/components/shared/AppPagination";
 import { NoDataFound } from "@/components/shared/NoDataFound";
-import { Link } from "react-router";
+import { useLocation } from "react-router";
+import DoctorCardRow from "@/components/cards/DoctorCardRow";
 
 export default function Appointment() {
     const [page, setPage] = useState(1);
-    const methods = useForm({ defaultValues: { search: "" } });
+    const location = useLocation();
+    const searchParam = new URLSearchParams(location.search).get("search") || "";
+    const methods = useForm({ defaultValues: { search: searchParam } });
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [activeDays, setActiveDays] = useState<number[]>([]);
+
+    useEffect(() => {
+        methods.setValue("search", searchParam);
+        setDebouncedSearch(searchParam);
+        setPage(1);
+    }, [searchParam, methods]);
 
     // Watch search field value
     const searchValue = useWatch({
@@ -150,6 +159,10 @@ export default function Appointment() {
             </section>
             {/* Doctors */}
             <section className=" py-32 px-10 ">
+                {data && data?.data?.length === 0 && (
+                    <NoDataFound title="No Doctor Found!" />
+                )}
+
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* If Loading */}
@@ -159,36 +172,11 @@ export default function Appointment() {
                         ))
                     }
                     {/* If not found any doctor */}
-                    {data && data?.data?.length === 0 && (
-                        <NoDataFound title="No Doctor Found!" />
-                    )}
 
                     {/* Doctors data */}
                     {
                         data && data?.data?.map((doctor: any) => (
-                            <div key={doctor?.id} className="group relative bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-4 transition-all hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-2xl">
-
-                                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    <div className="w-full h-full bg-gray-200 dark:bg-white/10" >
-                                        <img src={doctor?.profileImageUrl || '/doctor.jpg'} alt="" /></div>
-                                    <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                                        <Link to={`/appointment/${doctor?.id}`}>
-                                            <button className="w-full py-3 bg-white text-black rounded-xl font-black text-sm cursor-pointer  ">Book Consultation</button>
-                                        </Link>
-                                    </div>
-                                </div>
-                                <div className="px-4 pb-4">
-                                    <div className="flex justify-between items-start mb-1">
-                                        <h4 className="font-black dark:text-white uppercase text-lg tracking-tight">{doctor?.firstName} {doctor?.lastName}</h4>
-                                        <div className="flex items-center gap-1 text-orange">
-                                            <Star className="w-3 h-3 fill-current" />
-                                            <span className="text-[10px] font-bold">4.9</span>
-                                        </div>
-                                    </div>
-                                    <p className="text-[10px] font-mono text-gray-400 font-bold uppercase tracking-widest">{doctor?.doctor?.specialization}</p>
-                                </div>
-                            </div>
+                            <DoctorCardRow key={doctor.id} doctor={doctor} />
                         ))
                     }
 
