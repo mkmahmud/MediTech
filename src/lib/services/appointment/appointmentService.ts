@@ -9,6 +9,12 @@ export const appointmentService = {
         return response.data;
     },
 
+    // confirm appointment
+    confirmAppointment: async (appointmentId: string) => {
+        const response = await api.patch(`/appointments/confirm-appointment`, { appointmentId });
+        return response.data;
+    },
+
     // get appointments by patient id
     getAppointmentsByPatientId: async (patientId: string) => {
         const response = await api.get(`/appointments/get-appointments-by-patient-id?patientId=${patientId}`);

@@ -202,7 +202,7 @@ export default function Details() {
                                 onClick={() => setCompleteModalOpen(true)}
                                 className="w-full"
                             >
-                                Complete Appointment
+                            Prescription & Complete Appointment
                             </Button>
                         </div>
                     )}
@@ -215,6 +215,8 @@ export default function Details() {
                 onOpenChange={setCompleteModalOpen}
                 doctorId={doctorId}
                 appointmentId={appointment.id}
+                // @ts-ignore
+                patientId={appointment.patientId || appointment.patient?.id || ""}
             />
         </div>
     );
