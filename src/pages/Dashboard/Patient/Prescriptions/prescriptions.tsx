@@ -11,7 +11,7 @@ import { SelectGroup } from "@/components/ui/SelectGroup";
 import { Button } from "@/components/ui/button";
 import { NoDataFound } from "@/components/shared/NoDataFound";
 import { AppPagination } from "@/components/shared/AppPagination";
-import PrescriptionDetailsModal from "@/components/dashboard/PrescriptionDetailsModal";
+import PrescriptionDetailsModal from "@/pages/Dashboard/Patient/Prescriptions/components/PrescriptionDetailsModal";
 
 type FilterFormValues = {
   doctorId: string;

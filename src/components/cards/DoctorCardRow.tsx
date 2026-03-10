@@ -24,9 +24,11 @@ export default function DoctorCardRow({ doctor }: any) {
                 </div>
 
                 <div className="absolute left-3 right-3 bottom-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                    <Link to={`/appointment/${doctor?.id}`} className="block">
-                        <Button className="w-full">Book Consultation</Button>
-                    </Link>
+                    <Button className="w-full">
+                        <Link to={`/appointment/${doctor?.id}`} className="block">
+                            Book Consultation
+                        </Link>
+                    </Button>
                 </div>
             </div>
 

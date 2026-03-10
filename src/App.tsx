@@ -109,7 +109,13 @@ function App() {
             <Route path="/doctors/:id" element={<DoctorProfile />} />
             <Route path="/services" element={<Services />} />
             <Route path="/appointment" element={<AppointmentBooking />} />
-            <Route path="/appointment/:id" element={<BookAppointment />} />
+          </Route>
+
+          {/* Protected Public Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/appointment/:id" element={<BookAppointment />} />
+            </Route>
           </Route>
 
           {/* Dashboard routes */}

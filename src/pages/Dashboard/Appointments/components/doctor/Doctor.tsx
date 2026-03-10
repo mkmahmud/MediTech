@@ -10,7 +10,7 @@ import { Calendar, AlertCircle, Download } from "lucide-react";
 import AppointmentCardDoctor from "../AppointmentCardDoctor";
 import { AppointmentStatusFilters } from "../ui/AppointmentStatusFilters";
 import { type AppFilterStatus } from "@/pages/Dashboard/Appointments/appointmentTypes";
-import { AppointmentsPDFExport, triggerAppointmentsPDFDownload, type AppointmentForPDF } from "@/components/dashboard/AppointmentsPDFExport";
+import { AppointmentsPDFExport, triggerAppointmentsPDFDownload, type AppointmentForPDF } from "@/pages/Dashboard/Patient/Prescriptions/components/AppointmentsPDFExport";
 import { toast } from "sonner";
 
 export default function Doctor() {

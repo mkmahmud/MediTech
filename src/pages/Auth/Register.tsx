@@ -10,15 +10,8 @@ import { PhoneInputGroup } from "@/components/ui/phone-Inpu-group"
 import { motion } from "framer-motion"
 import { useAuth } from "@/hooks/auth/useAuth"
 import { toast } from "sonner"
-
-interface RegisterFormData {
-  fullName: string
-  email: string
-  countryCode: string
-  phoneNumber: string
-  password: string
-  agreeToTerms: boolean
-}
+import { zodResolver } from "@hookform/resolvers/zod"
+import { registerSchema, type RegisterFormData } from "./schemas/authSchemas"
 
 export default function RegisterPage() {
 
@@ -29,6 +22,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   const methods = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: "",
       email: "",

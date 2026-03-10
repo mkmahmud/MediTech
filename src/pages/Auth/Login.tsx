@@ -1,4 +1,5 @@
 import { useForm, FormProvider } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { InputGroup } from "@/components/ui/input-group"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,12 +12,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useUserStore } from "@/stores/user/useUserStore"
 import { toast } from "sonner"
 import { userService } from "@/lib/services/userService"
-
-interface LoginFormData {
-  email: string
-  password: string
-  rememberMe: boolean
-}
+import { loginSchema, type LoginFormData } from "@/pages/Auth/schemas/authSchemas"
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -27,6 +23,8 @@ export default function LoginPage() {
   const from = location.state?.from?.pathname || "/dashboard";
 
   const methods = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
@@ -44,6 +42,7 @@ export default function LoginPage() {
       return await login({
         email: data.email,
         password: data.password,
+        rememberMe: data.rememberMe,
       });
     },
     // @ts-ignore
@@ -79,7 +78,6 @@ export default function LoginPage() {
         }
       }
 
-      console.error("Login Error:", error);
       toast.error(errorMessage);
     }
   });

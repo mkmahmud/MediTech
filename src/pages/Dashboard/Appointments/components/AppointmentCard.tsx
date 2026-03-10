@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { appointmentService } from '@/lib/services/appointment/appointmentService';
 import { toast } from 'sonner';
 import { NOTIFICATION_QUERY_KEYS } from '@/hooks/useNotifications';
-import PrescriptionDetailsModal from '@/components/dashboard/PrescriptionDetailsModal';
+import PrescriptionDetailsModal from '@/pages/Dashboard/Patient/Prescriptions/components/PrescriptionDetailsModal';
 
 export default function AppointmentCard({ appointment }: any) {
     const { user } = useAuthStore();
