@@ -1,50 +1,23 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock3, MapPin, PresentationIcon, Video } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import CancelAppointment from './CancelAppointment';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { formatDate, formatTime } from '@/lib/utils';
 import { GetStatusColor, GetStatusIcon } from './ui/Status';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { appointmentService } from '@/lib/services/appointment/appointmentService';
-import { toast } from 'sonner';
-import { NOTIFICATION_QUERY_KEYS } from '@/hooks/useNotifications';
 import PrescriptionDetailsModal from '@/pages/Dashboard/Patient/Prescriptions/components/PrescriptionDetailsModal';
 
 export default function AppointmentCard({ appointment }: any) {
     const { user } = useAuthStore();
+    const navigate = useNavigate();
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false);
-    const queryClient = useQueryClient();
 
     const doctorId = appointment?.doctorId || appointment?.doctor?.id || "";
     const patientId = appointment?.patientId || appointment?.patient?.id || user?.id || "";
     const appointmentId = appointment?.id || appointment?.appointmentId || "";
     const prescriptionId = appointment?.prescriptionId || appointment?.prescription?.id || null;
-
-    const { mutate: confirmAppointment, isPending: isConfirming } = useMutation({
-        mutationFn: () => appointmentService.confirmAppointment(appointmentId),
-        onSuccess: async () => {
-            toast.success("Appointment confirmed successfully");
-            queryClient.invalidateQueries({ queryKey: ["appointments"] });
-            await queryClient.invalidateQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all });
-            await queryClient.refetchQueries({ queryKey: NOTIFICATION_QUERY_KEYS.all, type: 'active' });
-        },
-        onError: (error: any) => {
-            const message = error?.response?.data?.message || "Failed to confirm appointment";
-            toast.error(message);
-        },
-    });
-
-    const handleConfirmAppointment = () => {
-        if (!appointmentId) {
-            toast.error("Missing appointment id");
-            return;
-        }
-
-        confirmAppointment();
-    };
 
     return (
         <div
@@ -118,13 +91,14 @@ export default function AppointmentCard({ appointment }: any) {
                     </>
                 )}
 
-                {
-                    (appointment.status === "scheduled") && (
-                        <Button className='bg-green-400' onClick={handleConfirmAppointment} disabled={isConfirming}>
-                            {isConfirming ? "Confirming..." : "Confirm"}
-                        </Button>
-                    )
-                }
+                {appointment.status === "scheduled" && (
+                    <Button
+                        className='bg-green-400'
+                        onClick={() => navigate(`/payments/appointment/${appointment.id}`)}
+                    >
+                        Pay to Confirm
+                    </Button>
+                )}
 
                 <Button variant="destructive"  >
                     <Link to={`/dashboard/appointments/${appointment.id}`}>

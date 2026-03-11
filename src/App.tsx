@@ -34,6 +34,9 @@ const NotFound = lazy(() => import('./pages/NOtfound'));
 // Dashboard ~ Appointments Pages
 const Appointments = lazy(() => import('./pages/Dashboard/Appointments/Appointments'));
 const AppointmentDetails = lazy(() => import('./pages/Dashboard/Appointments/Details/Details'));
+const Payments = lazy(() => import('./pages/Dashboard/payment/Payments'));
+const AppointmentPayment = lazy(() => import('./pages/Dashboard/payment/AppointmentPayment'));
+const PaymentSuccess = lazy(() => import('./pages/Dashboard/payment/PaymentSuccess'));
 
 
 // Dashboard Admin Pages
@@ -118,6 +121,13 @@ function App() {
             </Route>
           </Route>
 
+          {/* Standalone Payment Routes (full-screen, no nav) */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/payments/appointment/:appointmentId" element={<AppointmentPayment />} />
+          </Route>
+          {/* Payment success is public so Stripe can redirect without auth */}
+          <Route path="/payments/success" element={<PaymentSuccess />} />
+
           {/* Dashboard routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
@@ -128,6 +138,8 @@ function App() {
               {/* Appointments */}
               <Route path="appointments" element={<Appointments />} />
               <Route path="appointments/:id" element={<AppointmentDetails />} />
+              {/* Payment list stays in dashboard */}
+              <Route path="payments" element={<Payments />} />
 
               {/* Patient Pages */}
               <Route path="prescriptions" element={<Prescriptions />} />

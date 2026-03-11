@@ -54,6 +54,12 @@ const ALL_NAV_ITEMS = [
         roles: ["PATIENT"]
     },
     {
+        path: "/dashboard/payments",
+        label: "Payments",
+        icon: ClipboardList,
+        roles: ["PATIENT"]
+    },
+    {
         path: "/dashboard/vitals",
         label: "Vitals_Track",
         icon: Activity,
@@ -139,16 +145,18 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
         <div style={clinicalFontStack} className="flex flex-col h-full bg-white dark:bg-[#050505] p-6 border-r border-gray-100 dark:border-white/5">
             {/* Brand Identity */}
             <div className="flex items-center gap-3 mb-12 px-2">
-                <div className="relative">
-                    <div className="w-10 h-10 bg-orange flex items-center justify-center rounded-xl shadow-orange/20 relative z-10">
-                        <HeartHandshake className="text-white w-6 h-6" />
+                <Link to="/" className="flex items-center gap-3 group">
+                    <div className="relative">
+                        <div className="w-10 h-10 bg-orange flex items-center justify-center rounded-xl shadow-orange/20 relative z-10">
+                            <HeartHandshake className="text-white w-6 h-6" />
+                        </div>
+                        <div className="absolute inset-0 bg-orange/40 blur-lg rounded-xl animate-pulse" />
                     </div>
-                    <div className="absolute inset-0 bg-orange/40 blur-lg rounded-xl animate-pulse" />
-                </div>
-                <div>
-                    <span className="text-md font-Roboto font-bold uppercase block leading-none">MediTech</span>
-                    <span className="text-xs font-bold text-orange uppercase mt-1">v0.0.1</span>
-                </div>
+                    <div>
+                        <span className="text-md font-Roboto font-bold uppercase block leading-none">MediTech</span>
+                        <span className="text-xs font-bold text-orange uppercase mt-1">v0.0.1</span>
+                    </div>
+                </Link>
             </div>
 
             {/* Navigation Registry */}
