@@ -302,8 +302,8 @@ export default function AppointmentPayment() {
 
                         {/* Card */}
                         <button
-                            type="button"
-                            disabled={!isScheduled}
+                            type="button" 
+                            disabled
                             onClick={() => setSelectedProvider("CARD")}
                             className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed
                                 ${selectedProvider === "CARD"

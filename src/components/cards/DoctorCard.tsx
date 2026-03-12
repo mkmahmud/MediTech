@@ -23,7 +23,7 @@ export default function DoctorCard({ doctor, i }: { doctor: any; i: number }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ delay: i * 0.05 }}
-            className="group bg-white dark:bg-[#080808] rounded-2xl lg:rounded-3xl border border-gray-100 dark:border-white/5 overflow-hidden hover:border-orange/30 hover:shadow-xl transition-all flex flex-col lg:flex-row h-full lg:h-auto"
+            className="group bg-white dark:bg-[#080808] rounded    border border-gray-100 dark:border-white/5 overflow-hidden hover:border-orange/30  transition-all flex flex-col lg:flex-row h-full lg:h-auto"
         >
             {/* Left: Image Section */}
             <div className="relative w-full lg:w-64 h-48 lg:h-80 flex-shrink-0 bg-gradient-to-br from-orange/10 to-primary/10">

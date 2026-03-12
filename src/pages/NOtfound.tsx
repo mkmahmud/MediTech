@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Home, ChevronLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
     return (
@@ -67,9 +68,9 @@ export default function NotFound() {
                         transition={{ delay: 0.2 }}
                     >
                         <h1 className="text-4xl md:text-6xl font-light tracking-[0.1em] text-gray-900 dark:text-white uppercase leading-none">
-                            Signal <span className="font-black text-primary">Terminated</span>
+                            <span className="font-black text-primary">Not Found</span>
                         </h1>
-                        <p className="mt-6 text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-gray-400 max-w-md mx-auto">
+                        <p className="mt-6 text-xs md:text-sm font-bold   text-gray-400 max-w-md mx-auto">
                             The requested directory is currently offline or non-existent.
                         </p>
                     </motion.div>
@@ -77,26 +78,28 @@ export default function NotFound() {
 
                 {/* --- Premium Action Buttons --- */}
                 <div className="mt-16 flex flex-col sm:flex-row gap-6 items-center">
-                    <Link
-                        to="/"
-                        className="group flex items-center gap-3 px-10 py-4 bg-primary text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-opacity-90 transition-all hover:shadow-[0_20px_40px_rgba(var(--primary-rgb),0.3)] active:scale-95"
-                    >
-                        <Home className="w-4 h-4 transition-transform group-hover:-translate-y-1" />
-                        Main Console
-                    </Link>
+                    <Button>
+                        <Link
+                            to="/"
+                            className='flex items-center  space-x-4'
+                        >
+                            <Home className="w-4 h-4 transition-transform group-hover:-translate-y-1" />
+                            <span>Go Home</span>
+                        </Link>
+                    </Button>
 
-                    <button
+                    <Button variant="outline"
                         onClick={() => window.history.back()}
-                        className="flex items-center gap-3 px-10 py-4 bg-transparent border border-gray-100 dark:border-white/10 text-gray-400 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-white/5 transition-all"
+                        className="flex items-center gap-3 "
                     >
                         <ChevronLeft className="w-4 h-4" />
-                        Previous Station
-                    </button>
+                        Go Back
+                    </Button>
                 </div>
 
                 {/* --- Interactive Status Bar (Matches your Loader's Progress Bar) --- */}
                 <div className="mt-24 w-48 space-y-3 flex flex-col items-center">
-                    <div className="flex justify-between w-full text-[9px] font-mono text-gray-500 uppercase tracking-widest">
+                    <div className="flex justify-between w-full text-sm font-mono text-gray-500 uppercase tracking-widest">
                         <span>Re-routing</span>
                         <motion.span animate={{ opacity: [0, 1] }} transition={{ repeat: Infinity }}>...</motion.span>
                     </div>

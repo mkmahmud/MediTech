@@ -1,4 +1,4 @@
-import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint,   CheckCircle2, Users, Clock3, Stethoscope, Star, ArrowRight, ChevronRight } from 'lucide-react';
+import { Search, Activity, ShieldCheck, Zap, Globe, Microscope, Video, Fingerprint, CheckCircle2, Users, Clock3, Stethoscope, Star, ArrowRight, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -38,7 +38,7 @@ export default function Home() {
         >
 
             {/* --- 1. HERO SECTION --- */}
-            <section className="relative pt-20 pb-16 sm:pt-28 sm:pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            <section className="relative pt-30 pb-16 sm:pt-28 sm:pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
                 {/* Animated Background Grid with Parallax Effect */}
                 <motion.div
                     className="absolute inset-0 opacity-[0.02] sm:opacity-[0.03] dark:opacity-[0.06] dark:sm:opacity-[0.08] pointer-events-none"
@@ -174,25 +174,70 @@ export default function Home() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, delay: 1 }}
                         >
-                            <div className="relative rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-xl">
-                                <div className="absolute inset-0 bg-gradient-to-br from-orange/20 via-transparent to-primary/20 mix-blend-overlay" />
+                            <div className="relative rounded-[2rem] overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-white dark:bg-[#0A0A0A]">
                                 <img
                                     src="/doctor.jpg"
                                     alt="Medical professional"
-                                    className="w-full h-64 object-cover grayscale-[0.5]"
+                                    className="w-full h-[22rem] sm:h-[24rem] object-cover object-top grayscale-[0.35]"
                                 />
 
-                                {/* Simple overlay card for mobile */}
-                                <div className="absolute bottom-4 left-4 right-4 p-4 bg-white/95 dark:bg-black/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <Activity className="w-5 h-5 text-orange animate-pulse" />
-                                            <div>
-                                                <p className="text-[9px] font-mono text-orange font-bold uppercase">Heart_Rate</p>
-                                                <p className="text-lg font-black dark:text-white tracking-tighter">72 BPM</p>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-orange/15 via-transparent to-primary/20 mix-blend-overlay" />
+
+                                <div className="absolute left-3 top-3 bottom-3 w-14 rounded-2xl border border-white/20 bg-black/35 backdrop-blur-md">
+                                    <div className="h-full flex flex-col items-center justify-between py-3">
+                                        <div className="w-8 h-8 rounded-xl bg-orange/20 text-orange flex items-center justify-center">
+                                            <Activity className="w-4 h-4 animate-pulse" />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
+                                                <span className="text-[10px] font-black text-white">72</span>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
+                                                <span className="text-[10px] font-black text-white">98</span>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
+                                                <span className="text-[10px] font-black text-white">24</span>
                                             </div>
                                         </div>
-                                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+
+                                        <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                    </div>
+                                </div>
+
+                                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full border border-white/30 bg-black/40 backdrop-blur-md flex items-center gap-2">
+                                    <span className="relative flex h-2 w-2 rounded-full bg-green-400">
+                                        <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
+                                    </span>
+                                    <span className="text-[9px] font-mono font-black uppercase tracking-wider text-white">AI_Assist_ON</span>
+                                </div>
+
+                                <div className="absolute bottom-3 left-3 right-3 p-3 bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-[9px] font-mono text-orange font-bold uppercase tracking-[0.2em]">Session_Mode</p>
+                                            <p className="text-sm font-black dark:text-white tracking-tight">Remote Cardiac Review</p>
+                                        </div>
+                                        <span className="px-2.5 py-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 text-[9px] font-black uppercase tracking-wider">
+                                            Stable
+                                        </span>
+                                    </div>
+
+                                    <div className="mt-3 grid grid-cols-3 gap-2">
+                                        <div className="rounded-xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-2 text-center">
+                                            <p className="text-[8px] font-mono text-gray-500 uppercase">HR</p>
+                                            <p className="text-[11px] font-black dark:text-white">72 BPM</p>
+                                        </div>
+                                        <div className="rounded-xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-2 text-center">
+                                            <p className="text-[8px] font-mono text-gray-500 uppercase">SpO2</p>
+                                            <p className="text-[11px] font-black dark:text-white">98%</p>
+                                        </div>
+                                        <div className="rounded-xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-2 text-center">
+                                            <p className="text-[8px] font-mono text-gray-500 uppercase">Resp</p>
+                                            <p className="text-[11px] font-black dark:text-white">24/min</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -206,52 +251,72 @@ export default function Home() {
                         animate={{ opacity: 1, x: 0, scale: 1 }}
                         transition={{ duration: 1, delay: 0.3 }}
                     >
-                        <div className="relative rounded-[3rem] overflow-hidden border-[1px] border-gray-200 dark:border-white/10 shadow-2xl group/image">
-                            {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-orange/20 via-transparent to-primary/20 mix-blend-overlay group-hover/image:opacity-0 transition-opacity duration-700" />
+                        <div className="relative rounded-[3rem] overflow-hidden border-[1px] border-gray-200 dark:border-white/10 shadow-2xl group/image bg-white dark:bg-[#0A0A0A]">
                             <img
                                 src="/doctor.jpg"
                                 alt="Medical professional providing healthcare services"
-                                className="w-full h-[500px] md:h-[600px] lg:h-[650px] object-cover grayscale-[0.5] group-hover/image:grayscale-0 group-hover/image:scale-105 transition-all duration-700"
+                                className="w-full h-[500px] md:h-[600px] lg:h-[650px] object-cover object-top grayscale-[0.35] group-hover/image:grayscale-0 group-hover/image:scale-105 transition-all duration-700"
                             />
 
-                            {/* Floating Activity Card */}
-                            <motion.div
-                                className="absolute top-10 right-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl"
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <Activity className="w-6 h-6 text-orange animate-pulse" />
-                            </motion.div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-orange/15 via-transparent to-primary/20 mix-blend-overlay" />
 
-                            {/* Floating Heart Rate Card */}
-                            <motion.div
-                                className="absolute bottom-10 left-10 p-6 bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl"
-                                animate={{ y: [0, -8, 0] }}
-                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                            >
-                                <p className="text-[10px] font-mono text-orange font-bold uppercase mb-1">Heart_Rate</p>
-                                <p className="text-2xl font-black dark:text-white tracking-tighter flex items-center gap-2">
-                                    72 BPM
-                                    <motion.span
-                                        animate={{ scale: [1, 1.2, 1] }}
-                                        transition={{ duration: 1, repeat: Infinity }}
-                                        className="inline-block w-2 h-2 bg-orange rounded-full"
-                                    />
-                                </p>
-                            </motion.div>
+                            <div className="absolute left-6 top-6 bottom-6 w-20 rounded-3xl border border-white/20 bg-black/35 backdrop-blur-md">
+                                <div className="h-full flex flex-col items-center justify-between py-5">
+                                    <div className="w-11 h-11 rounded-2xl bg-orange/20 text-orange flex items-center justify-center">
+                                        <Activity className="w-5 h-5 animate-pulse" />
+                                    </div>
 
-                            {/* Additional Floating Element - Success Badge */}
-                            <motion.div
-                                className="absolute top-1/2 left-10 -translate-y-1/2 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl opacity-0 group-hover/image:opacity-100 transition-opacity"
-                                animate={{ x: [0, 5, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                                    <span className="text-xs font-black dark:text-white">Verified</span>
+                                    <div className="space-y-3">
+                                        <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+                                            <span className="text-xs font-black text-white">72</span>
+                                        </div>
+                                        <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+                                            <span className="text-xs font-black text-white">98</span>
+                                        </div>
+                                        <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+                                            <span className="text-xs font-black text-white">24</span>
+                                        </div>
+                                    </div>
+
+                                    <CheckCircle2 className="w-5 h-5 text-green-400" />
                                 </div>
-                            </motion.div>
+                            </div>
+
+                            <div className="absolute top-6 right-6 px-4 py-2 rounded-full border border-white/30 bg-black/40 backdrop-blur-md flex items-center gap-2">
+                                <span className="relative flex h-2.5 w-2.5 rounded-full bg-green-400">
+                                    <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
+                                </span>
+                                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-white">AI_Assist_ON</span>
+                            </div>
+
+                            <div className="absolute bottom-6 left-6 right-6 p-5 bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-[10px] font-mono text-orange font-bold uppercase tracking-[0.2em]">Session_Mode</p>
+                                        <p className="text-lg font-black dark:text-white tracking-tight">Remote Cardiac Review</p>
+                                    </div>
+                                    <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 text-[10px] font-black uppercase tracking-wider">
+                                        Stable
+                                    </span>
+                                </div>
+
+                                <div className="mt-4 grid grid-cols-3 gap-3">
+                                    <div className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-3 text-center">
+                                        <p className="text-[9px] font-mono text-gray-500 uppercase">HR</p>
+                                        <p className="text-sm font-black dark:text-white">72 BPM</p>
+                                    </div>
+                                    <div className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-3 text-center">
+                                        <p className="text-[9px] font-mono text-gray-500 uppercase">SpO2</p>
+                                        <p className="text-sm font-black dark:text-white">98%</p>
+                                    </div>
+                                    <div className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 p-3 text-center">
+                                        <p className="text-[9px] font-mono text-gray-500 uppercase">Resp</p>
+                                        <p className="text-sm font-black dark:text-white">24/min</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 </div>

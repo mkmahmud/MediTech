@@ -49,7 +49,7 @@ export const NotificationPanel = () => {
         <div
             ref={panelRef}
             className={cn(
-                'absolute right-0 top-full mt-2 w-96 max-w-[calc(100vw-2rem)]',
+                'absolute -right-20 top-full mt-2 w-96 max-w-[calc(100vw-2rem)]',
                 'bg-background border rounded-lg shadow-lg overflow-hidden z-50',
                 'animate-in fade-in slide-in-from-top-2 duration-200'
             )}

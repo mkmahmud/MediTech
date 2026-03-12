@@ -126,7 +126,7 @@ export default function Navbar() {
             isLoggedIn ? <Button className="hidden sm:flex items-center ">
               <Link
                 to="/dashboard"
-
+                key={"dashboard"}
               >
                 Dashboard
               </Link>
@@ -212,6 +212,8 @@ export default function Navbar() {
               <Button variant={"outline"} className="  sm:flex items-center text-center ">
                 <Link
                   to="/appointment"
+                  key={"appointment"}
+                  onClick={() => setIsMenuOpen(false)}
 
                 >
                   Book appointment

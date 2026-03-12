@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 import './App.css';
 import { ThemeInitializer } from './components/ThemeInitializer';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -54,6 +54,17 @@ const Prescriptions = lazy(() => import('./pages/Dashboard/Patient/Prescriptions
 const Profile = lazy(() => import('./pages/Dashboard/profile/Profile'));
 
 
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname, search]);
+
+  return null;
+}
+
+
 
 
 function App() {
@@ -93,6 +104,7 @@ function App() {
   return (
     <>
       <ThemeInitializer />
+      <ScrollToTop />
       <Toaster richColors position="top-center" />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>

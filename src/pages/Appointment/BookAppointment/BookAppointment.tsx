@@ -243,8 +243,8 @@ export default function BookAppointment() {
           doctorInformation &&
 
           <aside className="lg:col-span-4 space-y-6">
-            <div className="bg-white dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-5 sticky top-32 shadow-sm">
-              <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 bg-gray-100 dark:bg-white/5">
+            <div className="bg-white dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded p-5 sticky top-32 shadow-sm">
+              <div className="aspect-[4/5] rounded  overflow-hidden mb-6 bg-gray-100 dark:bg-white/5">
                 <img src={doctorInformation?.profileImageUrl} alt="Doctor" className="w-full h-full object-cover" />
               </div>
               <div className="px-2">
@@ -304,23 +304,23 @@ export default function BookAppointment() {
                       { id: 'EMERGENCY', label: 'Emergency', icon: AlertTriangle }
                     ].map((t) => (
                       <Button
-                        variant="secondary"
+                        variant={appointmentType === t.id
+                          ? "default"
+                          : "ghost"
+                        }
                         key={t.id}
                         type="button"
                         onClick={() => setAppointmentType(t.id as any)}
-                        className={`flex items-center justify-between p-6 rounded-[2rem] border-2 transition-all ${appointmentType === t.id
-                          ? "border-orange bg-orange/5"
-                          : "border-gray-100 dark:border-white/5 bg-white dark:bg-white/5"
-                          }`}
+                        className={`flex items-center justify-between p-6   border-2 transition-all `}
                       >
                         <div className="flex items-center gap-4">
-                          <t.icon className={`w-5 h-5 ${appointmentType === t.id ? "text-orange" : "text-gray-400"}`} />
-                          <span className={`text-sm font-black    ${appointmentType === t.id ? "text-orange" : "text-gray-500"}`}>
+                          <t.icon className={`w-5 h-5 ${appointmentType === t.id ? "text-white" : "text-gray-400"}`} />
+                          <span className={`text-sm font-medium  ${appointmentType === t.id ? "text-white" : "text-gray-500"}`}>
                             {t.label}
                           </span>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${appointmentType === t.id ? "border-orange" : "border-gray-300"}`}>
-                          {appointmentType === t.id && <div className="w-2 h-2 bg-orange rounded-full" />}
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${appointmentType === t.id ? "border-white" : "border-gray-300"}`}>
+                          {appointmentType === t.id && <div className="w-2 h-2 bg-white rounded-full" />}
                         </div>
                       </Button>
                     ))}
@@ -345,10 +345,8 @@ export default function BookAppointment() {
                                 setSelectedSlot(null); // Reset slot when date changes
                               }}
                               type="button"
-                              className={`flex-shrink-0 w-24 py-10 rounded-[2rem] border-2 transition-all flex flex-col items-center gap-2 ${isSelected
-                                ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
-                                : "bg-white dark:bg-white/5 border-transparent text-gray-400"
-                                }`}
+                              variant={isSelected ? "default" : "ghost"}
+                              className={`flex-shrink-0 w-24 py-10   border-2 transition-all flex flex-col items-center gap-2  `}
                             >
                               <span className="text-[10px] font-bold uppercase">
                                 {date.toLocaleDateString('en-US', { weekday: 'short' })}
@@ -376,11 +374,12 @@ export default function BookAppointment() {
                           <Button
                             key={slot}
                             type="button"
+                            variant={selectedSlot === slot
+                              ? "default"
+                              : "ghost"
+                            }
                             onClick={() => setSelectedSlot(slot)}
-                            className={`py-4 rounded-2xl border-2 font-medium   transition-all ${selectedSlot === slot
-                              ? "bg-orange text-white border-orange"
-                              : "bg-white dark:bg-white/5 border-transparent text-gray-600 dark:text-gray-300"
-                              }`}
+                            className={`py-4   border-2 font-medium   transition-all `}
                           >
                             {slot}
                           </Button>

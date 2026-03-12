@@ -36,9 +36,8 @@ export default function DashboardOverview() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="h-2 w-2 rounded-full bg-orange animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-orange">Command_Center_v2.0</span>
-          </div>
-          <h1 className="text-5xl font-black uppercase italic tracking-tighter">System_Overview</h1>
+           </div>
+          <h1 className="text-5xl font-black uppercase italic tracking-tighter">Overview</h1>
         </div>
 
         <div className="flex gap-4">

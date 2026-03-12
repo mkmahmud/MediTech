@@ -70,7 +70,7 @@ export default function AppointmentCard({ appointment }: any) {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3  gap-3">
                 {appointment.type === "TELEMEDICINE" && appointment.status === "scheduled" && (
                     <Button variant="default"  >
                         <Video className="w-4 h-4 mr-2" />
@@ -80,7 +80,7 @@ export default function AppointmentCard({ appointment }: any) {
 
 
 
-                {(appointment.status === "scheduled" || appointment.status === "confirmed" || appointment.status === "rescheduled") && (
+                {(appointment.status === "scheduled"  || appointment.status === "rescheduled") && (
                     <>
                         <Button variant="secondary"  >
                             reschedule
