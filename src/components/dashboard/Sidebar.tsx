@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link, useLocation } from 'react-router'
+import { NavLink, Link } from 'react-router'
 import { motion } from "framer-motion"
 import {
     ChevronRight, ArrowLeft,
@@ -13,6 +13,7 @@ import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 // Dynamic Navigation Configuration
 const ALL_NAV_ITEMS = [
@@ -110,7 +111,6 @@ const ALL_NAV_ITEMS = [
 ];
 
 export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => void }) {
-    const location = useLocation();
     const user = useAuthStore((state) => state.user);
     const userRole = user?.role;
     const { logout } = useAuth();
@@ -167,20 +167,36 @@ export default function Sidebar({ closeMobileMenu }: { closeMobileMenu?: () => v
                         to={item.path}
                         end={item.end}
                         onClick={closeMobileMenu}
-                        className={({ isActive }) =>
-                            `relative flex items-center justify-between px-4 py-4 rounded-2xl transition-all group overflow-hidden ${isActive
-                                ? 'bg-black text-white dark:bg-white dark:text-black shadow-2xl shadow-black/20'
-                                : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5'
-                            }`
-                        }
+                        className="block outline-none my-2"
                     >
-                        <div className="flex items-center gap-3 relative z-10">
-                            <item.icon className="w-4 h-4" />
-                            <span className="text-sm font-Roboto">{item.label}</span>
-                        </div>
-                        <ChevronRight className={`w-3 h-3 transition-all relative z-10 ${location.pathname === item.path ? 'opacity-100 translate-x-0 text-orange' : 'opacity-0 -translate-x-2'}`} />
-                        {location.pathname === item.path && (
-                            <motion.div layoutId="activeGlow" className="absolute inset-0 bg-gradient-to-r from-orange/20 to-transparent pointer-events-none" />
+                        {({ isActive }) => (
+                            <Button
+                                asChild
+                                variant={isActive ? "default" : "secondary"}
+                                className={cn(
+                                    "relative w-full flex items-center justify-between px-4 py-7   transition-all group overflow-hidden border-none")}
+                            >
+                                <div className="flex w-full items-center justify-between">
+                                    <div className="flex items-center gap-3 relative z-10">
+                                        <item.icon className={cn("w-4 h-4", isActive && "text-white")} />
+                                        <span className="text-sm font-medium">{item.label}</span>
+                                    </div>
+
+                                    <ChevronRight
+                                        className={cn(
+                                            "w-3 h-3 transition-all relative z-10",
+                                            isActive ? "opacity-100 translate-x-0 text-white" : "opacity-0 -translate-x-2"
+                                        )}
+                                    />
+
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeGlow"
+                                            className="absolute inset-0 bg-gradient-to-r from-soft/75 to-transparent pointer-events-none"
+                                        />
+                                    )}
+                                </div>
+                            </Button>
                         )}
                     </NavLink>
                 ))}
