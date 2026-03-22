@@ -1,11 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { CheckCheck, Loader2, AlertCircle, Bell } from 'lucide-react';
 import { useNotificationStore } from '../../../stores/notifications/useNotificationStore';
+import { useAuthStore } from '../../../stores/auth/useAuthStore';
+import { useNotificationSocket } from '../../../hooks/useNotificationSocket';
 import { useNotifications, useMarkAllAsRead } from '../../../hooks/useNotifications';
+import { useQueryClient } from '@tanstack/react-query';
 import { NotificationItem } from '../NotificationItem/NotificationItem';
 import { Button } from '../../ui/button';
 import { cn } from '../../../lib/utils';
-import type { Notification } from '../../../types/notification';
+import type { Notification, NotificationResponse } from '../../../types/notification';
  
 
 export const NotificationPanel = () => {
@@ -13,11 +16,36 @@ export const NotificationPanel = () => {
  
 
     const { isNotificationPanelOpen, closeNotificationPanel, unreadCount } = useNotificationStore();
+    const incrementUnreadCount = useNotificationStore((state) => state.incrementUnreadCount);
+    const user = useAuthStore((state) => state.user);
+    const queryClient = useQueryClient();
     const panelRef = useRef<HTMLDivElement>(null);
 
     const { data, isLoading, error } = useNotifications({ limit: 20 }, isNotificationPanelOpen);
     const markAllAsRead = useMarkAllAsRead();
 
+    // Handle incoming socket notifications
+
+    const handleSocketNotification = useCallback((notification: Notification) => {
+        // Optimistically update the notifications cache
+        queryClient.setQueryData([
+            'notifications', 'list', { limit: 20 }
+        ], (oldData: NotificationResponse | undefined) => {
+            if (!oldData) {
+                return { data: [notification], total: 1, limit: 20, offset: 0, hasMore: false };
+            }
+            // Avoid duplicates
+            if (oldData.data.some((n: Notification) => n.id === notification.id)) return oldData;
+            return {
+                ...oldData,
+                data: [notification, ...oldData.data].slice(0, 20),
+                total: (oldData.total || 0) + 1,
+            };
+        });
+        incrementUnreadCount();
+    }, [queryClient, incrementUnreadCount]);
+
+    useNotificationSocket(handleSocketNotification, user?.id);
     
 
     // Close panel when clicking outside

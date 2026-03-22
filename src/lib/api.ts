@@ -29,19 +29,24 @@ api.interceptors.response.use(
             data.errors.forEach((e: any) =>
                 toast.error('VALIDATION_ERROR', { description: e.message })
             );
-        } else if (status === 401) {
-            useAuthStore.getState().clearAuth();
-            toast.error('UNAUTHORIZED', { description: data?.message || "Access denied to this node.", });
-        } else if (status === 404) {
-            console.error(
-                'Endpoint not found. Check if baseURL or path is correct:',
-                error.config?.url
-            );
-        } else {
-            toast.error('SYSTEM_ERROR', {
-                description: data?.message || 'Internal Protocol Error'
-            });
         }
+        // else if (status === 401) {
+        //     useAuthStore.getState().clearAuth();
+        //     toast.error('UNAUTHORIZED', { description: data?.message || "Access denied to this node.", });
+        // } else if (status === 404) {
+        //     console.error(
+        //         'Endpoint not found. Check if baseURL or path is correct:',
+        //         error.config?.url
+        //     );
+        // } else if (status === 409) {
+        //     toast.error('Conflict Error', {
+        //         description: data?.message || 'Already existing in the system.'
+        //     });
+        // } else {
+        //     toast.error('SYSTEM_ERROR', {
+        //         description: data?.message || 'Internal Protocol Error'
+        //     });
+        // }
 
         return Promise.reject(error);
     }

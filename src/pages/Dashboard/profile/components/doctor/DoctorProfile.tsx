@@ -87,8 +87,8 @@ export function DoctorProfile({ user, refetch }: DoctorProfileProps) {
       toast.success("BIOMETRIC_REGISTRY_UPDATED");
     },
     onError: (error: any) => {
-      console.error("Update Error:", error);
-      toast.error("UPDATE_PROTOCOL_REJECTED");
+      console.log('[updateProfile] onError called', error);
+      toast.error(error?.response?.data?.message || "PROFILE_UPDATE_FAILED", { id: 'profile-update-error' });
     }
   });
 
@@ -106,7 +106,7 @@ export function DoctorProfile({ user, refetch }: DoctorProfileProps) {
     },
     onError: (error: any) => {
       console.error("Failed to Update", error);
-      toast.error("IMAGE_UPDATE_FAILED");
+      toast.error(error?.response?.data?.message || "IMAGE_UPDATE_FAILED");
     }
   });
 
