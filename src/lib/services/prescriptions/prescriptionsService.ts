@@ -14,7 +14,7 @@ export const prescriptionsService = {
     createPrescription: async (payload: CreatePrescriptionPayload) => {
         try {
             const response = await api.post("/prescriptions", payload);
-            return response.data;
+            return response.data?.data;
         } catch (error) {
             throw error;
         }
@@ -30,12 +30,12 @@ export const prescriptionsService = {
         if (typeof query.offset === "number") params.offset = query.offset;
 
         const response = await api.get<GetPrescriptionsResponse>("/prescriptions", { params });
-        return response.data;
+        return response.data?.data;
     },
 
     getPrescriptionById: async (id: string) => {
-        const response = await api.get<Prescription>(`/prescriptions/${id}`);
-        return response.data;
+        const response = await api.get<{ status: boolean, message: string, data: Prescription }>(`/prescriptions/${id}`);
+        return response.data?.data;
     },
 
 };

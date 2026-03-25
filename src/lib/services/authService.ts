@@ -24,9 +24,13 @@ interface UserData {
 }
 
 interface AuthResponse {
-    user: UserData;
-    accessToken: string;
-    refreshToken: string;
+    success: boolean;
+    message: string;
+    data: {
+        user: UserData;
+        accessToken: string;
+        refreshToken: string;
+    }
 }
 
 /**
@@ -39,7 +43,7 @@ export const authService = {
      */
     register: async (data: RegisterData) => {
         const response = await api.post<AuthResponse>('/auth/register', data);
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -47,7 +51,7 @@ export const authService = {
      */
     login: async (credentials: LoginCredentials) => {
         const response = await api.post<AuthResponse>('/auth/login', credentials);
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -57,7 +61,7 @@ export const authService = {
         const response = await api.post<AuthResponse>('/auth/refresh', {
             refreshToken
         });
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -79,7 +83,7 @@ export const authService = {
      */
     createUser: async (userData: UserData) => {
         const response = await api.post('/auth/create-user', userData);
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -87,7 +91,7 @@ export const authService = {
      */
     changePassword: async (data: ChangePasswordData) => {
         const response = await api.post('/auth/change-password', data);
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -95,7 +99,7 @@ export const authService = {
      */
     verifyEmail: async (token: string) => {
         const response = await api.post('/auth/verify-email', { token });
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -103,7 +107,7 @@ export const authService = {
      */
     requestPasswordReset: async (email: string) => {
         const response = await api.post('/auth/forgot-password', { email });
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -114,7 +118,7 @@ export const authService = {
             token,
             newPassword
         });
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -122,7 +126,7 @@ export const authService = {
      */
     enableTwoFactor: async () => {
         const response = await api.post('/auth/2fa/enable');
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -130,7 +134,7 @@ export const authService = {
      */
     disableTwoFactor: async (code: string) => {
         const response = await api.post('/auth/2fa/disable', { code });
-        return response.data;
+        return response.data?.data;
     },
 
     /**
@@ -138,6 +142,6 @@ export const authService = {
      */
     verifyTwoFactorCode: async (code: string) => {
         const response = await api.post('/auth/2fa/verify', { code });
-        return response.data;
+        return response.data?.data;
     }
 };

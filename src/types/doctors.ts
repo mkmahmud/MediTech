@@ -12,11 +12,15 @@ export const SPECIALIZATIONS: Specialization[] = [
 ];
 
 export interface DoctorAvailability {
-    id: string;
-    doctorId: number;
-    dayOfWeek: number; // 0 (Sunday) to 6 (Saturday)
-    startTime: string; // "HH:mm" format
-    endTime: string;   // "HH:mm" format
-    isAvailable: boolean;
-    doctor: any
+    status: boolean;
+    message: string;
+    data: {
+        id: string;
+        doctorId: number;
+        dayOfWeek: number; // 0 (Sunday) to 6 (Saturday)
+        startTime: string; // "HH:mm" format
+        endTime: string;   // "HH:mm" format
+        isAvailable: boolean;
+        doctor: any
+    }
 }

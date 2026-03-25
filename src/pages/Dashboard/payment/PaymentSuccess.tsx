@@ -45,6 +45,7 @@ export default function PaymentSuccess() {
         refetchOnWindowFocus: false,
     });
 
+    // @ts-ignore
     const payment = data?.data;
     const normalizedStatus = (payment?.status || "").toUpperCase();
 

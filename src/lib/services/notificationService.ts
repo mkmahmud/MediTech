@@ -15,10 +15,24 @@ export const notificationService = {
         if (filters?.offset) params.append('offset', filters.offset.toString());
 
         try {
-            const { data } = await api.get<Notification[] | NotificationResponse>(
+            const { data } = await api.get<any[] | any>(
                 `/notifications/my-notifications?${params.toString()}`
             );
 
+            // If backend returns { data: [...] }
+            if (data && Array.isArray(data?.data)) {
+                const offset = filters?.offset || 0;
+                const limit = filters?.limit || 20;
+                const paginatedData = data?.data.slice(offset, offset + limit);
+                return {
+                    data: paginatedData,
+                    // @ts-ignore
+                    total: data?.data.length,
+                    limit,
+                    offset,
+                    hasMore: offset + paginatedData.length < data?.data.length,
+                };
+            }
 
             // Handle if backend returns array directly (not paginated)
             if (Array.isArray(data)) {
@@ -27,6 +41,7 @@ export const notificationService = {
                 const paginatedData = data.slice(offset, offset + limit);
 
                 return {
+                    // @ts-ignore
                     data: paginatedData,
                     total: data.length,
                     limit,

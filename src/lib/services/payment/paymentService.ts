@@ -70,12 +70,12 @@ type ApiResponse<T> = {
 export const paymentService = {
     createPayment: async (payload: CreatePaymentPayload) => {
         const response = await api.post<ApiResponse<PaymentDetails>>("/payments/create", payload);
-        return response.data;
+        return response.data?.data;
     },
 
     getPaymentDetails: async (paymentId: string) => {
         const response = await api.get<ApiResponse<PaymentDetails>>(`/payments/${paymentId}`);
-        return response.data;
+        return response.data?.data;
     },
 
     getPaymentsList: async (query?: {
@@ -86,6 +86,6 @@ export const paymentService = {
         provider?: string;
     }) => {
         const response = await api.get<ApiResponse<any>>("/payments", { params: query });
-        return response.data;
+        return response.data?.data;
     },
 };

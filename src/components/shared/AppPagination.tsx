@@ -8,6 +8,7 @@ interface AppPaginationProps {
     hasNextPage: boolean;
     onPageChange: (page: number) => void;
     isLoading?: boolean;
+    total?: number;
 }
 
 export function AppPagination({
@@ -16,7 +17,8 @@ export function AppPagination({
     hasPreviousPage,
     hasNextPage,
     onPageChange,
-    isLoading = false
+    isLoading = false,
+    total
 }: AppPaginationProps) {
 
     // Logic to generate page numbers (1, 2, 3... etc)
@@ -43,54 +45,63 @@ export function AppPagination({
     if (totalPages <= 1) return null;
 
     return (
-        <div className="flex items-center justify-center gap-2 py-6">
-            {/* Previous Button */}
-            <Button
-                variant="outline"
-                size="icon"
-                className="rounded-xl border-gray-200 dark:border-white/10 hover:bg-orange/10 hover:text-orange transition-all"
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={!hasPreviousPage || isLoading}
-            >
-                <ChevronLeft className="w-4 h-4" />
-            </Button>
+        <div className="flex items-center justify-between gap-2 py-6">
+            {
+                total !== undefined && (
+                    <p className="  text-gray-500 dark:text-gray-400">
+                        Total Records: <span className="font-bold">{total}</span>
+                    </p>
+                )
+            }
+            <div className="flex items-center justify-center gap-2 py-6">
+                {/* Previous Button */}
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="  border-gray-200 dark:border-white/10 hover:bg-orange/10 hover:text-orange transition-all"
+                    onClick={() => onPageChange(currentPage - 1)}
+                    disabled={!hasPreviousPage || isLoading}
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                </Button>
 
-            {/* Page Numbers */}
-            <div className="flex items-center gap-1">
-                {getPageNumbers().map((p, index) => (
-                    <div key={index}>
-                        {p === '...' ? (
-                            <div className="px-2">
-                                <MoreHorizontal className="w-4 h-4 text-gray-400" />
-                            </div>
-                        ) : (
-                            <Button
-                                variant={currentPage === p ? "default" : "outline"}
-                                size="sm"
-                                onClick={() => onPageChange(p as number)}
-                                disabled={isLoading}
-                                className={`w-9 h-9 rounded-xl font-bold text-[12px] transition-all ${currentPage === p
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                    {getPageNumbers().map((p, index) => (
+                        <div key={index}>
+                            {p === '...' ? (
+                                <div className="px-2">
+                                    <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                                </div>
+                            ) : (
+                                <Button
+                                    variant={currentPage === p ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => onPageChange(p as number)}
+                                    disabled={isLoading}
+                                    className={`w-9 h-9   font-bold text-[12px] transition-all ${currentPage === p
                                         ? "bg-orange hover:bg-orange/90 text-white shadow-md shadow-orange/20 border-none"
                                         : "border-gray-200 dark:border-white/10 text-gray-600 hover:border-orange hover:text-orange"
-                                    }`}
-                            >
-                                {p}
-                            </Button>
-                        )}
-                    </div>
-                ))}
-            </div>
+                                        }`}
+                                >
+                                    {p}
+                                </Button>
+                            )}
+                        </div>
+                    ))}
+                </div>
 
-            {/* Next Button */}
-            <Button
-                variant="outline"
-                size="icon"
-                className="rounded-xl border-gray-200 dark:border-white/10 hover:bg-orange/10 hover:text-orange transition-all"
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={!hasNextPage || isLoading}
-            >
-                <ChevronRight className="w-4 h-4" />
-            </Button>
+                {/* Next Button */}
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="  border-gray-200 dark:border-white/10 hover:bg-orange/10 hover:text-orange transition-all"
+                    onClick={() => onPageChange(currentPage + 1)}
+                    disabled={!hasNextPage || isLoading}
+                >
+                    <ChevronRight className="w-4 h-4" />
+                </Button>
+            </div>
         </div>
     );
 }

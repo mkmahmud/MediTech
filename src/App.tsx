@@ -42,6 +42,7 @@ const PaymentSuccess = lazy(() => import('./pages/Dashboard/payment/PaymentSucce
 // Dashboard Admin Pages
 const AddUser = lazy(() => import('./pages/Dashboard/Admin/Add-user/Add-user'));
 const Audit = lazy(() => import('./pages/Dashboard/Admin/Audit/Audit'));
+const AllUsers = lazy(() => import('./pages/Dashboard/Admin/All-users/all-users'));
 
 
 // Dashboard Doctor Page
@@ -159,6 +160,7 @@ function App() {
               {/* Admin Pages */}
               <Route path="add-users" element={<AddUser />} />
               <Route path="audits" element={<Audit />} />
+              <Route path="users" element={<AllUsers />} />
 
               {/* Doctor Pages */}
               <Route path="manage-availability" element={<ManageAvailability />} />

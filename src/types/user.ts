@@ -1,5 +1,5 @@
 export type UserRole = "SUPER_ADMIN" | "ADMIN" | "DOCTOR" | "NURSE" | "PATIENT" | "PHARMACIST" | "LAB_TECHNICIAN" | "RECEPTIONIST";
-export type UserStatus = "ACTIVE" | "PENDING_VERIFICATION" | "SUSPENDED" | "DEACTIVATED";
+export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'PENDING_VERIFICATION';
 
 export interface DoctorProfile {
     licenseNumber: string;

@@ -46,11 +46,15 @@ export interface NotificationFilters {
 }
 
 export interface NotificationResponse {
-    data: Notification[];
-    total: number;
-    limit: number;
-    offset: number;
-    hasMore: boolean;
+    status: boolean;
+    message: string;
+    data: {
+        data: Notification[];
+        total: number;
+        limit: number;
+        offset: number;
+        hasMore: boolean;
+    }
 }
 
 export interface UnreadCountResponse {

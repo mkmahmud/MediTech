@@ -9,11 +9,11 @@ import { NotificationItem } from '../NotificationItem/NotificationItem';
 import { Button } from '../../ui/button';
 import { cn } from '../../../lib/utils';
 import type { Notification, NotificationResponse } from '../../../types/notification';
- 
+
 
 export const NotificationPanel = () => {
 
- 
+
 
     const { isNotificationPanelOpen, closeNotificationPanel, unreadCount } = useNotificationStore();
     const incrementUnreadCount = useNotificationStore((state) => state.incrementUnreadCount);
@@ -35,18 +35,17 @@ export const NotificationPanel = () => {
                 return { data: [notification], total: 1, limit: 20, offset: 0, hasMore: false };
             }
             // Avoid duplicates
-            if (oldData.data.some((n: Notification) => n.id === notification.id)) return oldData;
+            if (oldData.data.data.some((n: Notification) => n.id === notification.id)) return oldData;
             return {
                 ...oldData,
-                data: [notification, ...oldData.data].slice(0, 20),
-                total: (oldData.total || 0) + 1,
+                data: [notification, ...oldData.data.data].slice(0, 20),
+                total: (oldData.data.total || 0) + 1,
             };
         });
         incrementUnreadCount();
     }, [queryClient, incrementUnreadCount]);
 
     useNotificationSocket(handleSocketNotification, user?.id);
-    
 
     // Close panel when clicking outside
     useEffect(() => {
@@ -68,9 +67,10 @@ export const NotificationPanel = () => {
     if (!isNotificationPanelOpen) return null;
 
     const notifications = data?.data || [];
-    const hasNotifications = notifications.length > 0;
+    // @ts-ignore
+    const hasNotifications = notifications.data.length > 0;
 
-    
+
 
 
     return (
@@ -131,7 +131,8 @@ export const NotificationPanel = () => {
                     </div>
                 ) : (
                     <div>
-                        {notifications.map((notification: Notification) => (
+                        {/* @ts-ignore */}
+                        {notifications.data.map((notification: Notification) => (
                             <NotificationItem key={notification.id} notification={notification} />
                         ))}
                     </div>

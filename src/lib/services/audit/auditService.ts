@@ -19,18 +19,18 @@ export const AuditService = {
         if (filters.offset !== undefined) params.append("offset", String(filters.offset));
 
         const query = params.toString();
-        const { data } = await api.get<AuditLogsResponse>(`/audit/logs${query ? `?${query}` : ""}`);
-        return data;
+        const { data } = await api.get<{ data: AuditLogsResponse }>(`/audit/logs${query ? `?${query}` : ""}`);
+        return data?.data;
     },
 
     getMyLogs: async (limit = 100): Promise<AuditLogsResponse> => {
-        const { data } = await api.get(`/audit/my-logs?limit=${limit}`);
-        return data;
+        const { data } = await api.get<{ data: AuditLogsResponse }>(`/audit/my-logs?limit=${limit}`);
+        return data?.data;
     },
 
     getPatientAuditLogs: async (patientId: string, limit = 100): Promise<AuditLogsResponse> => {
-        const { data } = await api.get(`/audit/patient/${patientId}?limit=${limit}`);
-        return data;
+        const { data } = await api.get<{ data: AuditLogsResponse }>(`/audit/patient/${patientId}?limit=${limit}`);
+        return data?.data;
     },
 
     getPHIAccessLogs: async (params?: { startDate?: string; endDate?: string; limit?: number }) => {
@@ -40,8 +40,8 @@ export const AuditService = {
         if (params?.limit !== undefined) query.append("limit", String(params.limit));
 
         const qs = query.toString();
-        const { data } = await api.get(`/audit/phi-access${qs ? `?${qs}` : ""}`);
-        return data;
+        const { data } = await api.get<{ data: AuditLogsResponse }>(`/audit/phi-access${qs ? `?${qs}` : ""}`);
+        return data?.data;
     },
 
 };

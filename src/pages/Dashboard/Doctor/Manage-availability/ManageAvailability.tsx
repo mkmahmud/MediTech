@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { doctorService } from '@/lib/services/doctorService';
 import { useUserStore } from '@/stores/user/useUserStore';
-import type { DoctorAvailability } from '@/types/doctors';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Mapping for Prisma dayOfWeek (0 = Sunday)
@@ -26,7 +25,7 @@ export default function ManageAvailability() {
     const { user } = useUserStore();
 
     // Local state for the "draft" schedule
-    const [availabilities, setAvailabilities] = useState<Partial<DoctorAvailability>[]>([]);
+    const [availabilities, setAvailabilities] = useState<any[]>([]);
 
     // 1. Fetching Data
     const { data: serverData, isLoading } = useQuery({
@@ -44,9 +43,10 @@ export default function ManageAvailability() {
         }
     }, [serverData]);
 
+
     // 3. Mutation for saving changes
     const mutation = useMutation({
-        mutationFn: (newSchedule: Partial<DoctorAvailability>[]) =>
+        mutationFn: (newSchedule: any[]) =>
             // @ts-ignore
             doctorService.setAvailability(user?.id, newSchedule),
         onSuccess: (res) => {

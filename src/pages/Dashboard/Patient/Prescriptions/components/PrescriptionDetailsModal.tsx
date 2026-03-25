@@ -256,7 +256,8 @@ export default function PrescriptionDetailsModal({
                 offset: 0,
             });
 
-            return pickClosestPrescription(response?.data || [], appointmentDate);
+            // @ts-ignore
+            return pickClosestPrescription(response?.data?.data || [], appointmentDate);
         },
     });
 

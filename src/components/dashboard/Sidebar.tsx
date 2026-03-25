@@ -5,7 +5,7 @@ import {
     ChevronRight, ArrowLeft,
     LayoutDashboard, Users, Calendar, Settings,
     HeartHandshake, ClipboardList, Pill, Beaker,
-    Activity, ShieldAlert, UserCircle,
+    Activity,   UserCircle,
     UserPlus,
     Airplay
 } from "lucide-react"
@@ -29,6 +29,12 @@ const ALL_NAV_ITEMS = [
         label: "Patient",
         icon: Users,
         roles: ["SUPER_ADMIN", "ADMIN", "DOCTOR", "NURSE", "RECEPTIONIST"]
+    },
+    {
+        path: "/dashboard/users",
+        label: "All Users",
+        icon: Users,
+        roles: ["SUPER_ADMIN", "ADMIN"]
     },
     {
         path: "/dashboard/audits",
@@ -83,12 +89,6 @@ const ALL_NAV_ITEMS = [
         label: "Financial_Node",
         icon: ClipboardList,
         roles: ["SUPER_ADMIN", "ADMIN", "RECEPTIONIST", "PATIENT"]
-    },
-    {
-        path: "/dashboard/users",
-        label: "Staff_Registry",
-        icon: ShieldAlert,
-        roles: ["SUPER_ADMIN", "ADMIN"]
     },
     {
         path: "/dashboard/profile",
