@@ -30,7 +30,8 @@ export default function DoctorCard({ doctor, i }: { doctor: any; i: number }) {
                 {doctor.profileImageUrl ? (
                     <div className="w-full h-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
                         <img
-                            src={doctor.profileImageUrl}
+                            // src={doctor.profileImageUrl}
+                            src={`${doctor.profileImageUrl} ${doctor.profileImageUrl ? '' : `https://ui-avatars.com/api/?name=${doctor.firstName}+${doctor.lastName}&background=random&size=256&color=fff&font-size=0.5&bold=true`}`}
                             alt={`Dr. ${doctor.firstName} ${doctor.lastName}`}
                             className="w-full h-full object-cover"
                         />

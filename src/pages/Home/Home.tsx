@@ -12,13 +12,21 @@ export default function Home() {
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
 
+
     const { data: doctorsData, isLoading: isDoctorsLoading } = useQuery({
         queryKey: ['home-doctors'],
-        queryFn: () => doctorService.getAllDoctors({ page: 1, limit: 4 }),
+        queryFn: () => doctorService.getAllDoctors({ page: 1, limit: 50 }), // fetch more to allow random selection
         staleTime: 1000 * 60 * 5,
     });
 
-    const doctors = doctorsData?.data || [];
+    // Utility to shuffle array
+    function getRandomDoctors(doctors: any[], count: number) {
+        const shuffled = [...doctors].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
+
+    const doctors = doctorsData?.data ? getRandomDoctors(doctorsData.data, 4) : [];
+
 
     const handleHeroSearch = () => {
         const query = searchTerm.trim();
@@ -412,7 +420,7 @@ export default function Home() {
                             ))
                         }
 
-                        {!isDoctorsLoading && doctors?.map((doctor: any) => (
+                        {!isDoctorsLoading && doctors && doctors?.map((doctor: any) => (
                             <DoctorCardRow key={doctor.id} doctor={doctor} />
                         ))}
 

@@ -78,6 +78,8 @@ export default function BookAppointment() {
     staleTime: 1000 * 60 * 5,
   });
 
+
+
   // Get Doctor Availability (For Slots & Dates)
   const { data: doctorAvailability } = useQuery({
     queryKey: ['doctors', id, 'availability'],
@@ -180,15 +182,19 @@ export default function BookAppointment() {
     },
   });
 
+
   // Handle Appointment Creation on Form Submit
   const onSubmit = async (data: any) => {
 
     // Convert Date into ISO String with selected time slot
     if (!selectedDate || !selectedSlot) return;
 
-    const doctorId = doctorInformation?.doctor?.id || doctorInformation?.id;
+    const doctorId = doctorInformation?.data?.doctor?.id || doctorInformation?.data?.id;
     // @ts-ignore
     const patientId = user?.patient?.id;
+
+
+
 
     if (!doctorId || !patientId) {
       toast.error("Missing doctor or patient information. Please reload the page.");
@@ -240,19 +246,19 @@ export default function BookAppointment() {
         }
 
         {
-          doctorInformation &&
+          doctorInformation?.data &&
 
           <aside className="lg:col-span-4 space-y-6">
             <div className="bg-white dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded p-5 sticky top-32 shadow-sm">
               <div className="aspect-[4/5] rounded  overflow-hidden mb-6 bg-gray-100 dark:bg-white/5">
-                <img src={doctorInformation?.profileImageUrl} alt="Doctor" className="w-full h-full object-cover" />
+                <img src={doctorInformation?.data?.profileImageUrl} alt="Doctor" className="w-full h-full object-cover" />
               </div>
               <div className="px-2">
                 <h1 className="text-2xl font-black    mb-2">
-                  Dr. {doctorInformation?.firstName} {doctorInformation?.lastName}
+                  Dr. {doctorInformation?.data?.firstName} {doctorInformation?.data?.lastName}
                 </h1>
                 <p className="text-sm font-medium text-orange    flex items-center gap-2">
-                  <Stethoscope className="w-3 h-3" /> {doctorInformation?.doctor?.specialization}
+                  <Stethoscope className="w-3 h-3" /> {doctorInformation?.data?.doctor?.specialization}
                 </p>
               </div>
 
@@ -261,7 +267,7 @@ export default function BookAppointment() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold text-gray-400  ">Consultation Fee </span>
-                  <span className="text-lg font-black text-orange">${doctorInformation?.doctor?.consultationFee}</span>
+                  <span className="text-lg font-black text-orange">${doctorInformation?.data?.doctor?.consultationFee}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold text-gray-400  ">Type</span>
@@ -269,7 +275,7 @@ export default function BookAppointment() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold text-gray-400  ">Experience </span>
-                  <span className="text-xs font-black text-orange">{doctorInformation?.doctor?.experience} Years</span>
+                  <span className="text-xs font-black text-orange">{doctorInformation?.data?.doctor?.experience} Years</span>
                 </div>
               </div>
             </div>

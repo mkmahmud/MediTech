@@ -11,7 +11,7 @@ export default function DoctorCardRow({ doctor }: any) {
         <article className="group relative rounded-[2rem] border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.02] p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-gray-100 dark:bg-white/10 mb-5">
                 <img
-                    src={doctor?.profileImageUrl || '/doctor.jpg'}
+                    src={doctor?.profileImageUrl || '/doctor.webp'}
                     alt={fullName}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -33,7 +33,7 @@ export default function DoctorCardRow({ doctor }: any) {
             </div>
 
             <div className="px-1 pb-1 space-y-3">
-                <div>
+                <Link to={`/doctors/${doctor?.id}`} className="block">
                     <h4 className="text-lg sm:text-xl font-black tracking-tight uppercase dark:text-white line-clamp-1">
                         {fullName}
                     </h4>
@@ -41,7 +41,7 @@ export default function DoctorCardRow({ doctor }: any) {
                         <Stethoscope className="w-3.5 h-3.5 text-orange" />
                         {specialization}
                     </p>
-                </div>
+                </Link>
 
                 <div className="flex items-center justify-between rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50/70 dark:bg-white/[0.03] px-3 py-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Experience</span>

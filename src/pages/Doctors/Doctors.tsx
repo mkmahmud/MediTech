@@ -43,7 +43,7 @@ const CATEGORIES = [
 export default function DoctorsPage() {
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
     const [page, setPage] = useState(1);
-    const limit = 4;
+    const limit = 7;
 
     const methods = useForm({ defaultValues: { search: "" } });
     const searchQuery = methods.watch("search");

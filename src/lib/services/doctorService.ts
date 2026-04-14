@@ -35,4 +35,10 @@ export const doctorService = {
         return response.data?.data;
     },
 
+    // Get Doctor profile 
+    getDoctorProfile: async (userId: string) => {
+        const response = await api.get(`/doctors/${userId}/profile`);
+        return response.data?.data;
+    }
+
 };
